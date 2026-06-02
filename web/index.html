@@ -22,35 +22,32 @@
       <h2>Datos del negocio</h2>
       <form id="bizForm">
         <label>Nombre del negocio *
-          <input name="name" required value="Clínica Dental Sonríe" />
+          <input name="name" required placeholder="Ej. Clínica Dental Sonríe" />
         </label>
         <div class="row">
           <label>Tipo *
             <select name="sector" id="sector"></select>
           </label>
           <label>Ciudad *
-            <input name="city" required value="Puerto de Sagunto" />
+            <input name="city" required placeholder="Ej. Puerto de Sagunto" />
           </label>
         </div>
         <div class="row">
           <label>Teléfono *
-            <input name="phone" required value="961234567" />
+            <input name="phone" required placeholder="961234567" />
           </label>
           <label>WhatsApp (si es otro)
             <input name="whatsapp" placeholder="igual que el teléfono" />
           </label>
         </div>
         <label>Servicios (uno por línea) *
-          <textarea name="services" rows="4" required>Limpiezas dentales
-Implantes
-Ortodoncia invisible
-Estética dental</textarea>
+          <textarea name="services" rows="4" required placeholder="Un servicio por línea"></textarea>
         </label>
         <label>Horario
-          <input name="hours" value="L-V 9:00-20:00, S 9:00-14:00" />
+          <input name="hours" placeholder="Ej. L-V 9:00-20:00, S 9:00-14:00" />
         </label>
         <label>Dirección
-          <input name="address" value="Av. del Mediterráneo 12" />
+          <input name="address" placeholder="Calle y número" />
         </label>
         <div class="row">
           <label>Email
@@ -61,11 +58,10 @@ Estética dental</textarea>
           </label>
         </div>
         <label>Puntos fuertes (uno por línea)
-          <textarea name="highlights" rows="2">20 años cuidando sonrisas en el Puerto
-Primera visita sin coste</textarea>
+          <textarea name="highlights" rows="2" placeholder="Ej. 20 años de experiencia"></textarea>
         </label>
-        <label>Enlace de reseñas de Google (si lo tienes)
-          <input name="google_review_url" placeholder="se genera una búsqueda si lo dejas vacío" />
+        <label>Enlace para dejar reseña en Google (recomendado)
+          <input name="google_review_url" placeholder="pega aquí el enlace de tu ficha; si no, el QR llevará a una búsqueda" />
         </label>
         <label class="color-field">
           <span><input type="checkbox" id="useColor" /> Color de marca propio</span>

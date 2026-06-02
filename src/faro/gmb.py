@@ -18,10 +18,16 @@ _CATEGORIES: dict[Sector, tuple[str, ...]] = {
     Sector.PELUQUERIA: ("Peluquería",),
     Sector.ESTETICA: ("Centro de estética", "Spa"),
     Sector.RESTAURANTE: ("Restaurante",),
+    Sector.BAR: ("Bar", "Cafetería"),
+    Sector.COMERCIO: ("Tienda",),
+    Sector.PANADERIA: ("Panadería", "Pastelería"),
     Sector.TALLER: ("Taller de reparación de automóviles",),
+    Sector.GIMNASIO: ("Gimnasio",),
+    Sector.FARMACIA: ("Farmacia",),
     Sector.ASESORIA: ("Asesoría fiscal", "Gestoría"),
     Sector.INMOBILIARIA: ("Agencia inmobiliaria",),
     Sector.REFORMAS: ("Empresa de reformas", "Contratista general"),
+    Sector.AUTONOMO: ("Servicio profesional",),
     Sector.OTRO: ("Empresa local",),
 }
 
@@ -41,7 +47,7 @@ class GmbContent:
 def _description(business: BusinessProfile) -> str:
     theme = business.theme
     parts = [
-        f"{business.name} es {theme.label.lower()} en {business.city}.",
+        f"{business.name} es {theme.noun} en {business.city}.",
     ]
     if business.services:
         parts.append("Servicios: " + ", ".join(business.services) + ".")

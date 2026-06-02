@@ -24,10 +24,16 @@ _SCHEMA_TYPES: dict[Sector, str] = {
     Sector.PELUQUERIA: "HairSalon",
     Sector.ESTETICA: "BeautySalon",
     Sector.RESTAURANTE: "Restaurant",
+    Sector.BAR: "BarOrPub",
+    Sector.COMERCIO: "Store",
+    Sector.PANADERIA: "Bakery",
     Sector.TALLER: "AutoRepair",
+    Sector.GIMNASIO: "ExerciseGym",
+    Sector.FARMACIA: "Pharmacy",
     Sector.ASESORIA: "AccountingService",
     Sector.INMOBILIARIA: "RealEstateAgent",
     Sector.REFORMAS: "GeneralContractor",
+    Sector.AUTONOMO: "ProfessionalService",
     Sector.OTRO: "LocalBusiness",
 }
 
@@ -53,8 +59,8 @@ def local_business_jsonld(business: BusinessProfile) -> str:
         "address": address,
         "areaServed": business.city,
     }
-    if business.email:
-        data["email"] = business.email
+    # El email no se incluye en el JSON-LD a propósito: lo dejaría en texto plano,
+    # rastreable por bots de spam. El teléfono ya cubre el contacto estructurado.
     payload = json.dumps(data, ensure_ascii=False, indent=2)
     # Evita que un "</script>" dentro de un dato cierre el bloque <script> inline.
     return payload.replace("</", "<\\/")

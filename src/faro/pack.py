@@ -7,6 +7,7 @@ listo y un LEEME que explica qué hacer con cada cosa.
 
 from __future__ import annotations
 
+import html
 import io
 import zipfile
 from dataclasses import dataclass
@@ -40,12 +41,13 @@ class DigitalPresencePack:
 
 
 def _review_card_html(business: BusinessProfile) -> str:
-    invite = review_card_invite(business).replace("\n", "<br>")
+    invite = html.escape(review_card_invite(business)).replace("\n", "<br>")
+    name = html.escape(business.name)
     qr = review_qr(business)
     theme = business.theme
     return f"""<!DOCTYPE html>
 <html lang="es"><head><meta charset="UTF-8" />
-<title>Tarjeta de reseñas · {business.name}</title>
+<title>Tarjeta de reseñas · {name}</title>
 <style>
   body {{
     font-family: system-ui, sans-serif; display: grid; place-items: center;
@@ -66,7 +68,7 @@ def _review_card_html(business: BusinessProfile) -> str:
 <body><div class="card">
   <div class="emoji">{theme.emoji}</div>
   <div class="stars">★★★★★</div>
-  <h1>{business.name}</h1>
+  <h1>{name}</h1>
   <p>{invite}</p>
   <img src="{qr}" alt="QR para dejar reseña" />
 </div></body></html>

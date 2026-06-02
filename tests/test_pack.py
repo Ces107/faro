@@ -64,6 +64,18 @@ def test_pack_zip_has_all_files() -> None:
         assert "Google Business" in zf.read("google-business.md").decode("utf-8")
 
 
+def test_review_card_escapes_html() -> None:
+    pack = build_pack(_biz(name="Bar <script>alert(1)</script> & Co"), use_live=False)
+    assert "<script>alert(1)</script>" not in pack.review_card_html
+    assert "&lt;script&gt;" in pack.review_card_html
+
+
+def test_legal_notice_escapes_html() -> None:
+    pack = build_pack(_biz(name="Bar <script>x</script>"), use_live=False)
+    assert "<script>x</script>" not in pack.legal_html
+    assert "&lt;script&gt;" in pack.legal_html
+
+
 def test_pack_without_optional_fields() -> None:
     biz = BusinessProfile(
         name="Peluquería Ana",

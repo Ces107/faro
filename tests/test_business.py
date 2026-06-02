@@ -97,6 +97,19 @@ def test_all_sectors_have_theme() -> None:
         theme = theme_for(sector)
         assert theme.label
         assert theme.color.startswith("#")
+        assert theme.noun.startswith(("un ", "una "))
+
+
+def test_long_fields_are_truncated() -> None:
+    biz = _valid(name="X" * 200, services=("Y" * 200,))
+    assert len(biz.name) == 60
+    assert len(biz.services[0]) == 70
+
+
+def test_new_sectors_work() -> None:
+    for s in (Sector.BAR, Sector.FARMACIA, Sector.GIMNASIO, Sector.PANADERIA):
+        biz = _valid(sector=s)
+        assert biz.theme.label
 
 
 def test_from_form_splits_lines() -> None:

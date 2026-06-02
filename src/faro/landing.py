@@ -20,6 +20,12 @@ from faro.whatsapp import phone_link, whatsapp_link
 
 _TEMPLATES_DIR = Path(__file__).resolve().parent / "templates"
 
+
+def _obfuscate_email(email: str) -> str:
+    """Codifica el email como entidades HTML para que los rastreadores de spam no
+    lo lean en texto plano. El navegador lo muestra con normalidad."""
+    return "".join(f"&#{ord(c)};" for c in email)
+
 _env = Environment(
     loader=FileSystemLoader(str(_TEMPLATES_DIR)),
     autoescape=select_autoescape(["html"]),
@@ -46,6 +52,7 @@ def render_landing(business: BusinessProfile, copy: LandingCopy) -> str:
         jsonld=local_business_jsonld(business),
         maps_embed_url=maps_embed_url(business) if business.address else "",
         maps_link=maps_link(business),
+        email_html=_obfuscate_email(business.email) if business.email else "",
     )
 
 

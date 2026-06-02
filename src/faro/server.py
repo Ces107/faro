@@ -6,6 +6,7 @@ delante del cliente, ve la web al momento y descarga el .zip listo para entregar
 
 from __future__ import annotations
 
+import os
 import secrets
 import unicodedata
 from pathlib import Path
@@ -44,7 +45,10 @@ class GenerateRequest(BaseModel):
     brand_color: str = ""
 
 
-def create_app(*, use_live: bool = True) -> FastAPI:
+def create_app(*, use_live: bool = False) -> FastAPI:
+    """Crea la app. ``use_live`` está apagado por defecto: la demo no debe llamar
+    a un servicio de pago durante una venta. Se activa con ``FARO_LIVE=1`` (ver
+    ``app`` más abajo) o pasándolo explícitamente."""
     app = FastAPI(title="Faro", version="0.1.0")
     packs: dict[str, tuple[DigitalPresencePack, BusinessProfile]] = {}
 
@@ -112,7 +116,7 @@ def create_app(*, use_live: bool = True) -> FastAPI:
     return app
 
 
-app = create_app()
+app = create_app(use_live=os.environ.get("FARO_LIVE") == "1")
 
 
 def main() -> None:

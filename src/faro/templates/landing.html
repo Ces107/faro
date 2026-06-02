@@ -140,7 +140,7 @@
       {% if business.hours %}
       <div class="info-card"><h4>Horario</h4><p>{{ business.hours }}</p></div>
       {% endif %}
-      <div class="info-card"><h4>Contacto</h4><p>{{ business.phone }}{% if business.email %}<br>{{ business.email }}{% endif %}</p></div>
+      <div class="info-card"><h4>Contacto</h4><p>{{ business.phone }}{% if business.email %}<br>{{ email_html | safe }}{% endif %}</p></div>
       {% if business.address %}
       <div class="info-card"><h4>Dónde estamos</h4><p>{{ business.address }}, {{ business.city }}</p></div>
       {% endif %}

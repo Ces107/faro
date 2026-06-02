@@ -55,6 +55,8 @@ function showResult(data) {
   el("actions").classList.remove("hidden");
   el("downloadBtn").href = data.download_url;
   el("openBtn").href = data.preview_url;
+  el("downloadBtn").dataset.name = el("bizForm").name.value.trim();
+  el("downloadBtn").dataset.phone = el("bizForm").phone.value.trim();
 
   el("gmb").classList.remove("hidden");
   el("gmbDesc").textContent = data.gmb.description;
@@ -81,5 +83,27 @@ el("useColor").addEventListener("change", (e) => {
   el("brandColor").disabled = !e.target.checked;
 });
 
+// Confirmación antes de descargar el pack para entregar: evita entregar datos equivocados.
+el("downloadBtn").addEventListener("click", (e) => {
+  const b = e.target.dataset;
+  if (!confirm(`Vas a descargar el pack de "${b.name}" (tel. ${b.phone}). ¿Son correctos los datos?`)) {
+    e.preventDefault();
+  }
+});
+
+// Datos de ejemplo solo en modo demostración (?demo=1), nunca por defecto.
+function fillDemo() {
+  if (new URLSearchParams(location.search).get("demo") !== "1") return;
+  const f = el("bizForm");
+  f.name.value = "Clínica Dental Sonríe";
+  f.city.value = "Puerto de Sagunto";
+  f.phone.value = "961234567";
+  f.services.value = "Limpiezas dentales\nImplantes\nOrtodoncia invisible";
+  f.hours.value = "L-V 9:00-20:00, S 9:00-14:00";
+  f.address.value = "Av. del Mediterráneo 12";
+  f.highlights.value = "20 años cuidando sonrisas en el Puerto\nPrimera visita sin coste";
+}
+
 el("bizForm").addEventListener("submit", generate);
 loadSectors();
+fillDemo();

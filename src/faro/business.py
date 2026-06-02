@@ -46,10 +46,16 @@ class Sector(str, Enum):
     PELUQUERIA = "peluqueria"
     ESTETICA = "estetica"
     RESTAURANTE = "restaurante"
+    BAR = "bar"
+    COMERCIO = "comercio"
+    PANADERIA = "panaderia"
     TALLER = "taller"
+    GIMNASIO = "gimnasio"
+    FARMACIA = "farmacia"
     ASESORIA = "asesoria"
     INMOBILIARIA = "inmobiliaria"
     REFORMAS = "reformas"
+    AUTONOMO = "autonomo"
     OTRO = "otro"
 
 
@@ -63,31 +69,45 @@ class SectorTheme:
     accent: str
     headline: str
     cta: str
+    noun: str
+    """Forma con artículo para frases tipo «X es {noun} en {ciudad}»."""
 
 
 _THEMES: dict[Sector, SectorTheme] = {
     Sector.DENTAL: SectorTheme("Clínica dental", "🦷", "#0ea5e9", "#0369a1",
-        "Tu sonrisa en las mejores manos", "Pedir cita"),
+        "Tu sonrisa en las mejores manos", "Pedir cita", "una clínica dental"),
     Sector.FISIO: SectorTheme("Fisioterapia", "💪", "#10b981", "#047857",
-        "Recupérate y vuelve a moverte sin dolor", "Pedir cita"),
+        "Recupérate y vuelve a moverte sin dolor", "Pedir cita", "un centro de fisioterapia"),
     Sector.VETERINARIO: SectorTheme("Clínica veterinaria", "🐾", "#f59e0b", "#b45309",
-        "El cuidado que tu mascota merece", "Pedir cita"),
+        "El cuidado que tu mascota merece", "Pedir cita", "una clínica veterinaria"),
     Sector.PELUQUERIA: SectorTheme("Peluquería", "💇", "#ec4899", "#be185d",
-        "Tu mejor versión empieza aquí", "Reservar"),
+        "Tu mejor versión empieza aquí", "Reservar", "una peluquería"),
     Sector.ESTETICA: SectorTheme("Centro de estética", "✨", "#a855f7", "#7e22ce",
-        "Cuídate. Te lo mereces", "Reservar"),
+        "Cuídate. Te lo mereces", "Reservar", "un centro de estética"),
     Sector.RESTAURANTE: SectorTheme("Restaurante", "🍽️", "#ef4444", "#b91c1c",
-        "Buena comida, cerca de ti", "Reservar mesa"),
+        "Buena comida, cerca de ti", "Reservar mesa", "un restaurante"),
+    Sector.BAR: SectorTheme("Bar / Cafetería", "☕", "#d97706", "#92400e",
+        "Tu sitio para un buen rato", "Ver carta", "un bar"),
+    Sector.COMERCIO: SectorTheme("Tienda", "🛍️", "#db2777", "#9d174d",
+        "Lo que buscas, al lado de casa", "Contactar", "una tienda"),
+    Sector.PANADERIA: SectorTheme("Panadería", "🥖", "#ca8a04", "#854d0e",
+        "Pan recién hecho cada día", "Contactar", "una panadería"),
     Sector.TALLER: SectorTheme("Taller mecánico", "🔧", "#3b82f6", "#1d4ed8",
-        "Tu coche, en buenas manos", "Pedir cita"),
+        "Tu coche, en buenas manos", "Pedir cita", "un taller mecánico"),
+    Sector.GIMNASIO: SectorTheme("Gimnasio", "🏋️", "#16a34a", "#15803d",
+        "Ponte en forma a tu ritmo", "Apúntate", "un gimnasio"),
+    Sector.FARMACIA: SectorTheme("Farmacia", "💊", "#059669", "#047857",
+        "Tu salud, bien atendida", "Contactar", "una farmacia"),
     Sector.ASESORIA: SectorTheme("Asesoría", "📊", "#0d9488", "#0f766e",
-        "Tu negocio, sin preocupaciones fiscales", "Consultar"),
+        "Tu negocio, sin preocupaciones fiscales", "Consultar", "una asesoría"),
     Sector.INMOBILIARIA: SectorTheme("Inmobiliaria", "🏠", "#0891b2", "#0e7490",
-        "Encuentra tu próximo hogar", "Ver propiedades"),
+        "Encuentra tu próximo hogar", "Ver propiedades", "una inmobiliaria"),
     Sector.REFORMAS: SectorTheme("Reformas", "🛠️", "#ea580c", "#c2410c",
-        "Transformamos tu espacio", "Pedir presupuesto"),
+        "Transformamos tu espacio", "Pedir presupuesto", "una empresa de reformas"),
+    Sector.AUTONOMO: SectorTheme("Servicios profesionales", "🧰", "#4f46e5", "#3730a3",
+        "El servicio que necesitas, cerca", "Contactar", "un profesional"),
     Sector.OTRO: SectorTheme("Negocio", "📍", "#2563eb", "#1d4ed8",
-        "Cerca de ti, cuando lo necesitas", "Contactar"),
+        "Cerca de ti, cuando lo necesitas", "Contactar", "un negocio"),
 }
 
 
@@ -139,6 +159,16 @@ class BusinessProfile:
             raise ValueError(
                 f"Color de marca no válido: {self.brand_color!r} (usa formato #RRGGBB)."
             )
+        # Truncado de longitudes: un texto desmedido rompería el diseño de la web
+        # en plena demo. Truncar (en vez de rechazar) no corta la venta.
+        object.__setattr__(self, "name", self.name.strip()[:60])
+        object.__setattr__(self, "city", self.city.strip()[:50])
+        object.__setattr__(self, "address", self.address.strip()[:120])
+        object.__setattr__(self, "slogan", self.slogan.strip()[:90])
+        object.__setattr__(self, "hours", self.hours.strip()[:120])
+        object.__setattr__(self, "email", self.email.strip()[:120])
+        object.__setattr__(self, "services", tuple(s[:70] for s in self.services[:12]))
+        object.__setattr__(self, "highlights", tuple(h[:90] for h in self.highlights[:6]))
 
     @property
     def theme(self) -> SectorTheme:

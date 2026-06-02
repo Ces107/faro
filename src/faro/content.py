@@ -66,7 +66,7 @@ def scripted_copy(business: BusinessProfile) -> LandingCopy:
     hero_subtitle = f"{theme.label} en {business.city}.{hl}".strip()
     services_phrase = ", ".join(business.services[:3])
     about_text = (
-        f"En {business.name} llevamos el día a día de {theme.label.lower()} en {business.city}. "
+        f"En {business.name} somos {theme.noun} en {business.city}. "
         f"Nos puedes encontrar para {services_phrase.lower()} y mucho más. "
         "Escríbenos por WhatsApp o llámanos y te atendemos enseguida."
     )
@@ -130,7 +130,9 @@ def live_copy(business: BusinessProfile) -> LandingCopy:
         "puntos_fuertes": list(business.highlights),
     }
     try:
-        client = anthropic.Anthropic(api_key=api_key)
+        # Timeout y un solo reintento: una venta presencial no puede quedarse
+        # colgada esperando a la red. Si tarda o falla, se cae a las plantillas.
+        client = anthropic.Anthropic(api_key=api_key, timeout=15.0, max_retries=1)
         message = client.messages.create(
             model=_MODEL,
             max_tokens=700,
