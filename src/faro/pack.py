@@ -11,18 +11,18 @@ import io
 import zipfile
 from dataclasses import dataclass
 
-from presencia_local.business import BusinessProfile
-from presencia_local.content import generate_copy
-from presencia_local.gmb import GmbContent, build_gmb
-from presencia_local.landing import render_landing
-from presencia_local.qr import qr_svg, review_qr
-from presencia_local.reviews import (
+from faro.business import BusinessProfile
+from faro.content import generate_copy
+from faro.gmb import GmbContent, build_gmb
+from faro.landing import render_landing
+from faro.qr import qr_svg, review_qr
+from faro.reviews import (
     ReviewReplies,
     review_card_invite,
     review_replies,
     review_url,
 )
-from presencia_local.whatsapp import whatsapp_link
+from faro.whatsapp import whatsapp_link
 
 
 @dataclass(frozen=True)

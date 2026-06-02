@@ -10,11 +10,11 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-from presencia_local.business import BusinessProfile
-from presencia_local.content import LandingCopy, generate_copy
-from presencia_local.qr import review_qr, whatsapp_qr
-from presencia_local.reviews import review_url
-from presencia_local.whatsapp import phone_link, whatsapp_link
+from faro.business import BusinessProfile
+from faro.content import LandingCopy, generate_copy
+from faro.qr import review_qr, whatsapp_qr
+from faro.reviews import review_url
+from faro.whatsapp import phone_link, whatsapp_link
 
 _TEMPLATES_DIR = Path(__file__).resolve().parent / "templates"
 

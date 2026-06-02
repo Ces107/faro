@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from presencia_local.business import BusinessProfile, Sector
+from faro.business import BusinessProfile, Sector
 
 _CATEGORIES: dict[Sector, tuple[str, ...]] = {
     Sector.DENTAL: ("Dentista", "Clínica dental"),

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from presencia_local.business import BusinessProfile, Sector, theme_for
+from faro.business import BusinessProfile, Sector, theme_for
 
 
 def _valid(**overrides: object) -> BusinessProfile:

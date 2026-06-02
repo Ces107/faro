@@ -15,8 +15,8 @@ from fastapi.responses import HTMLResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from presencia_local.business import BusinessProfile, Sector
-from presencia_local.pack import DigitalPresencePack, build_pack, to_zip
+from faro.business import BusinessProfile, Sector
+from faro.pack import DigitalPresencePack, build_pack, to_zip
 
 _WEB_DIR = Path(__file__).resolve().parents[2] / "web"
 
@@ -44,7 +44,7 @@ class GenerateRequest(BaseModel):
 
 
 def create_app(*, use_live: bool = True) -> FastAPI:
-    app = FastAPI(title="Presencia Local", version="0.1.0")
+    app = FastAPI(title="Faro", version="0.1.0")
     packs: dict[str, tuple[DigitalPresencePack, BusinessProfile]] = {}
 
     @app.get("/api/sectors")
@@ -97,7 +97,7 @@ def create_app(*, use_live: bool = True) -> FastAPI:
         return Response(
             content=data,
             media_type="application/zip",
-            headers={"Content-Disposition": f'attachment; filename="presencia-{slug}.zip"'},
+            headers={"Content-Disposition": f'attachment; filename="faro-{slug}.zip"'},
         )
 
     if _WEB_DIR.exists():
@@ -117,7 +117,7 @@ app = create_app()
 def main() -> None:
     import uvicorn
 
-    print("Presencia Local — demo en http://localhost:8000")
+    print("Faro — demo en http://localhost:8000")
     uvicorn.run(app, host="127.0.0.1", port=8000)
 
 

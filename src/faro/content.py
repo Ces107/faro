@@ -13,7 +13,7 @@ import json
 import os
 from dataclasses import dataclass
 
-from presencia_local.business import BusinessProfile
+from faro.business import BusinessProfile
 
 _MODEL = "claude-haiku-4-5-20251001"
 

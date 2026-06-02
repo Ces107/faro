@@ -5,9 +5,9 @@ from __future__ import annotations
 import io
 import zipfile
 
-from presencia_local.business import BusinessProfile, Sector
-from presencia_local.landing import build_landing
-from presencia_local.pack import build_pack, to_zip
+from faro.business import BusinessProfile, Sector
+from faro.landing import build_landing
+from faro.pack import build_pack, to_zip
 
 
 def _biz(**ov: object) -> BusinessProfile:

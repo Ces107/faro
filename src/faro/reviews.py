@@ -13,7 +13,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from urllib.parse import quote_plus
 
-from presencia_local.business import BusinessProfile
+from faro.business import BusinessProfile
 
 
 def review_url(business: BusinessProfile) -> str:

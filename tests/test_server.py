@@ -7,7 +7,7 @@ import zipfile
 
 from fastapi.testclient import TestClient
 
-from presencia_local.server import create_app
+from faro.server import create_app
 
 client = TestClient(create_app(use_live=False))
 
@@ -64,4 +64,4 @@ def test_preview_unknown_404() -> None:
 def test_serves_form_index() -> None:
     res = client.get("/")
     assert res.status_code == 200
-    assert "Presencia Local" in res.text
+    assert "Faro" in res.text

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from urllib.parse import quote
 
-from presencia_local.business import BusinessProfile
+from faro.business import BusinessProfile
 
 
 def default_message(business: BusinessProfile) -> str:

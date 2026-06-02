@@ -1,4 +1,4 @@
-# Presencia Local — que te encuentren en Google
+# Faro — que te encuentren en Google
 
 ## Para quién
 

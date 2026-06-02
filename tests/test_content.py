@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-from presencia_local.business import BusinessProfile, Sector
-from presencia_local.content import generate_copy, scripted_copy
-from presencia_local.gmb import build_gmb
-from presencia_local.qr import qr_data_uri, qr_svg, review_qr, whatsapp_qr
-from presencia_local.reviews import review_replies, review_url
-from presencia_local.whatsapp import default_message, whatsapp_link
+from faro.business import BusinessProfile, Sector
+from faro.content import generate_copy, scripted_copy
+from faro.gmb import build_gmb
+from faro.qr import qr_data_uri, qr_svg, review_qr, whatsapp_qr
+from faro.reviews import review_replies, review_url
+from faro.whatsapp import default_message, whatsapp_link
 
 
 def _biz(**ov: object) -> BusinessProfile:

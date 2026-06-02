@@ -9,9 +9,9 @@ from __future__ import annotations
 
 import segno
 
-from presencia_local.business import BusinessProfile
-from presencia_local.reviews import review_url
-from presencia_local.whatsapp import whatsapp_link
+from faro.business import BusinessProfile
+from faro.reviews import review_url
+from faro.whatsapp import whatsapp_link
 
 
 def qr_data_uri(data: str, *, dark: str = "#0f172a", scale: int = 6) -> str:

@@ -1,4 +1,4 @@
-"""Presencia Local — genera el pack de presencia digital de un negocio local.
+"""Faro — genera el pack de presencia digital de un negocio local.
 
 A partir de los datos de un negocio produce, en minutos:
 
@@ -11,8 +11,8 @@ La demo funciona sin cuentas de pago. Con ``ANTHROPIC_API_KEY`` el copy lo
 redacta el modelo; sin clave, se usan plantillas de calidad.
 """
 
-from presencia_local.business import BusinessProfile, Sector
-from presencia_local.pack import DigitalPresencePack, build_pack
+from faro.business import BusinessProfile, Sector
+from faro.pack import DigitalPresencePack, build_pack
 
 __all__ = ["BusinessProfile", "Sector", "DigitalPresencePack", "build_pack"]
 

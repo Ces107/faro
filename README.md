@@ -1,8 +1,8 @@
-# Presencia Local
+# Faro
 
 **Genera en minutos el pack de presencia digital de un negocio local: una página web lista para publicar, el contenido para su ficha de Google, el WhatsApp y la tarjeta de reseñas con QR. Rellenas un formulario, ves la web al momento y descargas todo en un .zip. Sin cuentas de pago para la demo.**
 
-[![CI](https://github.com/Ces107/presencia-local/actions/workflows/ci.yml/badge.svg)](https://github.com/Ces107/presencia-local/actions/workflows/ci.yml)
+[![CI](https://github.com/Ces107/faro/actions/workflows/ci.yml/badge.svg)](https://github.com/Ces107/faro/actions/workflows/ci.yml)
 
 ---
 
@@ -10,13 +10,13 @@
 
 El 78% de los micro-negocios en España no tiene web y el 80% no está en los directorios. Una peluquería, un taller o una clínica de barrio existe para sus clientes, pero no para Google. Quien busca "dentista en mi pueblo" no los encuentra.
 
-Presencia Local convierte ese trabajo (que a mano son horas por cliente) en minutos: metes los datos del negocio una vez y sale todo lo que necesita para que lo encuentren.
+Faro convierte ese trabajo (que a mano son horas por cliente) en minutos: metes los datos del negocio una vez y sale todo lo que necesita para que lo encuentren.
 
 ## La demo
 
 ```bash
 pip install -e ".[dev]"
-presencia-local                    # abre http://localhost:8000
+faro                    # abre http://localhost:8000
 ```
 
 Rellenas el formulario con los datos del negocio y pulsas "Generar pack". Al momento ves la web del negocio en la vista previa y puedes descargar el .zip con todo dentro.
@@ -54,7 +54,7 @@ Material de venta en [`ventas/`](ventas/): hoja de una página, guion de puerta,
 ## Estructura
 
 ```
-src/presencia_local/
+src/faro/
   business.py    modelo del negocio (datos + validación)
   content.py     copy de la landing (plantillas + LLM opcional)
   landing.py     render de la landing (Jinja2)

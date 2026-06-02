@@ -5,7 +5,7 @@ La gran ventaja de este producto: el cierre es en la misma visita. Llevas el por
 ## Antes de entrar
 
 - Busca el negocio en Google delante de la puerta. Si no tiene web o su ficha está vacía o sin reseñas, ese es tu gancho.
-- Ten la herramienta (`presencia-local`) abierta y probada en el portátil o la tablet.
+- Ten la herramienta (`faro`) abierta y probada en el portátil o la tablet.
 
 ## Apertura (15 segundos)
 

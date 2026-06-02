@@ -3,7 +3,7 @@
 ## Desde la web (la forma normal de venderlo)
 
 ```bash
-presencia-local        # abre http://localhost:8000
+faro        # abre http://localhost:8000
 ```
 
 Rellena el formulario con los datos del negocio, pulsa "Generar pack", y verás la
@@ -12,8 +12,8 @@ web al momento en la vista previa. Descarga el .zip y entrégalo.
 ## Desde Python (para automatizar o probar)
 
 ```python
-from presencia_local.business import BusinessProfile, Sector
-from presencia_local.pack import build_pack, to_zip
+from faro.business import BusinessProfile, Sector
+from faro.pack import build_pack, to_zip
 
 negocio = BusinessProfile(
     name="Clínica Dental Sonríe",
@@ -32,7 +32,7 @@ pack = build_pack(negocio, use_live=False)        # use_live=True usa la API de 
 open("index.html", "w", encoding="utf-8").write(pack.landing_html)
 
 # El pack completo en un .zip (web + Google Business + reseñas + QR + LEEME):
-open("presencia-clinica.zip", "wb").write(to_zip(pack, negocio))
+open("faro-clinica.zip", "wb").write(to_zip(pack, negocio))
 ```
 
 ## Qué hay en el .zip
