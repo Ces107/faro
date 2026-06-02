@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+
+# Caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+
+# Generated packs (output of the tool; not committed)
+output/
+*.zip
+
+# Secrets
+.env
+*.key
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/

@@ -1,0 +1,63 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "presencia-local"
+version = "0.1.0"
+description = "Genera el pack de presencia digital de un negocio local en minutos: una landing de una página, el contenido de Google Business, el WhatsApp y la tarjeta de reseñas con QR. Sin cuentas de pago para la demo."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "César Pereiro" }]
+keywords = ["presencia digital", "google business", "landing", "whatsapp", "pymes", "negocios locales", "reseñas"]
+dependencies = [
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.27",
+    "jinja2>=3.1",
+    "segno>=1.6",
+    "python-multipart>=0.0.9",
+]
+
+[project.optional-dependencies]
+# Modo "live": el copy lo redacta la API de Anthropic. La demo funciona SIN esto.
+live = ["anthropic>=0.40"]
+dev = [
+    "pytest>=8.0",
+    "httpx>=0.27",
+    "ruff>=0.6",
+    "mypy>=1.11",
+]
+
+[project.scripts]
+presencia-local = "presencia_local.server:main"
+
+[project.urls]
+Homepage = "https://github.com/Ces107/presencia-local"
+Repository = "https://github.com/Ces107/presencia-local"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+presencia_local = ["py.typed", "templates/*.html"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "C4"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+files = ["src/presencia_local"]
+
+[[tool.mypy.overrides]]
+module = ["anthropic", "segno"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
