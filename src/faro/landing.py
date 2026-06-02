@@ -14,6 +14,7 @@ from faro.business import BusinessProfile
 from faro.content import LandingCopy, generate_copy
 from faro.qr import review_qr, whatsapp_qr
 from faro.reviews import review_url
+from faro.seo import favicon_data_uri, local_business_jsonld
 from faro.whatsapp import phone_link, whatsapp_link
 
 _TEMPLATES_DIR = Path(__file__).resolve().parent / "templates"
@@ -31,11 +32,15 @@ def render_landing(business: BusinessProfile, copy: LandingCopy) -> str:
         business=business,
         theme=business.theme,
         copy=copy,
+        brand_color=business.color,
+        brand_accent=business.accent,
         whatsapp_url=whatsapp_link(business),
         phone_url=phone_link(business),
         review_url=review_url(business),
         whatsapp_qr=whatsapp_qr(business),
         review_qr=review_qr(business),
+        favicon=favicon_data_uri(business),
+        jsonld=local_business_jsonld(business),
     )
 
 

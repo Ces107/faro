@@ -53,6 +53,28 @@ def test_invalid_profiles_raise(overrides: dict[str, object]) -> None:
         _valid(**overrides)
 
 
+def test_brand_color_override() -> None:
+    biz = _valid(brand_color="#ff0000")
+    assert biz.color == "#ff0000"
+    assert biz.accent != "#ff0000"  # acento oscurecido
+    assert biz.accent.startswith("#")
+
+
+def test_color_defaults_to_sector() -> None:
+    biz = _valid()
+    assert biz.color == biz.theme.color
+
+
+def test_invalid_brand_color_raises() -> None:
+    with pytest.raises(ValueError):
+        _valid(brand_color="rojo")
+
+
+def test_initials() -> None:
+    assert _valid(name="Clínica Dental Sonríe").initials == "CD"
+    assert _valid(name="Pepe").initials == "P"
+
+
 def test_all_sectors_have_theme() -> None:
     for sector in Sector:
         theme = theme_for(sector)

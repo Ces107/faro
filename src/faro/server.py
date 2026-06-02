@@ -41,6 +41,7 @@ class GenerateRequest(BaseModel):
     google_review_url: str = ""
     highlights: str = ""
     slogan: str = ""
+    brand_color: str = ""
 
 
 def create_app(*, use_live: bool = True) -> FastAPI:

@@ -12,6 +12,15 @@ from dataclasses import dataclass
 from enum import Enum
 
 _PHONE_RE = re.compile(r"^[6789]\d{8}$")
+_HEX_RE = re.compile(r"^#[0-9a-fA-F]{6}$")
+
+
+def _darken(hex_color: str, factor: float = 0.78) -> str:
+    """Oscurece un color hex (para el degradado del hero) sin librerías externas."""
+    value = hex_color.lstrip("#")
+    r, g, b = (int(value[i : i + 2], 16) for i in (0, 2, 4))
+    r, g, b = (max(0, min(255, round(c * factor))) for c in (r, g, b))
+    return f"#{r:02x}{g:02x}{b:02x}"
 
 
 class Sector(str, Enum):
@@ -96,6 +105,7 @@ class BusinessProfile:
     google_review_url: str = ""
     highlights: tuple[str, ...] = ()
     slogan: str = ""
+    brand_color: str = ""
 
     def __post_init__(self) -> None:
         if not self.name.strip():
@@ -111,10 +121,31 @@ class BusinessProfile:
         # WhatsApp por defecto = teléfono principal.
         wa = _clean_phone(self.whatsapp) if self.whatsapp else phone
         object.__setattr__(self, "whatsapp", wa)
+        if self.brand_color and not _HEX_RE.match(self.brand_color):
+            raise ValueError(
+                f"Color de marca no válido: {self.brand_color!r} (usa formato #RRGGBB)."
+            )
 
     @property
     def theme(self) -> SectorTheme:
         return theme_for(self.sector)
+
+    @property
+    def color(self) -> str:
+        """Color de marca: el elegido por el negocio o, si no, el del sector."""
+        return self.brand_color or self.theme.color
+
+    @property
+    def accent(self) -> str:
+        """Color de acento para el degradado (derivado del color de marca o del sector)."""
+        return _darken(self.brand_color) if self.brand_color else self.theme.accent
+
+    @property
+    def initials(self) -> str:
+        """Iniciales para el logo del hero (hasta 2 letras de las primeras palabras)."""
+        words = [w for w in self.name.split() if w[:1].isalnum()]
+        letters = "".join(w[0] for w in words[:2]) or self.name[:1]
+        return letters.upper()
 
     @property
     def phone_e164(self) -> str:
@@ -147,4 +178,5 @@ class BusinessProfile:
             google_review_url=data.get("google_review_url", "").strip(),
             highlights=split_lines(data.get("highlights", "")),
             slogan=data.get("slogan", "").strip(),
+            brand_color=data.get("brand_color", "").strip(),
         )

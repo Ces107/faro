@@ -67,6 +67,10 @@ Primera visita sin coste</textarea>
         <label>Enlace de reseñas de Google (si lo tienes)
           <input name="google_review_url" placeholder="se genera una búsqueda si lo dejas vacío" />
         </label>
+        <label class="color-field">
+          <span><input type="checkbox" id="useColor" /> Color de marca propio</span>
+          <input type="color" name="brand_color" id="brandColor" value="#2563eb" disabled />
+        </label>
         <button type="submit" class="primary" id="genBtn">✨ Generar pack</button>
         <p id="error" class="error"></p>
       </form>

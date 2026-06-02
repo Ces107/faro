@@ -27,7 +27,7 @@ Rellenas el formulario con los datos del negocio y pulsas "Generar pack". Al mom
 
 A partir de un formulario produce:
 
-- **Una landing de una página**, responsive y lista para publicar. HTML autocontenido (los estilos y los QR van dentro): se sube a cualquier hosting y funciona. Incluye botón de WhatsApp, llamada directa, servicios, horario y sección de reseñas.
+- **Una landing de una página**, responsive y lista para publicar. HTML autocontenido (los estilos y los QR van dentro): se sube a cualquier hosting y funciona. Incluye botón de WhatsApp, llamada directa, servicios, horario, sección de reseñas, logo con las iniciales del negocio y su color de marca. Trae **SEO de verdad**: datos estructurados de schema.org (`LocalBusiness`) que Google lee para el SEO local, etiquetas Open Graph para que el enlace se vea bien al compartirlo por WhatsApp, y favicon propio.
 - **El contenido para Google Business Profile**: descripción optimizada (dentro del límite de Google), categorías sugeridas, cinco publicaciones para empezar y respuestas tipo para reseñas buenas, regulares y malas.
 - **El WhatsApp**: enlace `wa.me` con mensaje pre-rellenado y su QR.
 - **La tarjeta de reseñas**: una tarjeta imprimible con el QR que lleva a dejar la reseña en Google. Se deja en el mostrador.
@@ -67,13 +67,13 @@ src/faro/
   templates/     plantilla de la landing
 web/             el formulario y la vista previa
 ventas/          material de venta
-tests/           28 tests
+tests/           37 tests
 ```
 
 ## Calidad
 
 ```bash
-python -m pytest      # 28 tests
+python -m pytest      # 37 tests
 python -m ruff check src tests
 python -m mypy        # --strict
 ```

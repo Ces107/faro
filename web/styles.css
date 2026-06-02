@@ -28,6 +28,10 @@ form label { display: block; font-size: 13px; font-weight: 600; color: #334155; 
 form input, form select, form textarea { width: 100%; margin-top: 4px; padding: 9px 11px; border: 1px solid var(--line); border-radius: 9px; font-size: 14px; font-family: inherit; font-weight: 400; }
 form textarea { resize: vertical; }
 .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.color-field { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.color-field span { display: flex; align-items: center; gap: 6px; font-weight: 600; }
+.color-field input[type="color"] { width: 48px; height: 32px; padding: 2px; margin: 0; cursor: pointer; }
+.color-field input:disabled { opacity: 0.4; }
 
 button.primary, a.primary { background: var(--brand); color: #fff; border: none; padding: 11px 18px; border-radius: 9px; font-weight: 700; cursor: pointer; font-size: 15px; text-decoration: none; display: inline-block; }
 button.primary:hover, a.primary:hover { background: var(--brand-dark); }

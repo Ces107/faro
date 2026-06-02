@@ -33,3 +33,14 @@ la demo ni la entrega de un pack; se listan para no esconderlos.
   No hay integración con la API de Google Business Profile (requiere OAuth y
   verificación del negocio). El dueño pega los textos. Es lo correcto para el MVP;
   la automatización es un paso posterior con permisos del cliente.
+
+- **TD-007 MEDIUM — un color de marca muy claro reduce el contraste del hero.**
+  El hero usa texto blanco sobre el degradado del color de marca. Con un color
+  muy claro (p. ej. amarillo), el acento oscurecido al 78% puede no dar contraste
+  suficiente. `business.accent` (`_darken`). Fix: calcular la luminosidad y, si es
+  alta, oscurecer más o cambiar el texto a oscuro.
+
+- **TD-008 LOW — el horario no entra en los datos estructurados.**
+  El JSON-LD no incluye `openingHours` porque el horario es texto libre y
+  convertirlo al formato schema.org (`Mo-Fr 09:00-20:00`) requiere parsearlo.
+  Fix: un parser de horario o un campo estructurado en el formulario.

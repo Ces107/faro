@@ -5,10 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{{ business.name }}{% if business.city %} · {{ business.city }}{% endif %}</title>
   <meta name="description" content="{{ copy.hero_subtitle }}" />
+  <meta name="theme-color" content="{{ brand_color }}" />
+  <link rel="icon" href="{{ favicon }}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="{{ business.name }} · {{ business.city }}" />
+  <meta property="og:description" content="{{ copy.slogan }}" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="{{ business.name }} · {{ business.city }}" />
+  <meta name="twitter:description" content="{{ copy.slogan }}" />
+  <script type="application/ld+json">
+{{ jsonld | safe }}
+  </script>
   <style>
     :root {
-      --brand: {{ theme.color }};
-      --accent: {{ theme.accent }};
+      --brand: {{ brand_color }};
+      --accent: {{ brand_accent }};
       --ink: #0f172a;
       --muted: #64748b;
       --bg: #ffffff;
@@ -24,7 +35,9 @@
 
     /* Hero */
     .hero { background: linear-gradient(150deg, var(--brand), var(--accent)); color: #fff; padding: 80px 0 90px; position: relative; }
-    .hero .emoji { font-size: 56px; }
+    .hero .logo { display: flex; align-items: center; gap: 14px; }
+    .hero .badge { width: 72px; height: 72px; border-radius: 20px; background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.4); display: grid; place-items: center; font-size: 30px; font-weight: 800; letter-spacing: -0.02em; }
+    .hero .emoji { font-size: 34px; }
     .hero h1 { font-size: clamp(34px, 6vw, 58px); letter-spacing: -0.03em; margin: 14px 0 8px; }
     .hero .slogan { font-size: clamp(18px, 3vw, 24px); font-weight: 500; opacity: 0.96; }
     .hero .sub { font-size: 17px; opacity: 0.9; margin-top: 12px; max-width: 640px; }
@@ -79,7 +92,10 @@
 <body>
   <header class="hero">
     <div class="wrap">
-      <div class="emoji">{{ theme.emoji }}</div>
+      <div class="logo">
+        <div class="badge">{{ business.initials }}</div>
+        <span class="emoji">{{ theme.emoji }}</span>
+      </div>
       <h1>{{ business.name }}</h1>
       <p class="slogan">{{ copy.slogan }}</p>
       <p class="sub">{{ copy.hero_subtitle }}</p>

@@ -18,6 +18,7 @@ async function loadSectors() {
 function formToJson(form) {
   const out = {};
   for (const [k, v] of new FormData(form).entries()) out[k] = v;
+  if (!el("useColor").checked) out.brand_color = "";
   return out;
 }
 
@@ -74,6 +75,10 @@ document.addEventListener("click", (e) => {
       setTimeout(() => (e.target.textContent = "Copiar"), 1500);
     });
   }
+});
+
+el("useColor").addEventListener("change", (e) => {
+  el("brandColor").disabled = !e.target.checked;
 });
 
 el("bizForm").addEventListener("submit", generate);
