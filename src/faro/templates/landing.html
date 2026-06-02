@@ -20,6 +20,8 @@
     :root {
       --brand: {{ brand_color }};
       --accent: {{ brand_accent }};
+      --hero1: {{ hero_start }};
+      --hero2: {{ hero_end }};
       --ink: #0f172a;
       --muted: #64748b;
       --bg: #ffffff;
@@ -34,7 +36,7 @@
     a { color: inherit; }
 
     /* Hero */
-    .hero { background: linear-gradient(150deg, var(--brand), var(--accent)); color: #fff; padding: 80px 0 90px; position: relative; }
+    .hero { background: linear-gradient(150deg, var(--hero1), var(--hero2)); color: #fff; padding: 80px 0 90px; position: relative; }
     .hero .logo { display: flex; align-items: center; gap: 14px; }
     .hero .badge { width: 72px; height: 72px; border-radius: 20px; background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.4); display: grid; place-items: center; font-size: 30px; font-weight: 800; letter-spacing: -0.02em; }
     .hero .emoji { font-size: 34px; }
@@ -73,7 +75,8 @@
     .info-card p { font-size: 16px; }
 
     /* Reviews CTA */
-    .reviews { background: linear-gradient(150deg, var(--brand), var(--accent)); color: #fff; text-align: center; }
+    .map { width: 100%; height: 360px; border: 0; border-radius: 14px; }
+    .reviews { background: linear-gradient(150deg, var(--hero1), var(--hero2)); color: #fff; text-align: center; }
     .reviews .qr { background: #fff; padding: 14px; border-radius: 16px; display: inline-block; margin-top: 18px; }
     .reviews .qr img { width: 150px; height: 150px; display: block; }
     .stars { font-size: 26px; letter-spacing: 4px; }
@@ -143,6 +146,16 @@
       {% endif %}
     </div>
   </section>
+
+  {% if maps_embed_url %}
+  <section class="services">
+    <div class="wrap">
+      <h2 class="section-title">Cómo llegar</h2>
+      <p class="section-intro">{{ business.address }}, {{ business.city }}. <a href="{{ maps_link }}" style="color:var(--brand);font-weight:600">Abrir en Google Maps</a></p>
+      <iframe class="map" src="{{ maps_embed_url }}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Mapa de cómo llegar"></iframe>
+    </div>
+  </section>
+  {% endif %}
 
   <section class="reviews">
     <div class="wrap">

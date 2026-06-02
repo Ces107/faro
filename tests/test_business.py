@@ -65,6 +65,23 @@ def test_color_defaults_to_sector() -> None:
     assert biz.color == biz.theme.color
 
 
+def test_hero_gradient_dark_color_unchanged() -> None:
+    # Un color de marca oscuro se usa tal cual en el hero (contrasta con blanco).
+    biz = _valid(brand_color="#1d4ed8")
+    assert biz.hero_start == "#1d4ed8"
+
+
+def test_hero_gradient_light_color_is_darkened() -> None:
+    # Un color claro (amarillo) NO se usa tal cual: se oscurece para que el texto
+    # blanco del hero siga siendo legible (TD-007).
+    biz = _valid(brand_color="#ffff00")
+    assert biz.hero_start != "#ffff00"
+    # El inicio del degradado debe quedar claramente más oscuro que el amarillo puro.
+    from faro.business import _luminance
+
+    assert _luminance(biz.hero_start) < 0.6
+
+
 def test_invalid_brand_color_raises() -> None:
     with pytest.raises(ValueError):
         _valid(brand_color="rojo")

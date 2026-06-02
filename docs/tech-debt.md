@@ -34,11 +34,12 @@ la demo ni la entrega de un pack; se listan para no esconderlos.
   verificación del negocio). El dueño pega los textos. Es lo correcto para el MVP;
   la automatización es un paso posterior con permisos del cliente.
 
-- **TD-007 MEDIUM — un color de marca muy claro reduce el contraste del hero.**
-  El hero usa texto blanco sobre el degradado del color de marca. Con un color
-  muy claro (p. ej. amarillo), el acento oscurecido al 78% puede no dar contraste
-  suficiente. `business.accent` (`_darken`). Fix: calcular la luminosidad y, si es
-  alta, oscurecer más o cambiar el texto a oscuro.
+- **TD-007 MEDIUM — un color de marca muy claro reduce el contraste del hero. [RESUELTO 2026-06-02]**
+  Resuelto: `business.hero_start`/`hero_end` calculan la luminosidad del color de
+  marca (`_luminance`) y, si es claro (> 0.6), oscurecen el degradado del hero y
+  de la sección de reseñas de forma agresiva para que el texto blanco siga siendo
+  legible; el color vivo se mantiene en los acentos sobre fondo blanco. Verificado
+  con un color amarillo. Cubierto por `test_hero_gradient_light_color_is_darkened`.
 
 - **TD-008 LOW — el horario no entra en los datos estructurados.**
   El JSON-LD no incluye `openingHours` porque el horario es texto libre y

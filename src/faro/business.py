@@ -15,12 +15,26 @@ _PHONE_RE = re.compile(r"^[6789]\d{8}$")
 _HEX_RE = re.compile(r"^#[0-9a-fA-F]{6}$")
 
 
+def _rgb(hex_color: str) -> tuple[int, int, int]:
+    value = hex_color.lstrip("#")
+    return tuple(int(value[i : i + 2], 16) for i in (0, 2, 4))  # type: ignore[return-value]
+
+
 def _darken(hex_color: str, factor: float = 0.78) -> str:
     """Oscurece un color hex (para el degradado del hero) sin librerías externas."""
-    value = hex_color.lstrip("#")
-    r, g, b = (int(value[i : i + 2], 16) for i in (0, 2, 4))
-    r, g, b = (max(0, min(255, round(c * factor))) for c in (r, g, b))
+    r, g, b = (max(0, min(255, round(c * factor))) for c in _rgb(hex_color))
     return f"#{r:02x}{g:02x}{b:02x}"
+
+
+def _luminance(hex_color: str) -> float:
+    """Luminancia perceptual aproximada (0 = negro, 1 = blanco)."""
+    r, g, b = _rgb(hex_color)
+    return (0.299 * r + 0.587 * g + 0.114 * b) / 255
+
+
+# Por encima de esta luminancia, el texto blanco del hero no contrasta y hay que
+# oscurecer el fondo del degradado de forma agresiva.
+_LIGHT_THRESHOLD = 0.6
 
 
 class Sector(str, Enum):
@@ -139,6 +153,18 @@ class BusinessProfile:
     def accent(self) -> str:
         """Color de acento para el degradado (derivado del color de marca o del sector)."""
         return _darken(self.brand_color) if self.brand_color else self.theme.accent
+
+    @property
+    def hero_start(self) -> str:
+        """Color inicial del degradado del hero, garantizando contraste con texto blanco."""
+        base = self.color
+        return _darken(base, 0.55) if _luminance(base) > _LIGHT_THRESHOLD else base
+
+    @property
+    def hero_end(self) -> str:
+        """Color final del degradado del hero (siempre más oscuro que el inicial)."""
+        base = self.color
+        return _darken(base, 0.4) if _luminance(base) > _LIGHT_THRESHOLD else self.accent
 
     @property
     def initials(self) -> str:

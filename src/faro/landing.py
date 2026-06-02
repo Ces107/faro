@@ -12,6 +12,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from faro.business import BusinessProfile
 from faro.content import LandingCopy, generate_copy
+from faro.maps import maps_embed_url, maps_link
 from faro.qr import review_qr, whatsapp_qr
 from faro.reviews import review_url
 from faro.seo import favicon_data_uri, local_business_jsonld
@@ -34,6 +35,8 @@ def render_landing(business: BusinessProfile, copy: LandingCopy) -> str:
         copy=copy,
         brand_color=business.color,
         brand_accent=business.accent,
+        hero_start=business.hero_start,
+        hero_end=business.hero_end,
         whatsapp_url=whatsapp_link(business),
         phone_url=phone_link(business),
         review_url=review_url(business),
@@ -41,6 +44,8 @@ def render_landing(business: BusinessProfile, copy: LandingCopy) -> str:
         review_qr=review_qr(business),
         favicon=favicon_data_uri(business),
         jsonld=local_business_jsonld(business),
+        maps_embed_url=maps_embed_url(business) if business.address else "",
+        maps_link=maps_link(business),
     )
 
 
