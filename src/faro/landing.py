@@ -85,6 +85,9 @@ def render_landing(business: BusinessProfile, copy: LandingCopy) -> str:
         "hero_start": business.hero_start,
         "hero_end": business.hero_end,
         "sector_icon": get_icon(playbook.icon),
+        "trust_chip": playbook.trust_chip.replace("{city}", business.city).replace(
+            "{phone}", business.phone
+        ),
         "service_cards": build_service_cards(business, playbook),
         "process": playbook.process,
         "faq": build_faq(business, playbook),

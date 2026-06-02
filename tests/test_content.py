@@ -29,8 +29,9 @@ def test_scripted_copy_is_complete() -> None:
     assert copy.hero_subtitle
     assert copy.about_text
     assert len(copy.value_props) == 3
-    # El punto fuerte aportado debe aparecer en las propuestas de valor.
-    assert any("20 años" in p.description for p in copy.value_props)
+    # Cada propuesta de valor tiene un título distinto (sin duplicar "Lo que nos diferencia").
+    titles = [p.title for p in copy.value_props]
+    assert len(set(titles)) == len(titles)
 
 
 def test_generate_copy_scripted_when_no_live() -> None:

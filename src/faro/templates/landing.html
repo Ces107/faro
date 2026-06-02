@@ -27,7 +27,8 @@
       --hero2: {{ hero_end }};
       --brand-050: color-mix(in oklab, var(--brand) 8%, white);
       --brand-100: color-mix(in oklab, var(--brand) 14%, white);
-      --brand-700: color-mix(in oklab, var(--brand) 85%, black);
+      /* Acento legible sobre blanco (contraste WCAG garantizado en servidor). */
+      --brand-700: {{ brand_accent }};
       --ink: color-mix(in oklab, var(--brand) 18%, #0b1220);
       --ink-soft: #5b6577;
       --surface-0: #fff;
@@ -109,6 +110,7 @@
     .trust-strip { display: flex; flex-wrap: wrap; gap: 16px 22px; margin-top: 26px; font-size: var(--step--1); opacity: .92; }
     .trust-strip span { display: inline-flex; align-items: center; gap: 7px; }
     .open-pill { display: none; align-items: center; gap: 7px; padding: 5px 12px; border-radius: var(--r-pill); background: rgba(255,255,255,.16); font-weight: 600; font-size: var(--step--1); }
+    .trust-strip .open-pill { display: none; }
     .open-pill .dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; }
     .open-pill.closed .dot { background: #f59e0b; }
 
@@ -181,7 +183,8 @@
 
     /* Reviews */
     .reviews { background: linear-gradient(150deg, var(--hero1), var(--hero2)); color: #fff; text-align: center; }
-    .reviews .stars { font-size: 26px; letter-spacing: 4px; color: #ffd34d; }
+    .reviews .stars { display: inline-flex; gap: 6px; opacity: .9; }
+    .reviews .stars .ico { width: 26px; height: 26px; color: #fff; }
     .reviews .qr { background: #fff; padding: 14px; border-radius: var(--r-md); display: inline-block; margin-top: 16px; }
     .reviews .qr img { width: 156px; height: 156px; }
 
@@ -261,7 +264,7 @@
         <a class="btn btn-on-brand" href="{{ phone_url }}"><svg class="ico" viewBox="0 0 24 24">{{ icon('phone') | safe }}</svg> {{ business.phone }}</a>
       </div>
       <div class="trust-strip">
-        <span><svg class="ico" viewBox="0 0 24 24">{{ icon('shield') | safe }}</svg> {{ playbook.trust_chip }}</span>
+        <span><svg class="ico" viewBox="0 0 24 24">{{ icon('shield') | safe }}</svg> {{ trust_chip }}</span>
         <span><svg class="ico" viewBox="0 0 24 24">{{ icon('location') | safe }}</svg> {{ business.city }}</span>
         <span class="open-pill" id="openPill" data-hours='{{ opening_hours_json }}'><span class="dot"></span><span class="txt"></span></span>
       </div>
@@ -421,7 +424,7 @@
   {% if review_url %}
   <section class="reviews">
     <div class="wrap" data-reveal>
-      <div class="stars" aria-hidden="true">★★★★★</div>
+      <div class="stars" aria-hidden="true">{% for _ in range(5) %}<svg class="ico" viewBox="0 0 24 24">{{ icon('star') | safe }}</svg>{% endfor %}</div>
       <h2 class="section-title" style="color:#fff">¿Nos dejas una reseña?</h2>
       <p>Si te hemos ayudado, una reseña en Google nos viene genial. Te toma 30 segundos.</p>
       <div class="qr"><img src="{{ review_qr }}" alt="Código QR para dejar una reseña en Google" /></div>

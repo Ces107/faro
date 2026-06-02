@@ -54,9 +54,8 @@ def _default_value_props(business: BusinessProfile) -> tuple[ValueProp, ...]:
             f"{theme.label} con la experiencia y el cuidado que tu confianza merece.",
         ),
     ]
-    # Si el negocio aporta puntos fuertes, los anteponemos.
-    for highlight in business.highlights[:2]:
-        props.insert(0, ValueProp("Lo que nos diferencia", highlight))
+    # Los puntos fuertes del negocio van en la franja de estadísticas (como badges),
+    # no aquí, para no duplicar contenido ni repetir el mismo título.
     return tuple(props[:3])
 
 

@@ -65,21 +65,37 @@ def test_color_defaults_to_sector() -> None:
     assert biz.color == biz.theme.color
 
 
-def test_hero_gradient_dark_color_unchanged() -> None:
-    # Un color de marca oscuro se usa tal cual en el hero (contrasta con blanco).
-    biz = _valid(brand_color="#1d4ed8")
-    assert biz.hero_start == "#1d4ed8"
+def test_hero_gradient_readable_with_white_for_any_brand() -> None:
+    # El texto blanco del hero debe cumplir contraste WCAG AA (>=4.5) con cualquier
+    # color de marca, incluidos los claros (amarillo) y los saturados (cian).
+    from faro.business import contrast_ratio
+
+    for color in ("#1d4ed8", "#ffff00", "#0ea5e9", "#ec4899", "#10b981"):
+        biz = _valid(brand_color=color)
+        assert contrast_ratio("#ffffff", biz.hero_start) >= 4.5
 
 
-def test_hero_gradient_light_color_is_darkened() -> None:
-    # Un color claro (amarillo) NO se usa tal cual: se oscurece para que el texto
-    # blanco del hero siga siendo legible (TD-007).
+def test_light_color_is_darkened_for_hero() -> None:
     biz = _valid(brand_color="#ffff00")
     assert biz.hero_start != "#ffff00"
-    # El inicio del degradado debe quedar claramente más oscuro que el amarillo puro.
-    from faro.business import _luminance
 
-    assert _luminance(biz.hero_start) < 0.6
+
+def test_accent_readable_on_white() -> None:
+    # El color de acento (eyebrows, cifras, chips) debe leerse sobre blanco.
+    from faro.business import contrast_ratio
+
+    for color in ("#ffe066", "#0ea5e9", "#10b981"):
+        assert contrast_ratio("#ffffff", _valid(brand_color=color).accent) >= 4.5
+
+
+def test_on_brand_picks_max_contrast() -> None:
+    from faro.business import contrast_ratio
+
+    for color in ("#ffff00", "#0a3d62", "#0ea5e9"):
+        biz = _valid(brand_color=color)
+        chosen = biz.on_brand
+        other = "#0f172a" if chosen == "#ffffff" else "#ffffff"
+        assert contrast_ratio(chosen, color) >= contrast_ratio(other, color)
 
 
 def test_invalid_brand_color_raises() -> None:

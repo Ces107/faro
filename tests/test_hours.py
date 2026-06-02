@@ -40,6 +40,15 @@ def test_mixed_range_and_single() -> None:
     assert specs[1]["dayOfWeek"] == ["Saturday"]
 
 
+def test_split_shift_keeps_both_segments() -> None:
+    # Turno partido: el segundo rango sin día hereda los días del primero.
+    specs = parse_opening_hours("L-V 9:00-14:00, 17:00-20:00")
+    assert len(specs) == 2
+    assert specs[0]["opens"] == "09:00" and specs[0]["closes"] == "14:00"
+    assert specs[1]["opens"] == "17:00" and specs[1]["closes"] == "20:00"
+    assert specs[1]["dayOfWeek"] == specs[0]["dayOfWeek"]  # mismos días heredados
+
+
 def test_unparseable_returns_empty() -> None:
     assert parse_opening_hours("abrimos cuando podemos") == []
     assert parse_opening_hours("") == []

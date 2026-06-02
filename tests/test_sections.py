@@ -51,6 +51,14 @@ def test_faq_fills_placeholders_and_drops_address_when_missing() -> None:
     assert len(no_addr) < len(with_addr)  # la pregunta de dirección se descarta
 
 
+def test_faq_drops_address_placeholder_questions_without_address() -> None:
+    # Una FAQ con {address} sin dirección no debe dejar "Estamos en ." colgando.
+    for sector in Sector:
+        for q in build_faq(_biz(sector=sector, address=""), playbook_for(sector)):
+            assert "{address}" not in q.answer
+            assert "Estamos en ." not in q.answer
+
+
 def test_stats_are_honest_and_at_least_three() -> None:
     stats = build_stats(_biz(services=("A", "B", "C")), playbook_for(Sector.DENTAL))
     assert len(stats) >= 3

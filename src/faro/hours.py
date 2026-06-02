@@ -22,10 +22,12 @@ _DAY_NAME = {
     "D": "Sunday",
 }
 
-# Captura "<días> <hora>-<hora>" como una unidad, para no romper las listas de
-# días separadas por coma ("L,X,V 9-14") al trocear el texto por comas.
+# Captura "<días opcionales> <hora>-<hora>" como una unidad. Los días son
+# opcionales: un tramo horario sin días ("..., 17:00-20:00") hereda los del tramo
+# anterior (turno partido). Capturar días+hora juntos evita romper las listas de
+# días por coma ("L,X,V 9-14").
 _SEGMENT_RE = re.compile(
-    r"([LMXJVSD](?:\s*[-,]\s*[LMXJVSD])*)\s+"
+    r"([LMXJVSD](?:\s*[-,]\s*[LMXJVSD])*)?\s*"
     r"(\d{1,2})(?:[:.](\d{2}))?\s*[-aà]\s*(\d{1,2})(?:[:.](\d{2}))?",
     re.IGNORECASE,
 )
@@ -65,15 +67,18 @@ def parse_opening_hours(text: str) -> list[dict[str, object]]:
     if not text.strip():
         return []
     specs: list[dict[str, object]] = []
+    current_days: list[str] = []
     try:
         for match in _SEGMENT_RE.finditer(text):
-            days = _expand_days(match.group(1))
-            if not days:
-                continue
+            token = (match.group(1) or "").strip()
+            if token:
+                current_days = _expand_days(token)
+            if not current_days:
+                continue  # un tramo horario sin día previo válido se ignora
             specs.append(
                 {
                     "@type": "OpeningHoursSpecification",
-                    "dayOfWeek": [_DAY_NAME[d] for d in days],
+                    "dayOfWeek": [_DAY_NAME[d] for d in current_days],
                     "opens": _hhmm(match.group(2), match.group(3)),
                     "closes": _hhmm(match.group(4), match.group(5)),
                 }

@@ -26,10 +26,32 @@ def _darken(hex_color: str, factor: float = 0.78) -> str:
     return f"#{r:02x}{g:02x}{b:02x}"
 
 
-def _luminance(hex_color: str) -> float:
-    """Luminancia perceptual aproximada (0 = negro, 1 = blanco)."""
+def _rel_luminance(hex_color: str) -> float:
+    """Luminancia relativa WCAG (con corrección de gamma sRGB)."""
+
+    def channel(value: int) -> float:
+        c = value / 255
+        return c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4
+
     r, g, b = _rgb(hex_color)
-    return (0.299 * r + 0.587 * g + 0.114 * b) / 255
+    return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b)
+
+
+def contrast_ratio(a: str, b: str) -> float:
+    """Ratio de contraste WCAG entre dos colores (1 = igual, 21 = blanco/negro)."""
+    la, lb = _rel_luminance(a), _rel_luminance(b)
+    hi, lo = max(la, lb), min(la, lb)
+    return (hi + 0.05) / (lo + 0.05)
+
+
+def readable_on_white(color: str, ratio: float = 4.5) -> str:
+    """Oscurece el color lo justo para que contraste >= ratio sobre blanco."""
+    current = color
+    for _ in range(24):
+        if contrast_ratio("#ffffff", current) >= ratio:
+            return current
+        current = _darken(current, 0.86)
+    return current
 
 
 def mix_hex(base: str, other: str, pct: float) -> str:
@@ -44,11 +66,6 @@ def mix_hex(base: str, other: str, pct: float) -> str:
     g = round(bg * pct + og * (1 - pct))
     b = round(bb * pct + ob * (1 - pct))
     return f"#{r:02x}{g:02x}{b:02x}"
-
-
-# Por encima de esta luminancia, el texto blanco del hero no contrasta y hay que
-# oscurecer el fondo del degradado de forma agresiva.
-_LIGHT_THRESHOLD = 0.6
 
 
 class Sector(str, Enum):
@@ -241,25 +258,25 @@ class BusinessProfile:
 
     @property
     def on_brand(self) -> str:
-        """Color de texto legible (#fff o casi negro) sobre el color de marca (WCAG)."""
-        return "#ffffff" if _luminance(self.color) < 0.55 else "#0f172a"
+        """Color de texto (#fff o casi negro) con MÁS contraste WCAG sobre el color de marca."""
+        if contrast_ratio("#ffffff", self.color) >= contrast_ratio("#0f172a", self.color):
+            return "#ffffff"
+        return "#0f172a"
 
     @property
     def accent(self) -> str:
-        """Color de acento para el degradado (derivado del color de marca o del sector)."""
-        return _darken(self.brand_color) if self.brand_color else self.theme.accent
+        """Color de marca legible como texto sobre blanco (eyebrows, cifras, chips). WCAG >=4.5."""
+        return readable_on_white(self.color)
 
     @property
     def hero_start(self) -> str:
-        """Color inicial del degradado del hero, garantizando contraste con texto blanco."""
-        base = self.color
-        return _darken(base, 0.55) if _luminance(base) > _LIGHT_THRESHOLD else base
+        """Inicio del degradado del hero, oscurecido lo justo para texto blanco legible (WCAG)."""
+        return readable_on_white(self.color)
 
     @property
     def hero_end(self) -> str:
-        """Color final del degradado del hero (siempre más oscuro que el inicial)."""
-        base = self.color
-        return _darken(base, 0.4) if _luminance(base) > _LIGHT_THRESHOLD else self.accent
+        """Final del degradado del hero (más oscuro que el inicio)."""
+        return _darken(self.hero_start, 0.8)
 
     @property
     def initials(self) -> str:

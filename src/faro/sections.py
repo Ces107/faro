@@ -68,7 +68,9 @@ def build_faq(business: BusinessProfile, playbook: SectorPlaybook) -> list[FaqIt
     """Rellena las FAQ con datos reales; descarta las que necesitan dirección si no hay."""
     out: list[FaqItem] = []
     for item in playbook.faq:
-        if item.needs_address and not business.address:
+        # Descarta la pregunta si su respuesta necesita una dirección que no hay
+        # (por el flag o porque el texto la interpola), para no dejar «Estamos en .».
+        if (item.needs_address or "{address}" in item.answer) and not business.address:
             continue
         answer = (
             item.answer.replace("{phone}", business.phone)
