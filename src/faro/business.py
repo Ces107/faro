@@ -196,6 +196,7 @@ class BusinessProfile:
     google_review_url: str = ""
     highlights: tuple[str, ...] = ()
     slogan: str = ""
+    about: str = ""
     brand_color: str = ""
     photos: tuple[str, ...] = ()
     testimonials: tuple[Testimonial, ...] = ()
@@ -225,6 +226,7 @@ class BusinessProfile:
         object.__setattr__(self, "city", self.city.strip()[:50])
         object.__setattr__(self, "address", self.address.strip()[:120])
         object.__setattr__(self, "slogan", self.slogan.strip()[:90])
+        object.__setattr__(self, "about", self.about.strip()[:600])
         object.__setattr__(self, "hours", self.hours.strip()[:120])
         object.__setattr__(self, "email", self.email.strip()[:120])
         object.__setattr__(self, "services", tuple(s[:70] for s in self.services[:12]))
@@ -317,6 +319,7 @@ class BusinessProfile:
             google_review_url=data.get("google_review_url", "").strip(),
             highlights=split_lines(data.get("highlights", "")),
             slogan=data.get("slogan", "").strip(),
+            about=data.get("about", "").strip(),
             brand_color=data.get("brand_color", "").strip(),
             photos=split_lines(data.get("photos", "")),
             testimonials=_parse_testimonials(data.get("testimonials", "")),

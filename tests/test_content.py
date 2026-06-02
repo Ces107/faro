@@ -39,6 +39,23 @@ def test_generate_copy_scripted_when_no_live() -> None:
     assert "Puerto de Sagunto" in copy.hero_subtitle
 
 
+def test_no_filler_in_about() -> None:
+    # "y mucho más" era relleno; no debe aparecer.
+    assert "y mucho más" not in scripted_copy(_biz()).about_text
+
+
+def test_owner_about_is_respected() -> None:
+    # Si el dueño da su descripción, se usa tal cual (no se inventa otra).
+    biz = _biz(about="Somos un equipo familiar desde 1990.")
+    assert scripted_copy(biz).about_text == "Somos un equipo familiar desde 1990."
+
+
+def test_services_intro_matches_sector() -> None:
+    from faro.business import Sector
+
+    assert scripted_copy(_biz(sector=Sector.RESTAURANTE)).services_intro == "Nuestra carta"
+
+
 def test_parse_live_valid_payload() -> None:
     from faro.content import _parse_live
 

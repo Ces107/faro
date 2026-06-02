@@ -42,6 +42,12 @@ class SectorPlaybook:
     trust_chip: str
     generic_benefit: str
     icon: str  # icono de sector por defecto (nombre en icons.py)
+    # Vocabulario de la oferta: cómo se llama lo que vende este negocio. Evita
+    # forzar "servicios" en una panadería (productos) o un bar (carta). Por
+    # defecto "servicios"; se sobre-escribe en los sectores que difieren.
+    offer_word: str = "servicios"  # plural, para la etiqueta de la cifra y el formulario
+    offer_heading: str = "Nuestros servicios"  # título de la sección
+    offer_verb: str = "ofrecemos"  # verbo para la frase de "sobre nosotros"
 
 
 # Procesos reutilizables por arquetipo (varios sectores comparten flujo).
@@ -139,6 +145,8 @@ _PLAYBOOK: dict[Sector, SectorPlaybook] = {
         trust_chip="Trato cercano y profesional",
         generic_benefit="te lo dejamos perfecto",
         icon="tooth",
+        offer_word="tratamientos",
+        offer_heading="Nuestros tratamientos",
     ),
     Sector.FISIO: SectorPlaybook(
         process=_APPOINTMENT,
@@ -185,6 +193,8 @@ _PLAYBOOK: dict[Sector, SectorPlaybook] = {
         trust_chip="Profesionales con experiencia real",
         generic_benefit="te ayudamos a recuperarte",
         icon="heart",
+        offer_word="tratamientos",
+        offer_heading="Tratamientos y terapias",
     ),
     Sector.VETERINARIO: SectorPlaybook(
         process=_APPOINTMENT,
@@ -322,6 +332,8 @@ _PLAYBOOK: dict[Sector, SectorPlaybook] = {
         trust_chip="Tu bienestar, nuestra prioridad",
         generic_benefit="te cuidas y se nota",
         icon="scissors",
+        offer_word="tratamientos",
+        offer_heading="Nuestros tratamientos",
     ),
     Sector.RESTAURANTE: SectorPlaybook(
         process=_FOOD,
@@ -365,6 +377,9 @@ _PLAYBOOK: dict[Sector, SectorPlaybook] = {
         trust_chip="Cocina de verdad, sin artificios",
         generic_benefit="te lo ponemos fácil",
         icon="fork",
+        offer_word="platos",
+        offer_heading="Nuestra carta",
+        offer_verb="servimos",
     ),
     Sector.BAR: SectorPlaybook(
         process=_FOOD,
@@ -403,6 +418,9 @@ _PLAYBOOK: dict[Sector, SectorPlaybook] = {
         trust_chip="Tu bar de siempre",
         generic_benefit="te atendemos como mereces",
         icon="coffee",
+        offer_word="platos",
+        offer_heading="Nuestra carta",
+        offer_verb="servimos",
     ),
     Sector.COMERCIO: SectorPlaybook(
         process=_RETAIL,
@@ -441,6 +459,9 @@ _PLAYBOOK: dict[Sector, SectorPlaybook] = {
         trust_chip="Comercio de {city} de toda la vida",
         generic_benefit="lo tenemos o lo pedimos",
         icon="bag",
+        offer_word="productos",
+        offer_heading="Lo que encontrarás",
+        offer_verb="tenemos",
     ),
     Sector.PANADERIA: SectorPlaybook(
         process=_FOOD,
@@ -484,6 +505,9 @@ _PLAYBOOK: dict[Sector, SectorPlaybook] = {
         trust_chip="Elaboración propia, cada día",
         generic_benefit="hecho con cariño y buenos ingredientes",
         icon="bread",
+        offer_word="productos",
+        offer_heading="Nuestros productos",
+        offer_verb="tenemos",
     ),
     Sector.TALLER: SectorPlaybook(
         process=_QUOTE,
@@ -584,6 +608,7 @@ _PLAYBOOK: dict[Sector, SectorPlaybook] = {
         trust_chip="Sin permanencia, sin excusas",
         generic_benefit="te ayudamos a ponerte en forma",
         icon="dumbbell",
+        offer_heading="Clases y servicios",
     ),
     Sector.FARMACIA: SectorPlaybook(
         process=_RETAIL,
@@ -631,6 +656,9 @@ _PLAYBOOK: dict[Sector, SectorPlaybook] = {
         trust_chip="Tu farmacia de siempre",
         generic_benefit="te orientamos con criterio profesional",
         icon="pill",
+        offer_word="productos y servicios",
+        offer_heading="Productos y servicios",
+        offer_verb="tenemos",
     ),
     Sector.ASESORIA: SectorPlaybook(
         process=_ADVISORY,

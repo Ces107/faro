@@ -59,6 +59,21 @@ def test_faq_drops_address_placeholder_questions_without_address() -> None:
             assert "Estamos en ." not in q.answer
 
 
+def test_offer_vocabulary_per_sector() -> None:
+    # El vocabulario debe encajar con el sector: una panadería no tiene "servicios".
+    assert playbook_for(Sector.PANADERIA).offer_word == "productos"
+    assert playbook_for(Sector.RESTAURANTE).offer_word == "platos"
+    assert playbook_for(Sector.DENTAL).offer_word == "tratamientos"
+    assert playbook_for(Sector.TALLER).offer_word == "servicios"
+
+
+def test_stat_label_uses_offer_word() -> None:
+    biz = _biz(sector=Sector.PANADERIA, services=("Pan", "Bollería"))
+    stats = build_stats(biz, playbook_for(Sector.PANADERIA))
+    assert any(s.label == "productos" for s in stats)
+    assert not any(s.label == "servicios" for s in stats)
+
+
 def test_stats_are_honest_and_at_least_three() -> None:
     stats = build_stats(_biz(services=("A", "B", "C")), playbook_for(Sector.DENTAL))
     assert len(stats) >= 3

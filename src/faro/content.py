@@ -12,7 +12,7 @@ from __future__ import annotations
 import json
 import logging
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from faro.business import BusinessProfile
 
@@ -60,23 +60,32 @@ def _default_value_props(business: BusinessProfile) -> tuple[ValueProp, ...]:
 
 
 def scripted_copy(business: BusinessProfile) -> LandingCopy:
-    """Copy de calidad a partir de plantillas, sin LLM."""
+    """Copy de calidad a partir de plantillas, sin LLM.
+
+    Si el negocio aporta su propia descripción (``about``), se respeta tal cual en
+    vez de auto-redactar; así no inventamos texto cuando el dueño nos lo da.
+    """
+    from faro.playbook import playbook_for
+
     theme = business.theme
+    playbook = playbook_for(business.sector)
     slogan = business.slogan or theme.headline
     hl = f" {business.highlights[0]}." if business.highlights else ""
     hero_subtitle = f"{theme.label} en {business.city}.{hl}".strip()
-    services_phrase = ", ".join(business.services[:3])
-    about_text = (
-        f"En {business.name} somos {theme.noun} en {business.city}. "
-        f"Nos puedes encontrar para {services_phrase.lower()} y mucho más. "
-        "Escríbenos por WhatsApp o llámanos y te atendemos enseguida."
-    )
+    if business.about.strip():
+        about_text = business.about.strip()
+    else:
+        services_phrase = ", ".join(business.services[:3]).lower()
+        about_text = (
+            f"En {business.name} {playbook.offer_verb} {services_phrase} en {business.city}. "
+            "Escríbenos por WhatsApp o llámanos y te atendemos enseguida."
+        )
     return LandingCopy(
         slogan=slogan,
         hero_subtitle=hero_subtitle,
         about_title=f"Sobre {business.name}",
         about_text=about_text,
-        services_intro="Esto es lo que podemos hacer por ti",
+        services_intro=playbook.offer_heading,
         value_props=_default_value_props(business),
     )
 
@@ -156,4 +165,9 @@ def live_copy(business: BusinessProfile) -> LandingCopy:
 
 
 def generate_copy(business: BusinessProfile, *, use_live: bool = True) -> LandingCopy:
-    return live_copy(business) if use_live else scripted_copy(business)
+    copy = live_copy(business) if use_live else scripted_copy(business)
+    # Si el dueño dictó su descripción, se respeta SIEMPRE (también en modo live):
+    # no inventamos un "sobre nosotros" cuando nos lo han dado.
+    if business.about.strip():
+        copy = replace(copy, about_text=business.about.strip())
+    return copy

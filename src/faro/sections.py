@@ -85,7 +85,7 @@ def build_stats(business: BusinessProfile, playbook: SectorPlaybook) -> list[Sta
     """Cifras honestas para la franja de estadísticas. Nunca se inventan números."""
     tiles: list[Stat] = []
     if len(business.services) >= 2:
-        tiles.append(Stat(f"{len(business.services)}+", "servicios"))
+        tiles.append(Stat(f"{len(business.services)}+", playbook.offer_word))
     if business.hours and _ALL_WEEK_RE.search(business.hours):
         tiles.append(Stat("7 días", "te atendemos"))
     tiles.append(Stat(business.city, "cerca de ti"))

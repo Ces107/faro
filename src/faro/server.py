@@ -62,6 +62,7 @@ class GenerateRequest(BaseModel):
     google_review_url: str = ""
     highlights: str = ""
     slogan: str = ""
+    about: str = ""
     brand_color: str = ""
     photos: str = ""
     testimonials: str = ""
@@ -77,9 +78,17 @@ def create_app(*, use_live: bool = False) -> FastAPI:
 
     @app.get("/api/sectors")
     def sectors() -> dict[str, list[dict[str, str]]]:
+        from faro.business import theme_for
+        from faro.playbook import playbook_for
+
         return {
             "sectors": [
-                {"value": s.value, "label": s.value.capitalize()} for s in Sector
+                {
+                    "value": s.value,
+                    "label": theme_for(s).label,
+                    "offer_word": playbook_for(s).offer_word,
+                }
+                for s in Sector
             ]
         }
 
