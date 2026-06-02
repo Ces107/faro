@@ -10,11 +10,13 @@ Dos vías con el mismo resultado (``LandingCopy``):
 from __future__ import annotations
 
 import json
+import logging
 import os
 from dataclasses import dataclass
 
 from faro.business import BusinessProfile
 
+_LOG = logging.getLogger("faro.content")
 _MODEL = "claude-haiku-4-5-20251001"
 
 
@@ -91,21 +93,25 @@ _LIVE_SYSTEM = (
 )
 
 
+def _clamp(value: object, limit: int) -> str:
+    return str(value).strip()[:limit]
+
+
 def _parse_live(payload: str, fallback: LandingCopy) -> LandingCopy:
     try:
         data = json.loads(payload)
         props = tuple(
-            ValueProp(str(p["title"]), str(p["description"]))
+            ValueProp(_clamp(p["title"], 40), _clamp(p["description"], 160))
             for p in data["value_props"][:3]
         )
         if not props:
             return fallback
         return LandingCopy(
-            slogan=str(data["slogan"]),
-            hero_subtitle=str(data["hero_subtitle"]),
-            about_title=str(data["about_title"]),
-            about_text=str(data["about_text"]),
-            services_intro=str(data["services_intro"]),
+            slogan=_clamp(data["slogan"], 90),
+            hero_subtitle=_clamp(data["hero_subtitle"], 160),
+            about_title=_clamp(data["about_title"], 80),
+            about_text=_clamp(data["about_text"], 400),
+            services_intro=_clamp(data["services_intro"], 80),
             value_props=props,
         )
     except (json.JSONDecodeError, KeyError, TypeError):
@@ -121,6 +127,7 @@ def live_copy(business: BusinessProfile) -> LandingCopy:
     try:
         import anthropic
     except ImportError:
+        _LOG.warning("Modo live pedido pero falta el paquete 'anthropic'; uso plantillas.")
         return fallback
     facts = {
         "nombre": business.name,
@@ -143,7 +150,8 @@ def live_copy(business: BusinessProfile) -> LandingCopy:
             if block.type == "text":
                 return _parse_live(block.text, fallback)
         return fallback
-    except Exception:
+    except Exception as exc:
+        _LOG.warning("El modo live falló (%s); uso plantillas.", exc)
         return fallback
 
 

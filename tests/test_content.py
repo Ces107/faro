@@ -38,6 +38,40 @@ def test_generate_copy_scripted_when_no_live() -> None:
     assert "Puerto de Sagunto" in copy.hero_subtitle
 
 
+def test_parse_live_valid_payload() -> None:
+    from faro.content import _parse_live
+
+    payload = (
+        '{"slogan":"Tu sonrisa","hero_subtitle":"Dental en Sagunto",'
+        '"about_title":"Sobre","about_text":"Texto.","services_intro":"Servicios",'
+        '"value_props":[{"title":"A","description":"uno"},{"title":"B","description":"dos"},'
+        '{"title":"C","description":"tres"}]}'
+    )
+    copy = _parse_live(payload, scripted_copy(_biz()))
+    assert copy.slogan == "Tu sonrisa"
+    assert len(copy.value_props) == 3
+
+
+def test_parse_live_clamps_long_fields() -> None:
+    from faro.content import _parse_live
+
+    payload = (
+        '{"slogan":"' + "x" * 500 + '","hero_subtitle":"h","about_title":"t",'
+        '"about_text":"a","services_intro":"s",'
+        '"value_props":[{"title":"A","description":"d"}]}'
+    )
+    copy = _parse_live(payload, scripted_copy(_biz()))
+    assert len(copy.slogan) <= 90  # campo recortado, no rompe el diseño
+
+
+def test_parse_live_invalid_falls_back() -> None:
+    from faro.content import _parse_live
+
+    fallback = scripted_copy(_biz())
+    assert _parse_live("no es json", fallback) is fallback
+    assert _parse_live('{"slogan":"x"}', fallback) is fallback  # faltan claves
+
+
 def test_gmb_description_within_limit() -> None:
     gmb = build_gmb(_biz())
     assert len(gmb.description) <= 750

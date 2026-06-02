@@ -22,11 +22,30 @@ from faro.pack import DigitalPresencePack, build_pack, to_zip
 _WEB_DIR = Path(__file__).resolve().parents[2] / "web"
 
 
+_OUTPUT_DIR = Path(__file__).resolve().parents[2] / "output"
+_MAX_PACKS_IN_MEMORY = 50
+
+
 def _ascii_slug(text: str) -> str:
     """Slug ASCII para el nombre del fichero (las cabeceras HTTP no admiten Unicode)."""
     normalized = unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode()
     slug = "".join(c if c.isalnum() else "-" for c in normalized.lower())
     return "-".join(filter(None, slug.split("-")))[:40] or "negocio"
+
+
+def _save_pack_to_disk(
+    pack: DigitalPresencePack, business: BusinessProfile, pack_id: str
+) -> None:
+    """Guarda una copia del pack entregado para poder recuperarlo o re-editarlo.
+
+    Persistir es un extra: si el disco falla, la generación no se interrumpe.
+    """
+    try:
+        folder = _OUTPUT_DIR / f"{_ascii_slug(business.name)}-{pack_id}"
+        folder.mkdir(parents=True, exist_ok=True)
+        (folder / "pack.zip").write_bytes(to_zip(pack, business))
+    except OSError:
+        pass
 
 
 class GenerateRequest(BaseModel):
@@ -70,6 +89,10 @@ def create_app(*, use_live: bool = False) -> FastAPI:
         pack = build_pack(business, use_live=use_live)
         pack_id = secrets.token_hex(8)
         packs[pack_id] = (pack, business)
+        _save_pack_to_disk(pack, business, pack_id)
+        # Cap FIFO del store en memoria: no crece sin límite en sesiones largas.
+        while len(packs) > _MAX_PACKS_IN_MEMORY:
+            packs.pop(next(iter(packs)))
         return JSONResponse(
             {
                 "pack_id": pack_id,

@@ -36,8 +36,9 @@ Si el cliente quiere `sunegocio.com`, hay que comprar el dominio (~10-12 €/añ
 
 ## 3. Dejar la captación de reseñas montada
 
-1. Abre `tarjeta-resenas.html`, imprímela (queda en tamaño tarjeta) y dásela al cliente para el mostrador.
-2. Explícale: cuando un cliente esté contento, que escanee el QR y deje la reseña. Nunca se paga ni se condiciona una reseña (Google lo penaliza).
+1. **Consigue el enlace directo de reseña** (importante). En el formulario de Faro hay un campo "Enlace para dejar reseña en Google". Si lo rellenas, el QR lleva directo a la ventana de poner estrellas; si lo dejas vacío, el QR solo lleva a una búsqueda y mucha gente se pierde por el camino. Para conseguirlo: entra en la ficha de Google Business del negocio (business.google.com), pulsa "Pide más reseñas" / "Compartir formulario de reseña" y copia el enlace corto (tipo `g.page/r/.../review`). Pégalo en el formulario antes de generar el pack.
+2. Abre `tarjeta-resenas.html`, imprímela (queda en tamaño tarjeta) y dásela al cliente para el mostrador.
+3. Explícale: cuando un cliente esté contento, que escanee el QR y deje la reseña. Nunca se paga ni se condiciona una reseña (Google lo penaliza).
 
 ## 4. Checklist de entrega (marca antes de cobrar el resto / cerrar)
 

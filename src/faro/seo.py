@@ -16,6 +16,7 @@ import json
 from urllib.parse import quote
 
 from faro.business import BusinessProfile, Sector
+from faro.hours import parse_opening_hours
 
 _SCHEMA_TYPES: dict[Sector, str] = {
     Sector.DENTAL: "Dentist",
@@ -59,6 +60,9 @@ def local_business_jsonld(business: BusinessProfile) -> str:
         "address": address,
         "areaServed": business.city,
     }
+    opening_hours = parse_opening_hours(business.hours)
+    if opening_hours:
+        data["openingHoursSpecification"] = opening_hours
     # El email no se incluye en el JSON-LD a propósito: lo dejaría en texto plano,
     # rastreable por bots de spam. El teléfono ya cubre el contacto estructurado.
     payload = json.dumps(data, ensure_ascii=False, indent=2)

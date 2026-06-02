@@ -53,6 +53,19 @@ def test_jsonld_is_valid_and_complete() -> None:
     assert data["address"]["addressCountry"] == "ES"
 
 
+def test_jsonld_includes_opening_hours() -> None:
+    raw = local_business_jsonld(_biz(hours="L-V 9:00-20:00")).replace("<\\/", "</")
+    data = json.loads(raw)
+    assert "openingHoursSpecification" in data
+    assert data["openingHoursSpecification"][0]["opens"] == "09:00"
+
+
+def test_jsonld_omits_hours_when_unparseable() -> None:
+    raw = local_business_jsonld(_biz(hours="cuando abramos")).replace("<\\/", "</")
+    data = json.loads(raw)
+    assert "openingHoursSpecification" not in data
+
+
 def test_jsonld_escapes_script_close() -> None:
     # Un "</script>" en el nombre no debe poder cerrar el bloque <script> inline.
     biz = _biz(name="Bar </script> Pepe")
