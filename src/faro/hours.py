@@ -22,25 +22,38 @@ _DAY_NAME = {
     "D": "Sunday",
 }
 
-_TIME_RE = re.compile(
-    r"(\d{1,2})(?:[:.](\d{2}))?\s*[-aà]\s*(\d{1,2})(?:[:.](\d{2}))?"
+# Captura "<días> <hora>-<hora>" como una unidad, para no romper las listas de
+# días separadas por coma ("L,X,V 9-14") al trocear el texto por comas.
+_SEGMENT_RE = re.compile(
+    r"([LMXJVSD](?:\s*[-,]\s*[LMXJVSD])*)\s+"
+    r"(\d{1,2})(?:[:.](\d{2}))?\s*[-aà]\s*(\d{1,2})(?:[:.](\d{2}))?",
+    re.IGNORECASE,
 )
 
 
 def _expand_days(token: str) -> list[str]:
-    """'L-V' -> [L,M,X,J,V]; 'S' -> [S]; 'L,X,V' -> [L,X,V]. '' si no se entiende."""
+    """'L-V' -> [L,M,X,J,V]; 'S' -> [S]; 'L,X,V' -> [L,X,V]; 'L-V,S' -> [L..V,S].
+
+    Devuelve [] si algún tramo no se entiende.
+    """
     token = token.upper().replace(" ", "")
-    if "-" in token:
-        a, _, b = token.partition("-")
-        if a in _DAY_ORDER and b in _DAY_ORDER:
+    out: list[str] = []
+    for part in token.split(","):
+        if not part:
+            continue
+        if "-" in part:
+            a, _, b = part.partition("-")
+            if a not in _DAY_ORDER or b not in _DAY_ORDER:
+                return []
             i, j = _DAY_ORDER.index(a), _DAY_ORDER.index(b)
-            if i <= j:
-                return _DAY_ORDER[i : j + 1]
-        return []
-    parts = [p for p in token.split(",") if p]
-    if parts and all(p in _DAY_ORDER for p in parts):
-        return parts
-    return []
+            if i > j:
+                return []
+            out.extend(_DAY_ORDER[i : j + 1])
+        elif part in _DAY_ORDER:
+            out.append(part)
+        else:
+            return []
+    return out
 
 
 def _hhmm(hour: str, minute: str | None) -> str:
@@ -53,22 +66,16 @@ def parse_opening_hours(text: str) -> list[dict[str, object]]:
         return []
     specs: list[dict[str, object]] = []
     try:
-        for segment in text.split(","):
-            time_match = _TIME_RE.search(segment)
-            if time_match is None:
-                continue
-            days_part = segment[: time_match.start()].strip()
-            days = _expand_days(days_part)
+        for match in _SEGMENT_RE.finditer(text):
+            days = _expand_days(match.group(1))
             if not days:
                 continue
-            opens = _hhmm(time_match.group(1), time_match.group(2))
-            closes = _hhmm(time_match.group(3), time_match.group(4))
             specs.append(
                 {
                     "@type": "OpeningHoursSpecification",
                     "dayOfWeek": [_DAY_NAME[d] for d in days],
-                    "opens": opens,
-                    "closes": closes,
+                    "opens": _hhmm(match.group(2), match.group(3)),
+                    "closes": _hhmm(match.group(4), match.group(5)),
                 }
             )
     except (ValueError, IndexError):

@@ -72,13 +72,13 @@ src/faro/
   templates/     plantilla de la landing
 web/             el formulario y la vista previa
 ventas/          material de venta
-tests/           61 tests
+tests/           63 tests
 ```
 
 ## Calidad
 
 ```bash
-python -m pytest      # 61 tests
+python -m pytest      # 63 tests
 python -m ruff check src tests
 python -m mypy        # --strict
 ```

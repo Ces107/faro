@@ -114,7 +114,8 @@ def _parse_live(payload: str, fallback: LandingCopy) -> LandingCopy:
             services_intro=_clamp(data["services_intro"], 80),
             value_props=props,
         )
-    except (json.JSONDecodeError, KeyError, TypeError):
+    except (json.JSONDecodeError, KeyError, TypeError) as exc:
+        _LOG.warning("Respuesta del modo live no válida (%s); uso plantillas.", exc)
         return fallback
 
 

@@ -9,7 +9,7 @@ Esto resume el estado de Faro tras la auditoría de "listo para vender". Todo lo
 - Web responsive con tu color de marca, logo de iniciales, SEO real (datos estructurados de Google), Open Graph y mapa "cómo llegar" con consentimiento de cookies.
 - 17 sectores cubiertos. Seguridad: sin inyección de código (escapado), sin fugas de email.
 - Arranca solo en modo gratis (sin llamar a servicios de pago) y aguanta textos largos sin romperse.
-- 60 tests, CI verde. Repo: https://github.com/Ces107/faro
+- 63 tests, CI verde. Repo: https://github.com/Ces107/faro
 
 **Para usarlo sin saber programar**
 - `iniciar-faro.bat`: doble clic y arranca. Guía: `INICIO-RAPIDO.md`.

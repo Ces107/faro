@@ -4,7 +4,7 @@ Plantillas para captar y hacer seguimiento. Rellena lo que esté entre corchetes
 
 ## Anuncio para Milanuncios (Servicios > Crear página web)
 
-> **Web profesional para tu negocio en 5 días, desde 290 € (dominio incluido el primer año)**
+> **Web profesional para tu negocio en 5 días, desde 290 € (publicación incluida)**
 >
 > Te monto la web de tu negocio, tu ficha de Google para que te encuentren en el mapa y el botón de WhatsApp, todo listo y funcionando. Soy de [Sagunto] y trabajo con negocios de la zona. Te lo enseño antes de pagar. Escríbeme y te paso ejemplos.
 >

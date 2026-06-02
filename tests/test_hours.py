@@ -27,6 +27,19 @@ def test_hours_without_minutes() -> None:
     assert specs[0]["dayOfWeek"][-1] == "Sunday"
 
 
+def test_comma_separated_day_list() -> None:
+    # Antes se descartaban días silenciosamente ('L,X,V' -> solo viernes).
+    specs = parse_opening_hours("L,X,V 9:00-14:00")
+    assert len(specs) == 1
+    assert specs[0]["dayOfWeek"] == ["Monday", "Wednesday", "Friday"]
+
+
+def test_mixed_range_and_single() -> None:
+    specs = parse_opening_hours("L-V 9-18, S 10-14")
+    assert specs[0]["dayOfWeek"] == ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+    assert specs[1]["dayOfWeek"] == ["Saturday"]
+
+
 def test_unparseable_returns_empty() -> None:
     assert parse_opening_hours("abrimos cuando podemos") == []
     assert parse_opening_hours("") == []
