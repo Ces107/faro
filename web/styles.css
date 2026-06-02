@@ -32,6 +32,8 @@ form textarea { resize: vertical; }
 .color-field span { display: flex; align-items: center; gap: 6px; font-weight: 600; }
 .color-field input[type="color"] { width: 48px; height: 32px; padding: 2px; margin: 0; cursor: pointer; }
 .color-field input:disabled { opacity: 0.4; }
+.extras { border: 1px solid var(--line); border-radius: 10px; padding: 2px 12px 10px; margin-bottom: 12px; }
+.extras summary { cursor: pointer; font-weight: 600; font-size: 13px; color: var(--brand); padding: 9px 0; }
 
 button.primary, a.primary { background: var(--brand); color: #fff; border: none; padding: 11px 18px; border-radius: 9px; font-weight: 700; cursor: pointer; font-size: 15px; text-decoration: none; display: inline-block; }
 button.primary:hover, a.primary:hover { background: var(--brand-dark); }

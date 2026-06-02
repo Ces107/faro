@@ -63,6 +63,9 @@ class GenerateRequest(BaseModel):
     highlights: str = ""
     slogan: str = ""
     brand_color: str = ""
+    photos: str = ""
+    testimonials: str = ""
+    canonical_url: str = ""
 
 
 def create_app(*, use_live: bool = False) -> FastAPI:

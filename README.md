@@ -55,8 +55,10 @@ Sin clave de API, el copy sale de plantillas de calidad y la herramienta funcion
 src/faro/
   business.py    modelo del negocio (datos + validación + tema por sector)
   content.py     copy de la web (plantillas + LLM opcional con fallback)
-  sections.py    contenido por sección y por sector (servicios, proceso, FAQ...)
-  landing.py     render de la web (Jinja2)
+  playbook.py    contenido curado por sector (proceso, FAQ, beneficios, titulares)
+  sections.py    construye servicios, FAQ y estadísticas a partir de los datos
+  icons.py       familia de iconos de línea en SVG (sin CDN)
+  landing.py     render de la web premium (Jinja2)
   templates/     plantilla premium de la web
   gmb.py         contenido para Google Business Profile
   seo.py         datos estructurados schema.org + Open Graph + favicon

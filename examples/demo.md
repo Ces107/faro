@@ -1,13 +1,13 @@
 # Ejemplo de uso
 
-## Desde la web (la forma normal de venderlo)
+## Desde la web (la forma normal de usarlo)
 
 ```bash
 faro        # abre http://localhost:8000
 ```
 
 Rellena el formulario con los datos del negocio, pulsa "Generar pack", y verás la
-web al momento en la vista previa. Descarga el .zip y entrégalo.
+web al momento en la vista previa. Descarga el .zip con todo dentro.
 
 ## Desde Python (para automatizar o probar)
 

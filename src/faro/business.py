@@ -32,6 +32,20 @@ def _luminance(hex_color: str) -> float:
     return (0.299 * r + 0.587 * g + 0.114 * b) / 255
 
 
+def mix_hex(base: str, other: str, pct: float) -> str:
+    """Mezcla ``base`` con ``other`` (RGB lineal). pct = proporción de base (0..1).
+
+    Aproximación del ``color-mix`` de CSS para los navegadores que no lo soportan
+    (se inyecta como fallback). No hace falta exactitud oklab para un fallback.
+    """
+    br, bg, bb = _rgb(base)
+    orr, og, ob = _rgb(other)
+    r = round(br * pct + orr * (1 - pct))
+    g = round(bg * pct + og * (1 - pct))
+    b = round(bb * pct + ob * (1 - pct))
+    return f"#{r:02x}{g:02x}{b:02x}"
+
+
 # Por encima de esta luminancia, el texto blanco del hero no contrasta y hay que
 # oscurecer el fondo del degradado de forma agresiva.
 _LIGHT_THRESHOLD = 0.6
@@ -124,6 +138,31 @@ def _clean_phone(raw: str) -> str:
 
 
 @dataclass(frozen=True)
+class Testimonial:
+    """Una reseña real dictada por el dueño. Nunca se inventa."""
+
+    quote: str
+    author: str
+    role: str = ""
+
+
+def _parse_testimonials(value: str) -> tuple[Testimonial, ...]:
+    """Parsea líneas 'cita | autor' (o 'cita | autor | rol') en testimonios."""
+    out: list[Testimonial] = []
+    for line in value.replace(";", "\n").splitlines():
+        if not line.strip():
+            continue
+        parts = [p.strip() for p in line.split("|")]
+        quote = parts[0]
+        if not quote:
+            continue
+        author = parts[1] if len(parts) > 1 and parts[1] else "Cliente"
+        role = parts[2] if len(parts) > 2 else ""
+        out.append(Testimonial(quote, author, role))
+    return tuple(out)
+
+
+@dataclass(frozen=True)
 class BusinessProfile:
     """Datos de un negocio local. Inmutable y validado."""
 
@@ -141,6 +180,9 @@ class BusinessProfile:
     highlights: tuple[str, ...] = ()
     slogan: str = ""
     brand_color: str = ""
+    photos: tuple[str, ...] = ()
+    testimonials: tuple[Testimonial, ...] = ()
+    canonical_url: str = ""
 
     def __post_init__(self) -> None:
         if not self.name.strip():
@@ -170,6 +212,23 @@ class BusinessProfile:
         object.__setattr__(self, "email", self.email.strip()[:120])
         object.__setattr__(self, "services", tuple(s[:70] for s in self.services[:12]))
         object.__setattr__(self, "highlights", tuple(h[:90] for h in self.highlights[:6]))
+        object.__setattr__(
+            self,
+            "photos",
+            tuple(p.strip() for p in self.photos if p.strip().startswith(("http://", "https://")))[:9],
+        )
+        object.__setattr__(
+            self,
+            "testimonials",
+            tuple(
+                Testimonial(t.quote[:280], t.author[:60], t.role[:60])
+                for t in self.testimonials[:3]
+            ),
+        )
+        canonical = self.canonical_url.strip()
+        object.__setattr__(
+            self, "canonical_url", canonical[:200] if canonical.startswith("http") else ""
+        )
 
     @property
     def theme(self) -> SectorTheme:
@@ -179,6 +238,11 @@ class BusinessProfile:
     def color(self) -> str:
         """Color de marca: el elegido por el negocio o, si no, el del sector."""
         return self.brand_color or self.theme.color
+
+    @property
+    def on_brand(self) -> str:
+        """Color de texto legible (#fff o casi negro) sobre el color de marca (WCAG)."""
+        return "#ffffff" if _luminance(self.color) < 0.55 else "#0f172a"
 
     @property
     def accent(self) -> str:
@@ -237,4 +301,7 @@ class BusinessProfile:
             highlights=split_lines(data.get("highlights", "")),
             slogan=data.get("slogan", "").strip(),
             brand_color=data.get("brand_color", "").strip(),
+            photos=split_lines(data.get("photos", "")),
+            testimonials=_parse_testimonials(data.get("testimonials", "")),
+            canonical_url=data.get("canonical_url", "").strip(),
         )

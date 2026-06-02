@@ -70,6 +70,18 @@
           <span><input type="checkbox" id="useColor" /> Color de marca propio</span>
           <input type="color" name="brand_color" id="brandColor" value="#2563eb" disabled />
         </label>
+        <details class="extras">
+          <summary>Opciones avanzadas (opcional)</summary>
+          <label>Fotos (una URL por línea)
+            <textarea name="photos" rows="2" placeholder="https://... (fotos del negocio; activan la galería)"></textarea>
+          </label>
+          <label>Opiniones (una por línea: «frase | nombre»)
+            <textarea name="testimonials" rows="2" placeholder="Trato excelente | María L. | Cliente"></textarea>
+          </label>
+          <label>Dominio propio (si ya lo tiene)
+            <input name="canonical_url" placeholder="https://sunegocio.com" />
+          </label>
+        </details>
         <button type="submit" class="primary" id="genBtn">✨ Generar pack</button>
         <p id="error" class="error"></p>
       </form>

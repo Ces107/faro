@@ -87,6 +87,28 @@ def test_invalid_brand_color_raises() -> None:
         _valid(brand_color="rojo")
 
 
+def test_on_brand_contrast() -> None:
+    assert _valid(brand_color="#ffff00").on_brand == "#0f172a"  # claro -> texto oscuro
+    assert _valid(brand_color="#0a3d62").on_brand == "#ffffff"  # oscuro -> texto blanco
+
+
+def test_photos_filtered_and_capped() -> None:
+    biz = _valid(photos=("https://a/1.jpg", "no-url", "http://b/2.jpg"))
+    assert biz.photos == ("https://a/1.jpg", "http://b/2.jpg")
+
+
+def test_testimonials_kept() -> None:
+    from faro.business import Testimonial
+
+    biz = _valid(testimonials=(Testimonial("Muy bueno", "Ana", "Cliente"),))
+    assert biz.testimonials[0].author == "Ana"
+
+
+def test_canonical_only_http() -> None:
+    assert _valid(canonical_url="https://x.com").canonical_url == "https://x.com"
+    assert _valid(canonical_url="javascript:alert(1)").canonical_url == ""
+
+
 def test_initials() -> None:
     assert _valid(name="Clínica Dental Sonríe").initials == "CD"
     assert _valid(name="Pepe").initials == "P"
