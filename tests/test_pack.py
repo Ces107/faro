@@ -53,9 +53,13 @@ def test_pack_zip_has_all_files() -> None:
             "tarjeta-resenas.html",
             "resenas-qr.svg",
             "whatsapp-qr.svg",
+            "aviso-legal.html",
             "LEEME.txt",
         }
         assert "Clínica Dental Sonríe" in zf.read("index.html").decode("utf-8")
+        legal = zf.read("aviso-legal.html").decode("utf-8")
+        assert "Aviso legal" in legal
+        assert "NIF" in legal
         assert "<svg" in zf.read("resenas-qr.svg").decode("utf-8")
         assert "Google Business" in zf.read("google-business.md").decode("utf-8")
 

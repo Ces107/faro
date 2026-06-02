@@ -31,6 +31,9 @@ A partir de un formulario produce:
 - **El contenido para Google Business Profile**: descripción optimizada (dentro del límite de Google), categorías sugeridas, cinco publicaciones para empezar y respuestas tipo para reseñas buenas, regulares y malas.
 - **El WhatsApp**: enlace `wa.me` con mensaje pre-rellenado y su QR.
 - **La tarjeta de reseñas**: una tarjeta imprimible con el QR que lleva a dejar la reseña en Google. Se deja en el mostrador.
+- **El aviso legal** de la web (lo exige la ley en España, LSSI-CE), con los datos del negocio y un hueco para el NIF.
+
+Para usarlo sin saber programar, hay un lanzador de un clic (`iniciar-faro.bat`) y una guía paso a paso ([`INICIO-RAPIDO.md`](INICIO-RAPIDO.md)). Para poner online la web del cliente y su ficha de Google, ver [`ENTREGA.md`](ENTREGA.md).
 
 ![Ejemplo de landing generada](docs/ejemplo-landing.png)
 

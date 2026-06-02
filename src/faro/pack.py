@@ -15,6 +15,7 @@ from faro.business import BusinessProfile
 from faro.content import generate_copy
 from faro.gmb import GmbContent, build_gmb
 from faro.landing import render_landing
+from faro.legal import legal_notice_html
 from faro.qr import qr_svg, review_qr
 from faro.reviews import (
     ReviewReplies,
@@ -33,6 +34,7 @@ class DigitalPresencePack:
     gmb: GmbContent
     replies: ReviewReplies
     review_card_html: str
+    legal_html: str
     whatsapp_url: str
     review_url: str
 
@@ -128,6 +130,10 @@ Esto es todo lo que necesitas para que te encuentren en internet. Qué es cada c
 4. resenas-qr.svg y whatsapp-qr.svg — Los códigos QR sueltos,
    por si los quieres poner en un cartel, en el escaparate o en redes.
 
+5. aviso-legal.html — El aviso legal de tu web (lo exige la ley).
+   Súbelo junto a la web (ya va enlazado en el pie). Completa tu NIF antes de
+   publicarlo y, si tienes dudas, revísalo con tu asesor.
+
 Tu WhatsApp de contacto: {whatsapp_link(business)}
 Tu enlace de reseñas: {review_url(business)}
 
@@ -145,6 +151,7 @@ def build_pack(business: BusinessProfile, *, use_live: bool = True) -> DigitalPr
         gmb=gmb,
         replies=replies,
         review_card_html=_review_card_html(business),
+        legal_html=legal_notice_html(business),
         whatsapp_url=whatsapp_link(business),
         review_url=review_url(business),
     )
@@ -159,5 +166,6 @@ def to_zip(pack: DigitalPresencePack, business: BusinessProfile) -> bytes:
         zf.writestr("tarjeta-resenas.html", pack.review_card_html)
         zf.writestr("resenas-qr.svg", qr_svg(pack.review_url))
         zf.writestr("whatsapp-qr.svg", qr_svg(pack.whatsapp_url, dark=business.theme.accent))
+        zf.writestr("aviso-legal.html", pack.legal_html)
         zf.writestr("LEEME.txt", _readme(business))
     return buffer.getvalue()
