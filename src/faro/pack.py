@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import html
 import io
+import os
 import zipfile
 from dataclasses import dataclass
 
@@ -139,8 +140,22 @@ Esto es todo lo que necesitas para que te encuentren en internet. Qué es cada c
 Tu WhatsApp de contacto: {whatsapp_link(business)}
 Tu enlace de reseñas: {review_url(business)}
 
-Cualquier duda, pregunta a quien te montó el pack.
+{_operator_line()}
 """
+
+
+def _operator_line() -> str:
+    """Línea de contacto del profesional que montó el pack.
+
+    Se rellena con FARO_OPERATOR_NAME / FARO_OPERATOR_CONTACT del entorno, para
+    que cada entregable lleve un contacto real de soporte (lo pedía la auditoría).
+    """
+    name = os.environ.get("FARO_OPERATOR_NAME", "").strip()
+    contact = os.environ.get("FARO_OPERATOR_CONTACT", "").strip()
+    if name or contact:
+        who = " · ".join(p for p in (name, contact) if p)
+        return f"Te lo ha montado: {who}. Escríbele para cualquier cambio o duda."
+    return "Cualquier duda, pregunta a quien te montó el pack."
 
 
 def build_pack(business: BusinessProfile, *, use_live: bool = True) -> DigitalPresencePack:

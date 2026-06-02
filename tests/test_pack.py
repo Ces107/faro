@@ -5,6 +5,8 @@ from __future__ import annotations
 import io
 import zipfile
 
+import pytest
+
 from faro.business import BusinessProfile, Sector
 from faro.landing import build_landing
 from faro.pack import build_pack, to_zip
@@ -74,6 +76,17 @@ def test_legal_notice_escapes_html() -> None:
     pack = build_pack(_biz(name="Bar <script>x</script>"), use_live=False)
     assert "<script>x</script>" not in pack.legal_html
     assert "&lt;script&gt;" in pack.legal_html
+
+
+def test_readme_includes_operator_contact_when_set(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("FARO_OPERATOR_NAME", "César")
+    monkeypatch.setenv("FARO_OPERATOR_CONTACT", "600111222")
+    biz = _biz()
+    data = to_zip(build_pack(biz, use_live=False), biz)
+    with zipfile.ZipFile(io.BytesIO(data)) as zf:
+        leeme = zf.read("LEEME.txt").decode("utf-8")
+    assert "César" in leeme
+    assert "600111222" in leeme
 
 
 def test_pack_without_optional_fields() -> None:

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<title>Faro — folleto A5 imprimible</title>
+<style>
+  @page { size: A5; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color: #0f172a; }
+  .sheet { width: 148mm; min-height: 210mm; margin: 0 auto; padding: 16mm 14mm; }
+  .hero { background: linear-gradient(150deg,#2563eb,#1d4ed8); color:#fff; border-radius:14px; padding:18px 20px; }
+  .hero .logo { font-size: 30px; }
+  .hero h1 { font-size: 26px; margin: 6px 0 4px; }
+  .hero p { opacity:.95; font-size: 14px; }
+  h2 { font-size: 17px; margin: 18px 0 8px; }
+  ul { padding-left: 18px; }
+  li { font-size: 14px; margin-bottom: 5px; }
+  .price { background:#f1f5f9; border:1px solid #e2e8f0; border-radius:12px; padding:14px 16px; margin-top:16px; }
+  .price strong { font-size: 20px; color:#1d4ed8; }
+  .contact { margin-top: 20px; border-top:1px solid #e2e8f0; padding-top:12px; font-size:14px; }
+  .muted { color:#64748b; font-size:12px; margin-top:10px; }
+  @media print { .noprint { display:none; } }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="hero">
+    <div class="logo">📍</div>
+    <h1>Que te encuentren en Google</h1>
+    <p>Web + ficha de Google + WhatsApp para tu negocio, en minutos.</p>
+  </div>
+
+  <h2>Qué te dejo montado</h2>
+  <ul>
+    <li>Una página web sencilla y profesional, con tu nombre y tu WhatsApp.</li>
+    <li>Tu ficha de Google optimizada, para aparecer en el mapa.</li>
+    <li>Tu botón y QR de WhatsApp.</li>
+    <li>Una tarjeta de reseñas para el mostrador.</li>
+    <li>El aviso legal de tu web.</li>
+  </ul>
+
+  <h2>Cómo lo ves antes de pagar</h2>
+  <p style="font-size:14px">Te lo monto delante de ti, con los datos de tu negocio, y en dos minutos ves tu propia web. Si te gusta, te la dejo publicada.</p>
+
+  <div class="price">
+    <strong>Desde 290 €</strong> &nbsp;pago único, es tuyo.<br>
+    <span style="font-size:13px;color:#475569">Mantenimiento opcional desde 39 €/mes, cancelable.</span>
+  </div>
+
+  <div class="contact">
+    <strong>[Tu nombre]</strong><br>
+    WhatsApp / Tel.: [tu número]<br>
+    Email: [tu email]
+    <div class="muted">Soy de la zona. Me tienes al lado para cualquier cambio.</div>
+  </div>
+
+  <p class="noprint" style="margin-top:16px;color:#64748b;font-size:12px">
+    Imprime esta hoja (A5) y rellena tus datos de contacto antes. Pulsa Ctrl+P.
+  </p>
+</div>
+</body>
+</html>

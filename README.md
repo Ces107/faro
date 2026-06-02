@@ -52,7 +52,9 @@ Sin clave de API, el copy sale de plantillas de calidad y la herramienta funcion
 
 ## Cómo se vende
 
-Material de venta en [`ventas/`](ventas/): hoja de una página, guion de puerta, precios y objetivos para el Camp de Morvedre / Sagunto. Resumen: pack de **290-500 €** (pago único, es suyo) + un mantenimiento mensual opcional. La venta es puerta a puerta con la web del cliente en pantalla.
+Material de venta en [`ventas/`](ventas/): hoja de una página (y versión imprimible A5), guion de puerta, precios, objetivos para el Camp de Morvedre / Sagunto, plantillas de mensajes, acuerdo de servicio, factura, recibo y registro de puertas. Resumen: pack de **290-500 €** (pago único, es suyo) + un mantenimiento mensual opcional. La venta es puerta a puerta con la web del cliente en pantalla.
+
+**¿Qué falta para vender de verdad?** Ver [`LISTO-PARA-VENDER.md`](LISTO-PARA-VENDER.md): todo lo técnico y de proceso está hecho; lo único pendiente son cinco tareas que dependen de la identidad/fiscalidad del operador (alta de autónomo, medio de cobro, datos de contacto, dominio opcional, firma).
 
 ## Estructura
 
@@ -70,13 +72,13 @@ src/faro/
   templates/     plantilla de la landing
 web/             el formulario y la vista previa
 ventas/          material de venta
-tests/           43 tests
+tests/           61 tests
 ```
 
 ## Calidad
 
 ```bash
-python -m pytest      # 43 tests
+python -m pytest      # 61 tests
 python -m ruff check src tests
 python -m mypy        # --strict
 ```
