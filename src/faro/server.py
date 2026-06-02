@@ -39,6 +39,7 @@ class GenerateRequest(BaseModel):
     hours: str = ""
     address: str = ""
     email: str = ""
+    cif: str = ""
     google_review_url: str = ""
     highlights: str = ""
     slogan: str = ""

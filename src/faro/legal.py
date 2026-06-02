@@ -21,6 +21,7 @@ def legal_notice_html(business: BusinessProfile) -> str:
     raw_address = f"{business.address}, {business.city}" if business.address else business.city
     address = html.escape(raw_address)
     email = f"<li>Email: {html.escape(business.email)}</li>" if business.email else ""
+    nif = html.escape(business.cif) if business.cif else _NIF_PLACEHOLDER
     return f"""<!DOCTYPE html>
 <html lang="es"><head><meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -37,7 +38,7 @@ def legal_notice_html(business: BusinessProfile) -> str:
   <h2>Identificación del titular</h2>
   <ul>
     <li>Titular: {name}</li>
-    <li>NIF: {_NIF_PLACEHOLDER}</li>
+    <li>NIF/CIF: {nif}</li>
     <li>Domicilio: {address}</li>
     <li>Teléfono: {business.phone}</li>
     {email}
@@ -56,6 +57,11 @@ def legal_notice_html(business: BusinessProfile) -> str:
   que facilites se usan únicamente para atender tu solicitud y no se ceden a
   terceros. Puedes ejercer tus derechos de acceso, rectificación y supresión
   escribiendo al titular en los datos de contacto indicados arriba.</p>
+
+  <h2>Cookies</h2>
+  <p>Esta web no usa cookies propias de seguimiento. Si pulsas para cargar el mapa
+  de cómo llegar, se carga Google Maps, que puede instalar cookies de Google; el
+  mapa no se carga hasta que tú lo pides expresamente.</p>
 
   <h2>Propiedad intelectual</h2>
   <p>Los contenidos de este sitio pertenecen a {name} o se usan con

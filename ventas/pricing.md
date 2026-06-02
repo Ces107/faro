@@ -6,7 +6,8 @@
 |---|---|---|
 | Pack completo (web + ficha Google + WhatsApp + tarjeta reseñas) | desde 290 € (hasta 500 € según negocio) | Al entregar, por Bizum o transferencia |
 | Mantenimiento mensual (opcional) | desde 39 €/mes, sin permanencia | Mensual, cancelable |
-| Hosting + dominio | primer año incluido en el pack | Renovación ~100 €/año |
+| Publicación (hosting) | gratis en Netlify/Pages, incluido en el pack | sin coste recurrente |
+| Dominio propio (opcional) | ~10-12 €/año, lo paga el cliente | si quiere su .com en vez del subdominio gratis |
 
 Reglas que funcionan (del análisis de mercado, no opinión):
 
@@ -28,5 +29,7 @@ Si tras 40 puertas frías cierras menos de 3 packs, la restricción que manda (c
 
 ## Legal mínimo
 
-- Alta de autónomo cuando empiece a haber ingresos recurrentes; hasta el primer cobro, no hace falta.
-- En la web se incluye un aviso básico. Si el negocio recoge datos (formularios), su aviso de privacidad lo valida su asesor. Esto no es asesoría legal.
+- **Alta de autónomo antes de la primera venta.** Lo que obliga a darse de alta es la actividad habitual, no un umbral de euros: si vas a vender de forma recurrente, tienes que poder emitir factura desde el primer cobro. Hazlo antes de la primera puerta. Pasos en `LISTO-PARA-VENDER.md`.
+- **Factura en cada venta.** Numerada, con tu NIF. Plantilla en `factura-plantilla.md`.
+- **La web ya incluye aviso legal** (`aviso-legal.html`, con sección de cookies) y el mapa solo carga si el visitante lo pide (consentimiento). Completa el NIF del cliente. Esto no es asesoría legal: que el cliente lo revise con su asesor.
+- **No prometas posiciones en Google.** El producto deja al negocio bien montado para aparecer (web + ficha + datos estructurados), pero aparecer en el mapa exige que el dueño reclame y verifique su ficha de Google, y el ranking depende de muchos factores. Véndelo como "que te encuentren mejor", no como una garantía.

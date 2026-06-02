@@ -42,3 +42,12 @@ def test_landing_shows_map_only_with_address() -> None:
 
     without_addr = build_landing(_biz(address=""), use_live=False)
     assert "Cómo llegar" not in without_addr
+
+
+def test_map_is_consent_gated() -> None:
+    # El mapa NO debe cargar el iframe de Google directamente (cookies AEPD):
+    # se ofrece un botón de consentimiento que lo carga al pulsar.
+    html = build_landing(_biz(), use_live=False)
+    assert "Ver el mapa" in html
+    assert "faroLoadMap" in html
+    assert "<iframe" not in html  # el iframe se crea por JS solo al consentir

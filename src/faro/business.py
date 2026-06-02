@@ -136,6 +136,7 @@ class BusinessProfile:
     hours: str = ""
     address: str = ""
     email: str = ""
+    cif: str = ""
     google_review_url: str = ""
     highlights: tuple[str, ...] = ()
     slogan: str = ""
@@ -231,6 +232,7 @@ class BusinessProfile:
             hours=data.get("hours", "").strip(),
             address=data.get("address", "").strip(),
             email=data.get("email", "").strip(),
+            cif=data.get("cif", "").strip(),
             google_review_url=data.get("google_review_url", "").strip(),
             highlights=split_lines(data.get("highlights", "")),
             slogan=data.get("slogan", "").strip(),
