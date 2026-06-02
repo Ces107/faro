@@ -1,90 +1,87 @@
 # Faro
 
-**Genera en minutos el pack de presencia digital de un negocio local: una página web lista para publicar, el contenido para su ficha de Google, el WhatsApp y la tarjeta de reseñas con QR. Rellenas un formulario, ves la web al momento y descargas todo en un .zip. Sin cuentas de pago para la demo.**
+**Genera en minutos el pack de presencia digital de un negocio local: una página web premium lista para publicar, el contenido para su ficha de Google, el WhatsApp y la tarjeta de reseñas con QR. Rellenas un formulario, ves la web al momento y descargas todo en un .zip. Funciona sin cuentas de pago.**
 
 [![CI](https://github.com/Ces107/faro/actions/workflows/ci.yml/badge.svg)](https://github.com/Ces107/faro/actions/workflows/ci.yml)
 
 ---
 
-## Para qué sirve
+## Qué es
 
-El 78% de los micro-negocios en España no tiene web y el 80% no está en los directorios. Una peluquería, un taller o una clínica de barrio existe para sus clientes, pero no para Google. Quien busca "dentista en mi pueblo" no los encuentra.
+Muchos negocios locales no tienen web ni aparecen bien en Google. Faro toma los datos de un negocio (nombre, sector, servicios, horario, dirección...) y produce, en minutos, todo lo que necesita para tener una presencia digital de calidad. Una sola herramienta, sin servicios de pago para funcionar.
 
-Faro convierte ese trabajo (que a mano son horas por cliente) en minutos: metes los datos del negocio una vez y sale todo lo que necesita para que lo encuentren.
-
-## La demo
+## Cómo se usa
 
 ```bash
 pip install -e ".[dev]"
 faro                    # abre http://localhost:8000
 ```
 
-Rellenas el formulario con los datos del negocio y pulsas "Generar pack". Al momento ves la web del negocio en la vista previa y puedes descargar el .zip con todo dentro.
+Rellenas el formulario, pulsas "Generar pack" y ves la web del negocio al momento en la vista previa. Descargas el `.zip` con todo dentro.
 
 ![El generador](docs/ejemplo-generador.png)
 
 ## Qué genera
 
-A partir de un formulario produce:
-
-- **Una landing de una página**, responsive y lista para publicar. HTML autocontenido (los estilos y los QR van dentro): se sube a cualquier hosting y funciona. Incluye botón de WhatsApp, llamada directa, servicios, horario, sección de reseñas, logo con las iniciales del negocio y su color de marca. Trae **SEO de verdad**: datos estructurados de schema.org (`LocalBusiness`) que Google lee para el SEO local, etiquetas Open Graph para que el enlace se vea bien al compartirlo por WhatsApp, y favicon propio.
-- **El contenido para Google Business Profile**: descripción optimizada (dentro del límite de Google), categorías sugeridas, cinco publicaciones para empezar y respuestas tipo para reseñas buenas, regulares y malas.
+- **Una página web premium de una sola página**, responsive y lista para publicar. HTML autocontenido (estilos, animaciones y QR incrustados; sin dependencias externas): se sube a cualquier hosting estático y funciona. Incluye navegación, secciones de servicios, "por qué nosotros", proceso, preguntas frecuentes, reseñas, "cómo llegar" y contacto, con el color de marca del negocio, logo de iniciales, animaciones al hacer scroll y banner de cookies.
+- **SEO real**: datos estructurados de schema.org (`LocalBusiness` + horario), Open Graph para compartir y favicon propio.
+- **El contenido para Google Business Profile**: descripción optimizada, categorías sugeridas, publicaciones para empezar y respuestas tipo para reseñas.
 - **El WhatsApp**: enlace `wa.me` con mensaje pre-rellenado y su QR.
-- **La tarjeta de reseñas**: una tarjeta imprimible con el QR que lleva a dejar la reseña en Google. Se deja en el mostrador.
-- **El aviso legal** de la web (lo exige la ley en España, LSSI-CE), con los datos del negocio y un hueco para el NIF.
+- **La tarjeta de reseñas**: imprimible, con el QR que lleva a dejar la reseña en Google.
+- **El aviso legal** de la web (LSSI-CE) con sección de cookies.
 
-Para usarlo sin saber programar, hay un lanzador de un clic (`iniciar-faro.bat`) y una guía paso a paso ([`INICIO-RAPIDO.md`](INICIO-RAPIDO.md)). Para poner online la web del cliente y su ficha de Google, ver [`ENTREGA.md`](ENTREGA.md).
+![Ejemplo de web generada](docs/ejemplo-landing.png)
 
-![Ejemplo de landing generada](docs/ejemplo-landing.png)
+## Modo plantillas y modo IA
 
-## Por qué así
-
-El cliente no compra "una web". Compra ver SU negocio, con SU nombre, bien hecho, en dos minutos delante de él. Ese es el cierre: rellenas el formulario en el mostrador, le enseñas su propia página, y le entregas el pack. Lo que a otros les lleva días, aquí son minutos, y lo ve antes de pagar.
-
-## Modo demostración y modo real
-
-| | Modo *scripted* (por defecto) | Modo *live* |
+| | Plantillas (por defecto) | IA (opcional) |
 |---|---|---|
 | Copy de la web | Plantillas de calidad por sector | API de Anthropic (Claude) |
-| Requiere | Nada | `ANTHROPIC_API_KEY` + `pip install -e ".[live]"` |
+| Requiere | Nada | `ANTHROPIC_API_KEY` + `pip install -e ".[live]"` y `FARO_LIVE=1` |
 
-Sin clave de API, el copy sale de plantillas de calidad y la herramienta funciona entera. Con clave, el texto lo redacta el modelo. Si la API falla, se cae a las plantillas: el cliente nunca se queda sin pack.
+Sin clave de API, el copy sale de plantillas de calidad y la herramienta funciona entera. Con clave, el texto lo redacta el modelo; si la API falla o tarda, se cae a las plantillas (timeout incluido). El flujo crítico no depende del modelo.
 
-## Cómo se vende
+## Privacidad y cumplimiento
 
-Material de venta en [`ventas/`](ventas/): hoja de una página (y versión imprimible A5), guion de puerta, precios, objetivos para el Camp de Morvedre / Sagunto, plantillas de mensajes, acuerdo de servicio, factura, recibo y registro de puertas. Resumen: pack de **290-500 €** (pago único, es suyo) + un mantenimiento mensual opcional. La venta es puerta a puerta con la web del cliente en pantalla.
+- El mapa de Google Maps **no carga hasta que el visitante lo pide** (consentimiento de cookies, RGPD/AEPD).
+- La web incluye **aviso legal** (LSSI-CE) y banner de cookies.
+- El email del negocio va **ofuscado** frente a rastreadores de spam.
+- El contenido del negocio se **escapa** (sin inyección de HTML/JS).
+- Honesto por diseño: nunca inventa reseñas, premios ni datos que no se le hayan dado.
 
-**¿Qué falta para vender de verdad?** Ver [`LISTO-PARA-VENDER.md`](LISTO-PARA-VENDER.md): todo lo técnico y de proceso está hecho; lo único pendiente son cinco tareas que dependen de la identidad/fiscalidad del operador (alta de autónomo, medio de cobro, datos de contacto, dominio opcional, firma).
-
-## Estructura
+## Arquitectura
 
 ```
 src/faro/
-  business.py    modelo del negocio (datos + validación)
-  content.py     copy de la landing (plantillas + LLM opcional)
-  landing.py     render de la landing (Jinja2)
+  business.py    modelo del negocio (datos + validación + tema por sector)
+  content.py     copy de la web (plantillas + LLM opcional con fallback)
+  sections.py    contenido por sección y por sector (servicios, proceso, FAQ...)
+  landing.py     render de la web (Jinja2)
+  templates/     plantilla premium de la web
   gmb.py         contenido para Google Business Profile
+  seo.py         datos estructurados schema.org + Open Graph + favicon
+  hours.py       parseo de horario a schema.org openingHoursSpecification
+  maps.py        mapa de Google Maps (consent-gated)
   whatsapp.py    enlaces de WhatsApp y teléfono
   reviews.py     reseñas: enlace, QR, respuestas tipo
+  legal.py       aviso legal + cookies
   qr.py          códigos QR en SVG (segno, sin dependencias de pago)
   pack.py        arma el pack completo y lo empaqueta en .zip
   server.py      API FastAPI + servidor de la demo
-  templates/     plantilla de la landing
 web/             el formulario y la vista previa
-ventas/          material de venta
-tests/           63 tests
+tests/           suite de tests
 ```
 
 ## Calidad
 
 ```bash
-python -m pytest      # 63 tests
+python -m pytest
 python -m ruff check src tests
 python -m mypy        # --strict
 ```
 
+CI en Python 3.10, 3.11 y 3.12.
+
 ## Licencia
 
 MIT. Ver [`LICENSE`](LICENSE).
-
-> Las reseñas se invitan, nunca se incentivan ni se condicionan (eso va contra las normas de Google). El texto de la web y de Google es un punto de partida de calidad; el dueño lo revisa antes de publicar.

@@ -25,3 +25,9 @@ output/
 .DS_Store
 .idea/
 .vscode/
+
+# Material comercial / estrategia de venta: NO público (vive privado en plusUltra)
+ventas/
+LISTO-PARA-VENDER.md
+ENTREGA.md
+INICIO-RAPIDO.md
