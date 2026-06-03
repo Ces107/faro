@@ -1,0 +1,48 @@
+{# Servicios según la familia: carta (lista con precio), index (numerada),
+   grid (tarjetas con regla de tinta) o list (bold industrial). #}
+{% if tokens.service_style == 'carta' %}
+<div class="carta">
+  {% for c in service_cards %}
+  <div class="item" data-reveal style="--i:{{ loop.index0 }}">
+    <h3>{{ c.name }}</h3>
+    {% if c.price %}<span class="price num">{{ c.price }}</span>{% endif %}
+    <p class="lead-line">{{ c.benefit }}.</p>
+  </div>
+  {% endfor %}
+</div>
+
+{% elif tokens.service_style == 'grid' %}
+<div class="sgrid">
+  {% for c in service_cards %}
+  <div class="card" data-reveal style="--i:{{ loop.index0 }}">
+    <span class="tag num">{{ "%02d"|format(loop.index) }}</span>
+    <h3>{{ c.name }}</h3>
+    <p>{{ c.benefit }}.</p>
+    {% if c.price %}<span class="price num">{{ c.price }}</span>{% endif %}
+  </div>
+  {% endfor %}
+</div>
+
+{% elif tokens.service_style == 'list' %}
+<div class="slist">
+  {% for c in service_cards %}
+  <div class="item" data-reveal style="--i:{{ loop.index0 }}">
+    <h3>{{ c.name }}</h3>
+    <p>{{ c.benefit }}.{% if c.price %} <strong class="num" style="color:var(--brand)">{{ c.price }}</strong>{% endif %}</p>
+  </div>
+  {% endfor %}
+</div>
+
+{% else %}
+<div class="index">
+  {% for c in service_cards %}
+  <div class="item" data-reveal style="--i:{{ loop.index0 }}">
+    <div class="n num">{{ "%02d"|format(loop.index) }}</div>
+    <div>
+      <h3>{{ c.name }}{% if c.price %} <span class="price num" style="color:var(--brand);font-size:.8em">· {{ c.price }}</span>{% endif %}</h3>
+      <p>{{ c.benefit }}.</p>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}

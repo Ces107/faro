@@ -81,7 +81,14 @@ def _fallback_hexes(color: str) -> dict[str, str]:
 
 
 def render_landing(business: BusinessProfile, copy: LandingCopy) -> str:
-    """Renderiza la landing a un HTML autocontenido."""
+    """Renderiza la landing a un HTML autocontenido con el motor de plantillas."""
+    from faro.engine.render import render_site
+
+    return render_site(business, copy)
+
+
+def _render_landing_legacy(business: BusinessProfile, copy: LandingCopy) -> str:
+    """Render clásico (plantilla única). Conservado como referencia, sin uso."""
     template = _env.get_template("landing.html")
     playbook = playbook_for(business.sector)
     context = {

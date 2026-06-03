@@ -1,0 +1,76 @@
+{# Hero según la familia. El protagonista cambia: tipografía (editorial/poster),
+   foto a sangre (photo/split) o tira de galería (gallery). Nunca un blob. #}
+{% set meta %}
+  <div class="hero-meta">
+    <span class="open-pill" id="openPill" data-hours='{{ opening_hours_json }}'><span class="open-dot"></span><span class="txt"></span></span>
+    <span>{{ business.city }}</span>
+    {% for label, value in business.extras if value|lower in ['sí','si','yes'] %}<span>{{ label }}</span>{% endfor %}
+  </div>
+{% endset %}
+{% set ctas %}
+  <div class="hero-cta">
+    <a class="btn btn-brand" href="{{ whatsapp_url }}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2z"/></svg> {{ playbook.final_cta_headline }}</a>
+    <a class="btn btn-line" href="{{ phone_url }}">Llamar · <span class="num">{{ business.phone }}</span></a>
+  </div>
+{% endset %}
+
+{% if tokens.hero == 'photo' and business.photos %}
+<section class="hero hero-photo" id="inicio" style="--hero-img:url('{{ business.photos[0] }}')">
+  <div class="wrap" style="padding-bottom:clamp(36px,5vw,64px)">
+    <p class="kicker">{{ business.theme.label }} · {{ business.city }}</p>
+    <h1>{{ business.name }}</h1>
+    {% if copy.slogan %}<p class="slogan">{{ copy.slogan }}</p>{% endif %}
+    <p class="sub">{{ copy.hero_subtitle }}</p>
+    {{ ctas }}{{ meta }}
+  </div>
+</section>
+
+{% elif tokens.hero == 'poster' %}
+<section class="hero hero-poster" id="inicio">
+  <div class="wrap">
+    <p class="kicker">{{ business.theme.label }} · {{ business.city }}</p>
+    <h1>{{ business.name }}</h1>
+    {% if copy.slogan %}<p class="slogan">{{ copy.slogan }}</p>{% endif %}
+    <p class="sub">{{ copy.hero_subtitle }}</p>
+    {{ ctas }}{{ meta }}
+  </div>
+</section>
+
+{% elif tokens.hero == 'split' %}
+<section class="hero hero-split" id="inicio">
+  <div class="wrap"><div class="grid">
+    <div>
+      <p class="kicker">{{ business.theme.label }} · {{ business.city }}</p>
+      <h1>{{ business.name }}</h1>
+      {% if copy.slogan %}<p class="slogan">{{ copy.slogan }}</p>{% endif %}
+      <p class="sub">{{ copy.hero_subtitle }}</p>
+      {{ ctas }}{{ meta }}
+    </div>
+    <div class="panel{% if not business.photos %} panel-brand{% endif %}"{% if business.photos %} style="--hero-img:url('{{ business.photos[0] }}')"{% endif %}>{% if not business.photos %}<span class="panel-mark">{{ business.initials }}</span>{% endif %}</div>
+  </div></div>
+</section>
+
+{% elif tokens.hero == 'gallery' and business.photos %}
+<section class="hero hero-gallery" id="inicio">
+  <div class="wrap">
+    <p class="kicker">{{ business.theme.label }} · {{ business.city }}</p>
+    <h1>{{ business.name }}</h1>
+    {% if copy.slogan %}<p class="slogan">{{ copy.slogan }}</p>{% endif %}
+    <p class="sub">{{ copy.hero_subtitle }}</p>
+    {{ ctas }}
+    <div class="strip">{% for url in business.photos[:5] %}<img src="{{ url }}" loading="eager" alt="{{ business.name }} — {{ loop.index }}" />{% endfor %}</div>
+    {{ meta }}
+  </div>
+</section>
+
+{% else %}
+<section class="hero" id="inicio">
+  <div class="wrap">
+    <p class="kicker">{{ business.theme.label }} · {{ business.city }}</p>
+    <h1>{{ business.name }}</h1>
+    {% if copy.slogan %}<p class="slogan">{{ copy.slogan }}</p>{% endif %}
+    <p class="sub">{{ copy.hero_subtitle }}</p>
+    {{ ctas }}{{ meta }}
+  </div>
+</section>
+{% endif %}
