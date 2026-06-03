@@ -87,8 +87,9 @@ def create_app(*, use_live: bool = False) -> FastAPI:
     packs: dict[str, tuple[DigitalPresencePack, BusinessProfile]] = {}
 
     @app.get("/api/sectors")
-    def sectors() -> dict[str, list[dict[str, str]]]:
+    def sectors() -> dict[str, list[dict[str, object]]]:
         from faro.business import theme_for
+        from faro.engine.registry import template_for
         from faro.playbook import extra_hint, playbook_for
 
         return {
@@ -98,10 +99,33 @@ def create_app(*, use_live: bool = False) -> FastAPI:
                     "label": theme_for(s).label,
                     "offer_word": playbook_for(s).offer_word,
                     "extra_hint": extra_hint(s),
+                    "template": template_for(s).id,
                 }
                 for s in Sector
             ]
         }
+
+    @app.get("/api/form/{sector}")
+    def form_schema(sector: str) -> JSONResponse:
+        """El formulario declarativo de la plantilla que cubre este sector.
+
+        El front lo renderiza tal cual: así el formulario es DISTINTO según la
+        plantilla, sin HTML escrito a mano por sector.
+        """
+        from faro.engine.registry import template_for
+
+        try:
+            spec = template_for(Sector(sector))
+        except ValueError as exc:
+            raise HTTPException(status_code=404, detail="Sector desconocido") from exc
+        return JSONResponse(
+            {
+                "template": spec.id,
+                "name": spec.name,
+                "family": spec.family,
+                "schema": spec.form_schema.as_dict(),
+            }
+        )
 
     @app.post("/api/generate")
     def generate(req: GenerateRequest) -> JSONResponse:
