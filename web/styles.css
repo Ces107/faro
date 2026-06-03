@@ -27,13 +27,28 @@ body { margin: 0; background: linear-gradient(160deg, #0f172a, #1e293b); color: 
 form label { display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 12px; }
 form input, form select, form textarea { width: 100%; margin-top: 4px; padding: 9px 11px; border: 1px solid var(--line); border-radius: 9px; font-size: 14px; font-family: inherit; font-weight: 400; }
 form textarea { resize: vertical; }
-.row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.color-field { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-.color-field span { display: flex; align-items: center; gap: 6px; font-weight: 600; }
-.color-field input[type="color"] { width: 48px; height: 32px; padding: 2px; margin: 0; cursor: pointer; }
-.color-field input:disabled { opacity: 0.4; }
-.extras { border: 1px solid var(--line); border-radius: 10px; padding: 2px 12px 10px; margin-bottom: 12px; }
-.extras summary { cursor: pointer; font-weight: 600; font-size: 13px; color: var(--brand); padding: 9px 0; }
+
+/* Cabecera del selector de tipo + etiqueta de plantilla activa */
+.sector-field { position: relative; }
+.template-tag { display: inline-block; margin-top: 6px; font-size: 12px; font-weight: 600; color: var(--brand); }
+
+/* Formulario dinámico: grupos, rejilla y campos */
+fieldset.group { border: none; border-top: 1px solid var(--line); padding: 14px 0 0; margin: 0 0 6px; }
+fieldset.group legend { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); padding: 0; }
+.group-desc { font-size: 12px; color: var(--muted); margin: 2px 0 8px; }
+.field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; }
+.field { grid-column: span 1; }
+.field.full { grid-column: 1 / -1; }
+.field-label { display: block; }
+.field-help { display: block; font-weight: 400; color: var(--muted); font-size: 11px; margin-top: 3px; }
+.toggle-field { display: flex; align-items: center; gap: 8px; }
+.toggle-field .field-label { margin: 0; }
+.toggle-field input.toggle { width: auto; margin: 0; }
+.color-control { display: inline-flex; align-items: center; gap: 8px; margin-top: 4px; }
+.color-control input[type="color"] { width: 48px; height: 32px; padding: 2px; margin: 0; cursor: pointer; }
+.color-control input:disabled { opacity: 0.4; }
+.color-control input[type="checkbox"] { width: auto; margin: 0; }
+@media (max-width: 520px) { .field-grid { grid-template-columns: 1fr; } }
 
 button.primary, a.primary { background: var(--brand); color: #fff; border: none; padding: 11px 18px; border-radius: 9px; font-weight: 700; cursor: pointer; font-size: 15px; text-decoration: none; display: inline-block; }
 button.primary:hover, a.primary:hover { background: var(--brand-dark); }

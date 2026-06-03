@@ -1,0 +1,122 @@
+<script>
+(function () {
+  "use strict";
+  var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var nav = document.getElementById("nav"), prog = document.getElementById("progress"), toTop = document.getElementById("toTop");
+
+  var ticking = false;
+  function onScroll() {
+    var y = window.scrollY, h = document.documentElement.scrollHeight - innerHeight;
+    nav.classList.toggle("scrolled", y > 8);
+    prog.style.transform = "scaleX(" + (h > 0 ? y / h : 0) + ")";
+    toTop.classList.toggle("show", y > innerHeight * 0.7);
+    ticking = false;
+  }
+  addEventListener("scroll", function () { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+  onScroll();
+  toTop.onclick = function () { scrollTo({ top: 0, behavior: RM ? "auto" : "smooth" }); };
+
+  var toggle = document.getElementById("navToggle");
+  if (toggle) toggle.onclick = function () {
+    var open = nav.classList.toggle("open");
+    toggle.setAttribute("aria-expanded", open);
+  };
+  document.querySelectorAll(".nav-links a").forEach(function (a) { a.onclick = function () { nav.classList.remove("open"); }; });
+
+  if (!RM && "IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("vis"); io.unobserve(e.target); } });
+    }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+    document.querySelectorAll("[data-reveal]").forEach(function (el) { io.observe(el); });
+  } else {
+    document.querySelectorAll("[data-reveal]").forEach(function (el) { el.classList.add("vis"); });
+  }
+
+  var links = [].slice.call(document.querySelectorAll(".nav-links a"));
+  if ("IntersectionObserver" in window && links.length) {
+    var spy = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (e.isIntersecting) links.forEach(function (l) { l.classList.toggle("active", l.getAttribute("href") === "#" + e.target.id); });
+      });
+    }, { rootMargin: "-45% 0px -50% 0px" });
+    document.querySelectorAll("main section[id]").forEach(function (s) { spy.observe(s); });
+  }
+
+  function animateCount(el) {
+    var raw = el.getAttribute("data-count"), m = raw.match(/\d+/); if (!m) return;
+    var target = +m[0], suffix = raw.replace(/\d+/, ""), t0 = null, dur = 1100;
+    function tick(t) {
+      if (!t0) t0 = t; var p = Math.min((t - t0) / dur, 1), e = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * e) + suffix;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  var counters = document.querySelectorAll("[data-count]");
+  if (!RM && counters.length && "IntersectionObserver" in window) {
+    var cio = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { animateCount(e.target); cio.unobserve(e.target); } });
+    }, { threshold: 0.6 });
+    counters.forEach(function (c) { cio.observe(c); });
+  }
+
+  document.querySelectorAll("details.faq").forEach(function (d) {
+    d.addEventListener("toggle", function () {
+      if (d.open) document.querySelectorAll("details.faq[open]").forEach(function (o) { if (o !== d) o.open = false; });
+    });
+  });
+
+  try {
+    var pill = document.getElementById("openPill"), spec = JSON.parse(pill.getAttribute("data-hours") || "[]");
+    if (spec.length) {
+      var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      var now = new Date(), today = days[now.getDay()], hm = now.getHours() * 60 + now.getMinutes(), open = false;
+      spec.forEach(function (s) {
+        if ((s.dayOfWeek || []).indexOf(today) === -1) return;
+        var o = s.opens.split(":"), c = s.closes.split(":");
+        if (hm >= (+o[0] * 60 + +o[1]) && hm <= (+c[0] * 60 + +c[1])) open = true;
+      });
+      pill.querySelector(".txt").textContent = open ? "Abierto ahora" : "Cerrado ahora";
+      pill.classList.toggle("closed", !open);
+      pill.style.display = "inline-flex";
+      var cl = document.getElementById("ctaLine");
+      if (cl && open) cl.textContent = "Estamos abiertos. Escríbenos o llámanos ahora.";
+    }
+  } catch (e) {}
+
+  // Oferta con caducidad: si la fecha fin ya pasó, se oculta (no anunciar caducado).
+  var ob = document.getElementById("offerBar"), end = ob && ob.getAttribute("data-end");
+  if (ob && end) {
+    var d = new Date(end + "T23:59:59");
+    if (!isNaN(d) && d < new Date()) ob.style.display = "none";
+  }
+
+  var consent = null;
+  try { consent = localStorage.getItem("faro_cookies"); } catch (e) {}
+  if (consent === null) { var cb = document.getElementById("cookie"); if (cb) cb.classList.add("show"); }
+  window.faroCookies = function (accept) {
+    try { localStorage.setItem("faro_cookies", accept ? "1" : "0"); } catch (e) {}
+    document.getElementById("cookie").classList.remove("show");
+    if (accept) { var mc = document.getElementById("mapConsent"); if (mc) faroLoadMap(); }
+  };
+  window.faroOpenCookies = function () { document.getElementById("cookie").classList.add("show"); };
+  window.faroLoadMap = function () {
+    var box = document.getElementById("mapConsent"); if (!box) return;
+    var f = document.createElement("iframe");
+    f.className = "map"; f.src = box.getAttribute("data-src"); f.loading = "lazy";
+    f.referrerPolicy = "no-referrer-when-downgrade"; f.title = "Mapa de cómo llegar";
+    box.replaceWith(f);
+  };
+  if (consent === "1") { var mc0 = document.getElementById("mapConsent"); if (mc0) faroLoadMap(); }
+
+  document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+    a.addEventListener("click", function (ev) {
+      var id = a.getAttribute("href").slice(1); if (!id) return;
+      var t = document.getElementById(id); if (!t) return;
+      ev.preventDefault();
+      t.scrollIntoView({ behavior: RM ? "auto" : "smooth" });
+      t.setAttribute("tabindex", "-1"); t.focus({ preventScroll: true });
+    });
+  });
+})();
+</script>

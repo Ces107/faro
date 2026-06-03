@@ -21,100 +21,13 @@
     <section class="form-panel">
       <h2>Datos del negocio</h2>
       <form id="bizForm">
-        <label>Nombre del negocio *
-          <input name="name" required placeholder="Ej. Clínica Dental Sonríe" />
+        <label class="sector-field">Tipo de negocio
+          <select name="sector" id="sector"></select>
+          <span class="template-tag" id="templateTag"></span>
         </label>
-        <div class="row">
-          <label>Tipo *
-            <select name="sector" id="sector"></select>
-          </label>
-          <label>Ciudad *
-            <input name="city" required placeholder="Ej. Puerto de Sagunto" />
-          </label>
-        </div>
-        <div class="row">
-          <label>Teléfono *
-            <input name="phone" required placeholder="961234567" />
-          </label>
-          <label>WhatsApp (si es otro)
-            <input name="whatsapp" placeholder="igual que el teléfono" />
-          </label>
-        </div>
-        <label><span id="servicesLabel">Servicios</span> (uno por línea) *
-          <textarea name="services" rows="4" required placeholder="Uno por línea"></textarea>
-        </label>
-        <label>Descripción del negocio (en tus palabras)
-          <textarea name="about" rows="3" placeholder="Cuéntalo tú: quiénes sois, desde cuándo, qué os hace diferentes. Si lo dejas vacío, se redacta una por ti."></textarea>
-        </label>
-        <label>¿Qué os hace diferentes? (1-3, uno por línea)
-          <textarea name="differentiators" rows="2" placeholder="Ej. Atendemos sin esperas&#10;Presupuesto cerrado por escrito"></textarea>
-        </label>
-        <label id="destacadosField">Datos destacados (uno por línea: «Etiqueta: valor»)
-          <textarea name="destacados" rows="3" placeholder="Ej. Terraza: Sí"></textarea>
-        </label>
-        <label>Horario
-          <input name="hours" placeholder="Ej. L-V 9:00-20:00, S 9:00-14:00" />
-        </label>
-        <label>Dirección
-          <input name="address" placeholder="Calle y número" />
-        </label>
-        <label>NIF/CIF (para el aviso legal)
-          <input name="cif" placeholder="si lo dejas vacío, queda como hueco a completar" />
-        </label>
-        <div class="row">
-          <label>Email
-            <input name="email" type="email" />
-          </label>
-          <label>En activo desde (año)
-            <input name="years" placeholder="Ej. 2008" />
-          </label>
-        </div>
-        <div class="row">
-          <label>Formas de pago
-            <input name="payment_methods" placeholder="Efectivo, Tarjeta, Bizum" />
-          </label>
-          <label>Aparcamiento
-            <input name="parking" placeholder="Ej. Fácil aparcar en la zona" />
-          </label>
-        </div>
-        <div class="row">
-          <label>Instagram
-            <input name="instagram" placeholder="@tunegocio" />
-          </label>
-          <label>Facebook
-            <input name="facebook" placeholder="enlace o página" />
-          </label>
-        </div>
-        <div class="row">
-          <label>Idiomas en los que atendéis
-            <input name="languages" placeholder="Castellano, Valenciano" />
-          </label>
-          <label>Slogan (opcional)
-            <input name="slogan" placeholder="se genera si lo dejas vacío" />
-          </label>
-        </div>
-        <label>Puntos fuertes (uno por línea)
-          <textarea name="highlights" rows="2" placeholder="Ej. 20 años de experiencia"></textarea>
-        </label>
-        <label>Enlace para dejar reseña en Google (recomendado)
-          <input name="google_review_url" placeholder="pega aquí el enlace de tu ficha; si no, el QR llevará a una búsqueda" />
-        </label>
-        <label class="color-field">
-          <span><input type="checkbox" id="useColor" /> Color de marca propio</span>
-          <input type="color" name="brand_color" id="brandColor" value="#2563eb" disabled />
-        </label>
-        <details class="extras">
-          <summary>Opciones avanzadas (opcional)</summary>
-          <label>Fotos (una URL por línea)
-            <textarea name="photos" rows="2" placeholder="https://... (fotos del negocio; activan la galería)"></textarea>
-          </label>
-          <label>Opiniones (una por línea: «frase | nombre»)
-            <textarea name="testimonials" rows="2" placeholder="Trato excelente | María L. | Cliente"></textarea>
-          </label>
-          <label>Dominio propio (si ya lo tiene)
-            <input name="canonical_url" placeholder="https://sunegocio.com" />
-          </label>
-        </details>
+        <!-- El resto del formulario se genera desde el esquema de la plantilla
+             (/api/form/<sector>): así es distinto según el tipo de negocio. -->
+        <div id="formFields" aria-live="polite"></div>
         <button type="submit" class="primary" id="genBtn">✨ Generar pack</button>
         <p id="error" class="error"></p>
       </form>

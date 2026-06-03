@@ -40,7 +40,13 @@ Repository = "https://github.com/Ces107/faro"
 where = ["src"]
 
 [tool.setuptools.package-data]
-faro = ["py.typed", "templates/*.html"]
+faro = [
+    "py.typed",
+    "templates/*.html",
+    "engine/templates/*.html",
+    "engine/templates/blocks/*.html",
+    "engine/assets/fonts/*.woff2",
+]
 
 [tool.ruff]
 line-length = 100

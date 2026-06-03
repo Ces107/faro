@@ -58,16 +58,52 @@ def local_business_jsonld(business: BusinessProfile) -> str:
         "name": business.name,
         "telephone": f"+{business.phone_e164}",
         "address": address,
-        "areaServed": business.city,
+        "areaServed": business.service_area or business.city,
     }
     opening_hours = parse_opening_hours(business.hours)
     if opening_hours:
         data["openingHoursSpecification"] = opening_hours
+    if business.canonical_url:
+        data["url"] = business.canonical_url
+    # Valoración real de Google (nunca inventada): solo si el dueño la aporta.
+    rating = business.rating
+    if rating is not None and business.google_reviews_count.isdigit():
+        data["aggregateRating"] = {
+            "@type": "AggregateRating",
+            "ratingValue": rating,
+            "reviewCount": int(business.google_reviews_count),
+        }
+    same_as = [
+        url
+        for url in (business.google_profile_url, business.instagram, business.facebook)
+        if url.startswith("http")
+    ]
+    if same_as:
+        data["sameAs"] = same_as
     # El email no se incluye en el JSON-LD a propósito: lo dejaría en texto plano,
     # rastreable por bots de spam. El teléfono ya cubre el contacto estructurado.
     payload = json.dumps(data, ensure_ascii=False, indent=2)
     # Evita que un "</script>" dentro de un dato cierre el bloque <script> inline.
     return payload.replace("</", "<\\/")
+
+
+def faq_jsonld(faq: list[tuple[str, str]]) -> str:
+    """JSON-LD ``FAQPage`` (rich results en Google). '' si no hay preguntas."""
+    if not faq:
+        return ""
+    data = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": q,
+                "acceptedAnswer": {"@type": "Answer", "text": a},
+            }
+            for q, a in faq
+        ],
+    }
+    return json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
 
 
 def favicon_data_uri(business: BusinessProfile) -> str:

@@ -15,7 +15,7 @@ from faro.business import BusinessProfile
 from faro.icons import get_icon
 from faro.playbook import FaqItem, SectorPlaybook
 
-_PRICE_RE = re.compile(r"\d+\s?€")
+_PRICE_RE = re.compile(r"\d+(?:[.,]\d+)?\s?€")
 _ALL_WEEK_RE = re.compile(r"l\s*[-a]\s*d|todos los d|lunes a domingo|7 d|24\s*h", re.IGNORECASE)
 
 
