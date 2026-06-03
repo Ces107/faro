@@ -53,6 +53,7 @@ fieldset.group legend { font-size: 12px; font-weight: 800; text-transform: upper
 button.primary, a.primary { background: var(--brand); color: #fff; border: none; padding: 11px 18px; border-radius: 9px; font-weight: 700; cursor: pointer; font-size: 15px; text-decoration: none; display: inline-block; }
 button.primary:hover, a.primary:hover { background: var(--brand-dark); }
 button.primary { width: 100%; margin-top: 6px; }
+.form-hint { font-size: 12px; color: var(--muted); margin: 4px 0 0; }
 a.ghost { color: var(--brand); text-decoration: none; padding: 11px 14px; font-weight: 600; font-size: 14px; }
 .error { color: var(--warn); font-size: 13px; min-height: 18px; margin: 8px 0 0; }
 

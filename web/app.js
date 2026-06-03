@@ -22,6 +22,20 @@ async function loadSectors() {
     sel.appendChild(opt);
   }
   sel.value = "dental";
+  await applySector();
+}
+
+// Al elegir un tipo, los campos se pre-rellenan con un ejemplo realista de esa
+// plantilla. El operador edita los datos reales y pulsa «Generar pack» normal.
+// Es contenido de demostración: se sustituye por los datos del negocio real.
+async function applySector() {
+  const sector = el("sector").value;
+  try {
+    const res = await fetch("/api/demo/" + encodeURIComponent(sector));
+    currentValues = res.ok ? await res.json() : { sector };
+  } catch (e) {
+    currentValues = { sector };
+  }
   await renderForm();
 }
 
@@ -71,6 +85,7 @@ function fieldControl(f, value) {
   }
   const input = document.createElement("input");
   input.type = { tel: "tel", email: "email", url: "url", number: "number" }[f.kind] || "text";
+  if (input.type === "number") input.step = "any"; // permite decimales (p.ej. valoración 4,8)
   input.value = v;
   return input;
 }
@@ -111,11 +126,9 @@ function renderField(f, value) {
 }
 
 async function renderForm() {
+  // Pinta el formulario de la plantilla con los valores actuales (el ejemplo del
+  // sector, ya cargado en currentValues por applySector).
   const sector = el("sector").value;
-  // Conserva lo que ya hay escrito antes de re-pintar, sin pisar valores ya
-  // presentes (p.ej. los del modo demo) con los campos vacíos del DOM actual.
-  const collected = collectValues();
-  for (const k in collected) if (collected[k]) currentValues[k] = collected[k];
   const res = await fetch("/api/form/" + encodeURIComponent(sector));
   const data = await res.json();
   el("templateTag").textContent = "Plantilla: " + data.name;
@@ -236,21 +249,11 @@ el("downloadBtn").addEventListener("click", (e) => {
   }
 });
 
-// Datos de ejemplo solo en modo demostración (?demo=1), nunca por defecto.
-function fillDemo() {
-  if (new URLSearchParams(location.search).get("demo") !== "1") return;
-  currentValues = Object.assign(currentValues, {
-    name: "Clínica Dental Sonríe",
-    city: "Puerto de Sagunto",
-    phone: "961234567",
-    services: "Limpiezas dentales\nImplantes\nOrtodoncia invisible",
-    hours: "L-V 9:00-20:00, S 9:00-14:00",
-    address: "Av. del Mediterráneo 12",
-    differentiators: "20 años cuidando sonrisas en el Puerto\nPrimera visita sin coste",
-  });
-  renderForm();
+// Atajo ?demo=1: además de pre-rellenar, genera la web al cargar.
+async function autoGenerate() {
+  if (new URLSearchParams(location.search).get("demo") === "1") el("bizForm").requestSubmit();
 }
 
-el("sector").addEventListener("change", renderForm);
+el("sector").addEventListener("change", applySector);
 el("bizForm").addEventListener("submit", generate);
-loadSectors().then(fillDemo);
+loadSectors().then(autoGenerate);

@@ -105,6 +105,20 @@ def create_app(*, use_live: bool = False) -> FastAPI:
             ]
         }
 
+    @app.get("/api/demo/{sector}")
+    def demo(sector: str) -> JSONResponse:
+        """Datos de ejemplo completos para ver una web entera de un clic.
+
+        Es contenido de demostración (el operador lo edita con los datos reales
+        del negocio antes de entregar el pack).
+        """
+        from faro.engine.demo import demo_data
+
+        try:
+            return JSONResponse(demo_data(Sector(sector)))
+        except ValueError as exc:
+            raise HTTPException(status_code=404, detail="Sector desconocido") from exc
+
     @app.get("/api/form/{sector}")
     def form_schema(sector: str) -> JSONResponse:
         """El formulario declarativo de la plantilla que cubre este sector.
