@@ -38,25 +38,27 @@ class LandingCopy:
     value_props: tuple[ValueProp, ...]
 
 
+_DIFF_TITLES = ("Lo que nos diferencia", "Por qué elegirnos", "Nuestro compromiso")
+
+
 def _default_value_props(business: BusinessProfile) -> tuple[ValueProp, ...]:
     theme = business.theme
-    props = [
-        ValueProp(
-            "Cercanía",
-            f"Estamos en {business.city}. Nos tienes al lado cuando nos necesitas.",
-        ),
-        ValueProp(
-            "Trato de verdad",
-            "Te atendemos personas, no centralitas. Dinos qué necesitas y te ayudamos.",
-        ),
+    # Si el dueño nos dice qué les diferencia, esos son los puntos fuertes reales
+    # (con títulos distintos, no el genérico repetido tres veces).
+    if business.differentiators:
+        return tuple(
+            ValueProp(_DIFF_TITLES[i % len(_DIFF_TITLES)], d)
+            for i, d in enumerate(business.differentiators[:3])
+        )
+    # Si no, tres motivos honestos y genéricos (cada uno con su propio título).
+    return (
+        ValueProp("Cercanía", f"Estamos en {business.city}, al lado cuando lo necesites."),
+        ValueProp("Trato de verdad", "Te atienden personas, no centralitas. Dinos qué necesitas."),
         ValueProp(
             "Profesionalidad",
-            f"{theme.label} con la experiencia y el cuidado que tu confianza merece.",
+            f"{theme.label} con la experiencia y el cuidado que mereces.",
         ),
-    ]
-    # Los puntos fuertes del negocio van en la franja de estadísticas (como badges),
-    # no aquí, para no duplicar contenido ni repetir el mismo título.
-    return tuple(props[:3])
+    )
 
 
 def scripted_copy(business: BusinessProfile) -> LandingCopy:

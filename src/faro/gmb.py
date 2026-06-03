@@ -50,7 +50,10 @@ def _description(business: BusinessProfile) -> str:
         f"{business.name} es {theme.noun} en {business.city}.",
     ]
     if business.services:
-        parts.append("Servicios: " + ", ".join(business.services) + ".")
+        from faro.playbook import playbook_for
+
+        offer = playbook_for(business.sector).offer_word.capitalize()
+        parts.append(f"{offer}: " + ", ".join(business.services) + ".")
     if business.highlights:
         parts.append(" ".join(h.rstrip(".") + "." for h in business.highlights))
     if business.hours:

@@ -863,3 +863,30 @@ _ARCHETYPE_DEFAULT = _PLAYBOOK[Sector.OTRO]
 
 def playbook_for(sector: Sector) -> SectorPlaybook:
     return _PLAYBOOK.get(sector, _ARCHETYPE_DEFAULT)
+
+
+# Ejemplos de "datos destacados" sugeridos por sector (placeholder del formulario).
+# Guían al dueño para que aporte hechos reales en vez de que se inventen.
+_EXTRA_HINTS: dict[Sector, str] = {
+    Sector.DENTAL: "Primera visita: gratis\nFinanciación: Sí\nUrgencias: Sí",
+    Sector.FISIO: "A domicilio: Sí\nFisioterapia deportiva: Sí",
+    Sector.VETERINARIO: "Urgencias 24h: Sí\nAnimales: perros, gatos\nPeluquería canina: Sí",
+    Sector.PELUQUERIA: "Con cita o sin cita: Ambas\nMarcas: L'Oréal",
+    Sector.ESTETICA: "Tratamientos estrella: láser, presoterapia",
+    Sector.RESTAURANTE: "Tipo de cocina: mediterránea\nMenú del día: 13€\nTerraza: Sí",
+    Sector.BAR: "Desayunos: Sí\nTerraza: Sí\nTapas: Sí",
+    Sector.COMERCIO: "Qué vendéis: ropa de mujer\nEnvíos: Sí",
+    Sector.PANADERIA: "Horneado propio: Sí\nSin gluten: Sí\nEncargos: Sí",
+    Sector.TALLER: "Marcas: todas\nITV: te la gestionamos\nCoche de cortesía: Sí",
+    Sector.GIMNASIO: "Sin permanencia: Sí\nClases: spinning, yoga\nEntrenador personal: Sí",
+    Sector.FARMACIA: "Guardia: Sí\nOrtopedia: Sí\nEncargos: Sí",
+    Sector.ASESORIA: "Clientes: autónomos y pymes\nÁreas: laboral, fiscal, contable",
+    Sector.INMOBILIARIA: "Operaciones: venta y alquiler\nTasación: gratis\nZona: Camp de Morvedre",
+    Sector.REFORMAS: "Tipos: baños, cocinas, integral\nPresupuesto: gratis\nGarantía: Sí",
+    Sector.AUTONOMO: "Servicio: lo que ofreces\nZona: a domicilio",
+}
+
+
+def extra_hint(sector: Sector) -> str:
+    """Placeholder sugerido para el campo 'datos destacados' del formulario."""
+    return _EXTRA_HINTS.get(sector, "Algo que te haga destacar: Sí")

@@ -201,6 +201,16 @@ class BusinessProfile:
     photos: tuple[str, ...] = ()
     testimonials: tuple[Testimonial, ...] = ()
     canonical_url: str = ""
+    # Datos reales que antes se inventaban (todos opcionales, degradan a vacío).
+    years: str = ""  # años de experiencia o "desde 1998"
+    differentiators: tuple[str, ...] = ()  # qué os hace diferentes (sustituye props genéricas)
+    instagram: str = ""
+    facebook: str = ""
+    payment_methods: tuple[str, ...] = ()  # Efectivo, Tarjeta, Bizum...
+    parking: str = ""
+    languages: tuple[str, ...] = ()
+    booking_style: str = ""  # "", cita, sin_cita, reserva
+    extras: tuple[tuple[str, str], ...] = ()  # hechos por sector: (etiqueta, valor)
 
     def __post_init__(self) -> None:
         if not self.name.strip():
@@ -247,6 +257,23 @@ class BusinessProfile:
         canonical = self.canonical_url.strip()
         object.__setattr__(
             self, "canonical_url", canonical[:200] if canonical.startswith("http") else ""
+        )
+        object.__setattr__(self, "years", self.years.strip()[:20])
+        object.__setattr__(self, "instagram", self.instagram.strip()[:120])
+        object.__setattr__(self, "facebook", self.facebook.strip()[:200])
+        object.__setattr__(self, "parking", self.parking.strip()[:60])
+        object.__setattr__(self, "booking_style", self.booking_style.strip()[:20])
+        object.__setattr__(
+            self, "differentiators", tuple(d[:90] for d in self.differentiators[:3])
+        )
+        object.__setattr__(
+            self, "payment_methods", tuple(p[:30] for p in self.payment_methods[:6])
+        )
+        object.__setattr__(self, "languages", tuple(lang[:30] for lang in self.languages[:5]))
+        object.__setattr__(
+            self,
+            "extras",
+            tuple((k[:40], v[:120]) for k, v in self.extras if k and v)[:12],
         )
 
     @property
@@ -305,6 +332,21 @@ class BusinessProfile:
         def split_lines(value: str) -> tuple[str, ...]:
             return tuple(s.strip() for s in value.replace(";", "\n").splitlines() if s.strip())
 
+        def split_commas(value: str) -> tuple[str, ...]:
+            return tuple(s.strip() for s in value.split(",") if s.strip())
+
+        # Hechos por sector. Dos vías: claves "x_<etiqueta>" (formulario dinámico)
+        # y un campo "destacados" con líneas "Etiqueta: valor".
+        extras: list[tuple[str, str]] = [
+            (k[2:].replace("_", " ").strip(), v.strip())
+            for k, v in data.items()
+            if k.startswith("x_") and v.strip()
+        ]
+        for line in split_lines(data.get("destacados", "")):
+            label, sep, value = line.partition(":")
+            if sep and label.strip() and value.strip():
+                extras.append((label.strip(), value.strip()))
+
         return cls(
             name=data.get("name", "").strip(),
             sector=Sector(data.get("sector", "otro")),
@@ -324,4 +366,13 @@ class BusinessProfile:
             photos=split_lines(data.get("photos", "")),
             testimonials=_parse_testimonials(data.get("testimonials", "")),
             canonical_url=data.get("canonical_url", "").strip(),
+            years=data.get("years", "").strip(),
+            differentiators=split_lines(data.get("differentiators", "")),
+            instagram=data.get("instagram", "").strip(),
+            facebook=data.get("facebook", "").strip(),
+            payment_methods=split_commas(data.get("payment_methods", "")),
+            parking=data.get("parking", "").strip(),
+            languages=split_commas(data.get("languages", "")),
+            booking_style=data.get("booking_style", "").strip(),
+            extras=tuple(extras),
         )

@@ -3,6 +3,7 @@
 const el = (id) => document.getElementById(id);
 
 const OFFER_WORD = {};
+const EXTRA_HINT = {};
 
 async function loadSectors() {
   const res = await fetch("/api/sectors");
@@ -14,14 +15,18 @@ async function loadSectors() {
     opt.textContent = s.label;
     sel.appendChild(opt);
     OFFER_WORD[s.value] = s.offer_word;
+    EXTRA_HINT[s.value] = s.extra_hint;
   }
   sel.value = "dental";
-  updateServicesLabel();
+  updateSectorFields();
 }
 
-function updateServicesLabel() {
-  const word = OFFER_WORD[el("sector").value] || "Servicios";
+function updateSectorFields() {
+  const sector = el("sector").value;
+  const word = OFFER_WORD[sector] || "Servicios";
   el("servicesLabel").textContent = word.charAt(0).toUpperCase() + word.slice(1);
+  const dest = document.querySelector('[name="destacados"]');
+  if (dest && EXTRA_HINT[sector]) dest.placeholder = "Ej.\n" + EXTRA_HINT[sector];
 }
 
 function formToJson(form) {
@@ -113,7 +118,7 @@ function fillDemo() {
   f.highlights.value = "20 años cuidando sonrisas en el Puerto\nPrimera visita sin coste";
 }
 
-el("sector").addEventListener("change", updateServicesLabel);
+el("sector").addEventListener("change", updateSectorFields);
 el("bizForm").addEventListener("submit", generate);
 loadSectors();
 fillDemo();

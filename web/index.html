@@ -46,6 +46,12 @@
         <label>Descripción del negocio (en tus palabras)
           <textarea name="about" rows="3" placeholder="Cuéntalo tú: quiénes sois, desde cuándo, qué os hace diferentes. Si lo dejas vacío, se redacta una por ti."></textarea>
         </label>
+        <label>¿Qué os hace diferentes? (1-3, uno por línea)
+          <textarea name="differentiators" rows="2" placeholder="Ej. Atendemos sin esperas&#10;Presupuesto cerrado por escrito"></textarea>
+        </label>
+        <label id="destacadosField">Datos destacados (uno por línea: «Etiqueta: valor»)
+          <textarea name="destacados" rows="3" placeholder="Ej. Terraza: Sí"></textarea>
+        </label>
         <label>Horario
           <input name="hours" placeholder="Ej. L-V 9:00-20:00, S 9:00-14:00" />
         </label>
@@ -58,6 +64,30 @@
         <div class="row">
           <label>Email
             <input name="email" type="email" />
+          </label>
+          <label>En activo desde (año)
+            <input name="years" placeholder="Ej. 2008" />
+          </label>
+        </div>
+        <div class="row">
+          <label>Formas de pago
+            <input name="payment_methods" placeholder="Efectivo, Tarjeta, Bizum" />
+          </label>
+          <label>Aparcamiento
+            <input name="parking" placeholder="Ej. Fácil aparcar en la zona" />
+          </label>
+        </div>
+        <div class="row">
+          <label>Instagram
+            <input name="instagram" placeholder="@tunegocio" />
+          </label>
+          <label>Facebook
+            <input name="facebook" placeholder="enlace o página" />
+          </label>
+        </div>
+        <div class="row">
+          <label>Idiomas en los que atendéis
+            <input name="languages" placeholder="Castellano, Valenciano" />
           </label>
           <label>Slogan (opcional)
             <input name="slogan" placeholder="se genera si lo dejas vacío" />

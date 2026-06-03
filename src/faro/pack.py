@@ -77,8 +77,11 @@ def _review_card_html(business: BusinessProfile) -> str:
 
 
 def _gmb_markdown(business: BusinessProfile, gmb: GmbContent, replies: ReviewReplies) -> str:
+    from faro.playbook import playbook_for
+
     posts = "\n\n".join(f"**Publicación {i}:**\n{p}" for i, p in enumerate(gmb.posts, 1))
     services = "\n".join(f"- {s}" for s in gmb.services)
+    offer = playbook_for(business.sector).offer_word.capitalize()
     return f"""# Google Business Profile — {business.name}
 
 Pega esto en tu ficha de Google Business (business.google.com).
@@ -91,7 +94,7 @@ Pega esto en tu ficha de Google Business (business.google.com).
 
 {", ".join(gmb.categories)}
 
-## Servicios
+## {offer}
 
 {services}
 

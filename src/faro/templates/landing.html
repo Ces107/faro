@@ -196,6 +196,8 @@
     .foot-grid h4 { color: #fff; font-size: var(--step--1); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 12px; }
     .foot-brand .badge { width: 40px; height: 40px; border-radius: 11px; background: var(--brand); color: var(--brand-ink); display: grid; place-items: center; font-weight: 800; margin-bottom: 10px; }
     .foot-list { display: grid; gap: 7px; font-size: var(--step--1); }
+    .foot-social { display: flex; gap: 14px; margin-top: 10px; font-size: var(--step--1); }
+    .foot-social a { text-decoration: underline; }
     .foot-bottom { border-top: 1px solid rgba(255,255,255,.12); margin-top: 30px; padding-top: 18px; font-size: var(--step--1); color: #94a0b4; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
     .linkbtn { background: none; border: 0; color: inherit; cursor: pointer; padding: 0; font: inherit; text-decoration: underline; }
 
@@ -266,6 +268,7 @@
       <div class="trust-strip">
         <span><svg class="ico" viewBox="0 0 24 24">{{ icon('shield') | safe }}</svg> {{ trust_chip }}</span>
         <span><svg class="ico" viewBox="0 0 24 24">{{ icon('location') | safe }}</svg> {{ business.city }}</span>
+        {% for label, value in business.extras if value|lower in ['sí','si','yes'] %}<span><svg class="ico" viewBox="0 0 24 24">{{ icon('check') | safe }}</svg> {{ label }}</span>{% endfor %}
         <span class="open-pill" id="openPill" data-hours='{{ opening_hours_json }}'><span class="dot"></span><span class="txt"></span></span>
       </div>
     </div>
@@ -286,7 +289,7 @@
 
   <section id="servicios">
     <div class="wrap">
-      <p class="eyebrow">Lo que hacemos</p>
+      <p class="eyebrow">Lo que ofrecemos</p>
       <h2 class="section-title">{{ copy.services_intro }}</h2>
       <div class="cards grid-2">
         {% for c in service_cards %}
@@ -375,6 +378,10 @@
           {% if business.hours %}<div class="info-card"><h4><svg class="ico" viewBox="0 0 24 24">{{ icon('clock') | safe }}</svg> Horario</h4><p>{{ business.hours }}</p></div>{% endif %}
           <div class="info-card"><h4><svg class="ico" viewBox="0 0 24 24">{{ icon('phone') | safe }}</svg> Contacto</h4><p>{{ business.phone }}{% if business.email %}<br>{{ email_html | safe }}{% endif %}</p></div>
           {% if business.address %}<div class="info-card"><h4><svg class="ico" viewBox="0 0 24 24">{{ icon('location') | safe }}</svg> Dónde estamos</h4><p>{{ business.address }}, {{ business.city }}</p></div>{% endif %}
+          {% if business.payment_methods %}<div class="info-card"><h4><svg class="ico" viewBox="0 0 24 24">{{ icon('euro') | safe }}</svg> Formas de pago</h4><p>{{ business.payment_methods | join(', ') }}</p></div>{% endif %}
+          {% if business.parking %}<div class="info-card"><h4><svg class="ico" viewBox="0 0 24 24">{{ icon('car') | safe }}</svg> Aparcamiento</h4><p>{{ business.parking }}</p></div>{% endif %}
+          {% if business.languages %}<div class="info-card"><h4><svg class="ico" viewBox="0 0 24 24">{{ icon('check') | safe }}</svg> Te atendemos en</h4><p>{{ business.languages | join(', ') }}</p></div>{% endif %}
+          {% for label, value in business.extras if value|lower not in ['sí','si','yes'] %}<div class="info-card"><h4><svg class="ico" viewBox="0 0 24 24">{{ icon('star') | safe }}</svg> {{ label }}</h4><p>{{ value }}</p></div>{% endfor %}
         </div>
       </div>
     </div>
@@ -441,6 +448,12 @@
           <div class="badge">{{ business.initials }}</div>
           <strong>{{ business.name }}</strong>
           {% if copy.slogan %}<p style="margin-top:6px;font-size:var(--step--1)">{{ copy.slogan }}</p>{% endif %}
+          {% if instagram_url or facebook_url %}
+          <div class="foot-social">
+            {% if instagram_url %}<a href="{{ instagram_url }}" aria-label="Instagram" target="_blank" rel="noopener">Instagram</a>{% endif %}
+            {% if facebook_url %}<a href="{{ facebook_url }}" aria-label="Facebook" target="_blank" rel="noopener">Facebook</a>{% endif %}
+          </div>
+          {% endif %}
         </div>
         <div>
           <h4>Contacto</h4>

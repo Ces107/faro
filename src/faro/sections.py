@@ -84,8 +84,14 @@ def build_faq(business: BusinessProfile, playbook: SectorPlaybook) -> list[FaqIt
 def build_stats(business: BusinessProfile, playbook: SectorPlaybook) -> list[Stat]:
     """Cifras honestas para la franja de estadísticas. Nunca se inventan números."""
     tiles: list[Stat] = []
-    if len(business.services) >= 2:
-        tiles.append(Stat(f"{len(business.services)}+", playbook.offer_word))
+    # Años de experiencia, solo si el dueño lo aporta (nunca inventado).
+    years = business.years.strip()
+    if years.isdigit() and len(years) == 4:
+        tiles.append(Stat(f"Desde {years}", "en el barrio"))
+    elif years.isdigit():
+        tiles.append(Stat(f"{years}", "años de experiencia"))
+    if len(business.services) >= 3:
+        tiles.append(Stat(f"{len(business.services)}", playbook.offer_word))
     if business.hours and _ALL_WEEK_RE.search(business.hours):
         tiles.append(Stat("7 días", "te atendemos"))
     tiles.append(Stat(business.city, "cerca de ti"))

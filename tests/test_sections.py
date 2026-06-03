@@ -68,7 +68,7 @@ def test_offer_vocabulary_per_sector() -> None:
 
 
 def test_stat_label_uses_offer_word() -> None:
-    biz = _biz(sector=Sector.PANADERIA, services=("Pan", "Bollería"))
+    biz = _biz(sector=Sector.PANADERIA, services=("Pan", "Bollería", "Tartas"))
     stats = build_stats(biz, playbook_for(Sector.PANADERIA))
     assert any(s.label == "productos" for s in stats)
     assert not any(s.label == "servicios" for s in stats)

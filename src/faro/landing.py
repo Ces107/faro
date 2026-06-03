@@ -39,12 +39,22 @@ def _obfuscate_email(email: str) -> str:
     return "".join(f"&#{ord(c)};" for c in email)
 
 
+def _social_url(value: str, base: str) -> str:
+    """Normaliza @usuario o enlace a una URL completa; '' si vacío."""
+    value = value.strip()
+    if not value:
+        return ""
+    if value.startswith("http"):
+        return value
+    return f"https://{base}/{value.lstrip('@')}"
+
+
 def _anchors(
-    business: BusinessProfile, has_photos: bool, has_testimonials: bool
+    business: BusinessProfile, offer_label: str, has_photos: bool, has_testimonials: bool
 ) -> list[dict[str, str]]:
     """Enlaces de navegación, solo para las secciones que de verdad se renderizan."""
     items = [
-        {"id": "servicios", "label": "Servicios"},
+        {"id": "servicios", "label": offer_label},
         {"id": "proceso", "label": "Cómo trabajamos"},
     ]
     if has_photos:
@@ -102,7 +112,14 @@ def render_landing(business: BusinessProfile, copy: LandingCopy) -> str:
         "maps_embed_url": maps_embed_url(business) if business.address else "",
         "maps_link": maps_link(business),
         "email_html": _obfuscate_email(business.email) if business.email else "",
-        "anchors": _anchors(business, bool(business.photos), bool(business.testimonials)),
+        "instagram_url": _social_url(business.instagram, "instagram.com"),
+        "facebook_url": _social_url(business.facebook, "facebook.com"),
+        "anchors": _anchors(
+            business,
+            playbook.offer_word.split()[0].capitalize(),
+            bool(business.photos),
+            bool(business.testimonials),
+        ),
         "opening_hours_json": json.dumps(parse_opening_hours(business.hours)),
         "current_year": datetime.datetime.now().year,
         "icon": get_icon,

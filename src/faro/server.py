@@ -67,6 +67,16 @@ class GenerateRequest(BaseModel):
     photos: str = ""
     testimonials: str = ""
     canonical_url: str = ""
+    years: str = ""
+    differentiators: str = ""
+    instagram: str = ""
+    facebook: str = ""
+    payment_methods: str = ""
+    parking: str = ""
+    languages: str = ""
+    booking_style: str = ""
+
+    model_config = {"extra": "allow"}  # acepta los campos por sector "x_*" del formulario
 
 
 def create_app(*, use_live: bool = False) -> FastAPI:
@@ -79,7 +89,7 @@ def create_app(*, use_live: bool = False) -> FastAPI:
     @app.get("/api/sectors")
     def sectors() -> dict[str, list[dict[str, str]]]:
         from faro.business import theme_for
-        from faro.playbook import playbook_for
+        from faro.playbook import extra_hint, playbook_for
 
         return {
             "sectors": [
@@ -87,6 +97,7 @@ def create_app(*, use_live: bool = False) -> FastAPI:
                     "value": s.value,
                     "label": theme_for(s).label,
                     "offer_word": playbook_for(s).offer_word,
+                    "extra_hint": extra_hint(s),
                 }
                 for s in Sector
             ]
