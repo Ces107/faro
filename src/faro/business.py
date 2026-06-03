@@ -211,6 +211,17 @@ class BusinessProfile:
     languages: tuple[str, ...] = ()
     booking_style: str = ""  # "", cita, sin_cita, reserva
     extras: tuple[tuple[str, str], ...] = ()  # hechos por sector: (etiqueta, valor)
+    # Funcionalidades de conversión (todas opcionales, nunca inventadas).
+    google_rating: str = ""  # valoración real 1-5 (badge); vacío = no se muestra
+    google_reviews_count: str = ""  # nº de reseñas reales
+    google_profile_url: str = ""  # ficha de Google (verifica el rating; alimenta sameAs)
+    booking_url: str = ""  # enlace externo de reserva/cita (Booksy, Doctoralia, TheFork...)
+    offer_title: str = ""  # gancho de oferta
+    offer_details: str = ""  # condiciones de la oferta
+    offer_end_date: str = ""  # YYYY-MM-DD; la oferta se auto-oculta tras esta fecha
+    delivery_links: tuple[str, ...] = ()  # enlaces de pedido (Glovo, Just Eat...)
+    service_area: str = ""  # zonas donde trabaja (negocios móviles)
+    credentials: tuple[str, ...] = ()  # certificaciones/licencias/colegiación reales
 
     def __post_init__(self) -> None:
         if not self.name.strip():
@@ -275,6 +286,22 @@ class BusinessProfile:
             "extras",
             tuple((k[:40], v[:120]) for k, v in self.extras if k and v)[:12],
         )
+        object.__setattr__(self, "google_rating", self.google_rating.strip()[:3])
+        object.__setattr__(self, "google_reviews_count", self.google_reviews_count.strip()[:7])
+        gp = self.google_profile_url.strip()
+        object.__setattr__(self, "google_profile_url", gp[:200] if gp.startswith("http") else "")
+        bk = self.booking_url.strip()
+        object.__setattr__(self, "booking_url", bk[:200] if bk.startswith("http") else "")
+        object.__setattr__(self, "offer_title", self.offer_title.strip()[:80])
+        object.__setattr__(self, "offer_details", self.offer_details.strip()[:200])
+        object.__setattr__(self, "offer_end_date", self.offer_end_date.strip()[:10])
+        object.__setattr__(
+            self,
+            "delivery_links",
+            tuple(d.strip() for d in self.delivery_links if d.strip().startswith("http"))[:4],
+        )
+        object.__setattr__(self, "service_area", self.service_area.strip()[:160])
+        object.__setattr__(self, "credentials", tuple(c[:90] for c in self.credentials[:6]))
 
     @property
     def theme(self) -> SectorTheme:
@@ -313,6 +340,30 @@ class BusinessProfile:
         words = [w for w in self.name.split() if w[:1].isalnum()]
         letters = "".join(w[0] for w in words[:2]) or self.name[:1]
         return letters.upper()
+
+    @property
+    def rating(self) -> float | None:
+        """Valoración de Google como número 1-5, o None si no es válida/no hay."""
+        raw = self.google_rating.replace(",", ".")
+        try:
+            value = float(raw)
+        except ValueError:
+            return None
+        return value if 0 < value <= 5 else None
+
+    @property
+    def rating_stars(self) -> str:
+        """Estrellas llenas/vacías para el rating real (★/☆). '' si no hay rating."""
+        r = self.rating
+        if r is None:
+            return ""
+        full = int(round(r))
+        return "★" * full + "☆" * (5 - full)
+
+    @property
+    def offer_active(self) -> bool:
+        """Hay oferta que mostrar (tiene título; la caducidad la gestiona el JS)."""
+        return bool(self.offer_title)
 
     @property
     def phone_e164(self) -> str:
@@ -375,4 +426,14 @@ class BusinessProfile:
             languages=split_commas(data.get("languages", "")),
             booking_style=data.get("booking_style", "").strip(),
             extras=tuple(extras),
+            google_rating=data.get("google_rating", "").strip(),
+            google_reviews_count=data.get("google_reviews_count", "").strip(),
+            google_profile_url=data.get("google_profile_url", "").strip(),
+            booking_url=data.get("booking_url", "").strip(),
+            offer_title=data.get("offer_title", "").strip(),
+            offer_details=data.get("offer_details", "").strip(),
+            offer_end_date=data.get("offer_end_date", "").strip(),
+            delivery_links=split_lines(data.get("delivery_links", "")),
+            service_area=data.get("service_area", "").strip(),
+            credentials=split_lines(data.get("credentials", "")),
         )

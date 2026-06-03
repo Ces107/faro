@@ -172,6 +172,37 @@ def core_trust() -> FieldGroup:
     )
 
 
+def core_conversion() -> FieldGroup:
+    """Palancas de conversión reales: rating de Google, reserva, oferta, credenciales.
+
+    Todo opcional y nunca inventado: un campo vacío no pinta su bloque.
+    """
+    return FieldGroup(
+        "Más conversión (opcional)",
+        (
+            FormField("google_rating", "Valoración en Google (1-5)", FieldKind.NUMBER,
+                      placeholder="4.8", help="Solo si es real. Nunca se inventa."),
+            FormField("google_reviews_count", "Nº de reseñas", FieldKind.NUMBER, placeholder="127"),
+            FormField("google_profile_url", "Ficha de Google", FieldKind.URL, full_width=True,
+                      placeholder="enlace a tu ficha (verifica la valoración)"),
+            FormField("booking_url", "Enlace de reserva / cita online", FieldKind.URL,
+                      full_width=True,
+                      placeholder="Booksy, Doctoralia, TheFork... (botón de reserva)"),
+            FormField("offer_title", "Oferta (título)", placeholder="2x1 en cafés de 8 a 10h"),
+            FormField("offer_end_date", "La oferta termina el", placeholder="2026-07-31"),
+            FormField("offer_details", "Condiciones de la oferta", full_width=True,
+                      placeholder="de lunes a viernes, no acumulable"),
+            FormField("delivery_links", "Pedido a domicilio (una URL por línea)", FieldKind.LIST,
+                      full_width=True, rows=2, placeholder="https://glovoapp.com/...\nhttps://just-eat.es/..."),
+            FormField("service_area", "Zonas donde trabajáis", full_width=True,
+                      placeholder="Sagunto, Puerto de Sagunto, Canet, Almenara"),
+            FormField("credentials", "Certificaciones / licencias / colegiación (una por línea)",
+                      FieldKind.LIST, full_width=True, rows=2,
+                      placeholder="Colegiado nº 1234\nSeguro de responsabilidad civil"),
+        ),
+    )
+
+
 def core_brand() -> FieldGroup:
     """Marca: color e identidad visual."""
     return FieldGroup(

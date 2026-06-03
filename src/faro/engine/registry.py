@@ -13,6 +13,7 @@ from faro.business import Sector
 from faro.engine.forms import (
     FormSchema,
     core_brand,
+    core_conversion,
     core_identity,
     core_offer,
     core_story,
@@ -26,7 +27,8 @@ _ALL_SECTORS: tuple[Sector, ...] = tuple(Sector)
 def _base_schema() -> FormSchema:
     """El formulario común: identidad, historia, confianza y marca."""
     return FormSchema(
-        (core_identity(), core_offer(), core_story(), core_trust(), core_brand())
+        (core_identity(), core_offer(), core_story(), core_trust(),
+         core_conversion(), core_brand())
     )
 
 

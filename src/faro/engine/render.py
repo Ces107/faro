@@ -25,7 +25,7 @@ from faro.playbook import playbook_for
 from faro.qr import review_qr
 from faro.reviews import review_url
 from faro.sections import build_faq, build_service_cards, build_stats
-from faro.seo import favicon_data_uri, local_business_jsonld
+from faro.seo import faq_jsonld, favicon_data_uri, local_business_jsonld
 from faro.whatsapp import phone_link, whatsapp_link
 
 _TEMPLATES_DIR = Path(__file__).resolve().parent / "templates"
@@ -71,6 +71,7 @@ def render_site(business: BusinessProfile, copy: LandingCopy) -> str:
     is_carta = tokens.service_style == "carta"
     offer_label = "Carta" if is_carta else playbook.offer_word.split()[0].capitalize()
     offer_eyebrow = "La carta" if is_carta else "Lo que ofrecemos"
+    faq = build_faq(business, playbook)
 
     # La familia fija la dirección de arte (tipografía, layout, neutros); si el
     # negocio aporta su color de marca, personaliza el acento sin romperla.
@@ -89,7 +90,8 @@ def render_site(business: BusinessProfile, copy: LandingCopy) -> str:
         "proceso_title": "Cómo trabajamos",
         "service_cards": build_service_cards(business, playbook),
         "process": playbook.process,
-        "faq": build_faq(business, playbook),
+        "faq": faq,
+        "faq_jsonld": faq_jsonld([(q.question, q.answer) for q in faq]),
         "stats": build_stats(business, playbook),
         "whatsapp_url": whatsapp_link(business),
         "phone_url": phone_link(business),

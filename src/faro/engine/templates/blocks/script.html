@@ -84,6 +84,13 @@
     }
   } catch (e) {}
 
+  // Oferta con caducidad: si la fecha fin ya pasó, se oculta (no anunciar caducado).
+  var ob = document.getElementById("offerBar"), end = ob && ob.getAttribute("data-end");
+  if (ob && end) {
+    var d = new Date(end + "T23:59:59");
+    if (!isNaN(d) && d < new Date()) ob.style.display = "none";
+  }
+
   var consent = null;
   try { consent = localStorage.getItem("faro_cookies"); } catch (e) {}
   if (consent === null) { var cb = document.getElementById("cookie"); if (cb) cb.classList.add("show"); }

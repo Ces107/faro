@@ -18,6 +18,7 @@
   <script type="application/ld+json">
 {{ jsonld | safe }}
   </script>
+  {% if faq_jsonld %}<script type="application/ld+json">{{ faq_jsonld | safe }}</script>{% endif %}
   <script>document.documentElement.className += ' js';</script>
   <style>
     {{ font_css | safe }}
@@ -78,6 +79,27 @@
       background:var(--paper);border-radius:var(--radius);cursor:pointer;}
     .progress{position:fixed;top:0;left:0;height:3px;background:var(--brand);width:100%;
       transform:scaleX(0);transform-origin:0 50%;z-index:101;}
+
+    /* Oferta con caducidad (se auto-oculta por JS tras la fecha). */
+    .offer-bar{background:var(--brand);color:#fff;font-weight:600;}
+    .offer-bar .wrap{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;
+      padding:10px 0;font-size:.95rem;text-align:center;}
+    .offer-bar b{font-family:var(--font-display);font-weight:600;}
+    .offer-bar .when{opacity:.85;font-size:.85rem;}
+    /* Valoración real de Google. */
+    .rating{display:inline-flex;align-items:center;gap:8px;font-weight:700;}
+    .rating .stars{color:#eab308;letter-spacing:1px;}
+    .rating .n{font-variant-numeric:tabular-nums;}
+    .rating a{color:inherit;opacity:.8;font-weight:600;text-decoration:underline;}
+    /* Credenciales reales (tira sobria). */
+    .creds{display:flex;flex-wrap:wrap;gap:10px 14px;margin-top:26px;}
+    .creds span{border:1px solid var(--line);border-radius:var(--radius);padding:7px 13px;
+      font-size:.84rem;font-weight:600;color:var(--text-soft);}
+    /* Pedido a domicilio. */
+    .delivery{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;}
+    .delivery a{border:var(--border) solid var(--ink);border-radius:var(--radius);padding:10px 16px;
+      font-weight:700;font-size:.9rem;}
+    .delivery a:hover{background:var(--ink);color:var(--paper);}
 
     /* HERO — editorial por defecto: tipografía gigante a la izquierda, asimétrica. */
     .hero{padding-block:clamp(48px,7vw,96px) clamp(56px,8vw,104px);position:relative;overflow:hidden;}
@@ -306,6 +328,15 @@
     </div>
   </header>
 
+  {% if business.offer_active %}
+  <div class="offer-bar" id="offerBar"{% if business.offer_end_date %} data-end="{{ business.offer_end_date }}"{% endif %}>
+    <div class="wrap">
+      <span><b>{{ business.offer_title }}</b>{% if business.offer_details %} · {{ business.offer_details }}{% endif %}</span>
+      {% if business.offer_end_date %}<span class="when">hasta el {{ business.offer_end_date }}</span>{% endif %}
+    </div>
+  </div>
+  {% endif %}
+
   <main id="contenido">
   {% include "blocks/hero.html" %}
 
@@ -390,6 +421,7 @@
         <p class="eyebrow">Quiénes somos</p>
         <h2 class="display" style="margin-bottom:18px">{{ copy.about_title }}</h2>
         <p>{{ copy.about_text }}</p>
+        {% if business.credentials %}<div class="creds">{% for c in business.credentials %}<span>{{ c }}</span>{% endfor %}</div>{% endif %}
       </div>
       <div class="factsheet" data-reveal style="--i:1">
         {% if business.hours %}<div class="row"><span class="k">Horario</span><span>{{ business.hours }}</span></div>{% endif %}
@@ -399,6 +431,7 @@
         {% if business.payment_methods %}<div class="row"><span class="k">Pago</span><span>{{ business.payment_methods | join(', ') }}</span></div>{% endif %}
         {% if business.parking %}<div class="row"><span class="k">Parking</span><span>{{ business.parking }}</span></div>{% endif %}
         {% if business.languages %}<div class="row"><span class="k">Idiomas</span><span>{{ business.languages | join(', ') }}</span></div>{% endif %}
+        {% if business.service_area %}<div class="row"><span class="k">Zona</span><span>{{ business.service_area }}</span></div>{% endif %}
         {% for label, value in business.extras if value|lower not in ['sí','si','yes'] %}<div class="row"><span class="k">{{ label }}</span><span>{{ value }}</span></div>{% endfor %}
       </div>
     </div>

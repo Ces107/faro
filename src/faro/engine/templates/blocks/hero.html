@@ -2,6 +2,7 @@
    foto a sangre (photo/split) o tira de galería (gallery). Nunca un blob. #}
 {% set meta %}
   <div class="hero-meta">
+    {% if business.rating %}<span class="rating"><span class="stars">{{ business.rating_stars }}</span> <span class="n">{{ business.google_rating }}</span>{% if business.google_reviews_count %} <span style="opacity:.7;font-weight:600">({{ business.google_reviews_count }})</span>{% endif %}{% if business.google_profile_url %} <a href="{{ business.google_profile_url }}" target="_blank" rel="noopener">en Google</a>{% endif %}</span>{% endif %}
     <span class="open-pill" id="openPill" data-hours='{{ opening_hours_json }}'><span class="open-dot"></span><span class="txt"></span></span>
     <span>{{ business.city }}</span>
     {% for label, value in business.extras if value|lower in ['sí','si','yes'] %}<span>{{ label }}</span>{% endfor %}
@@ -9,9 +10,12 @@
 {% endset %}
 {% set ctas %}
   <div class="hero-cta">
-    <a class="btn btn-brand" href="{{ whatsapp_url }}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2z"/></svg> {{ playbook.final_cta_headline }}</a>
-    <a class="btn btn-line" href="{{ phone_url }}">Llamar · <span class="num">{{ business.phone }}</span></a>
+    {% if business.booking_url %}<a class="btn btn-brand" href="{{ business.booking_url }}" target="_blank" rel="noopener">{{ playbook.final_cta_headline }}</a>
+    <a class="btn btn-line" href="{{ whatsapp_url }}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2z"/></svg> WhatsApp</a>
+    {% else %}<a class="btn btn-brand" href="{{ whatsapp_url }}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2z"/></svg> {{ playbook.final_cta_headline }}</a>
+    <a class="btn btn-line" href="{{ phone_url }}">Llamar · <span class="num">{{ business.phone }}</span></a>{% endif %}
   </div>
+  {% if business.delivery_links %}<div class="delivery">{% for url in business.delivery_links %}<a href="{{ url }}" target="_blank" rel="noopener">Pídelo a domicilio →</a>{% endfor %}</div>{% endif %}
 {% endset %}
 
 {% if tokens.hero == 'photo' and business.photos %}
