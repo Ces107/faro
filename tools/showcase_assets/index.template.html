@@ -168,7 +168,7 @@ section{padding-block:clamp(64px,9vw,128px);position:relative}
 .fam-bar .url{margin-left:12px;font-family:var(--mono);font-size:.72rem;color:var(--faint);
   background:rgba(255,255,255,.04);border-radius:6px;padding:4px 12px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .fam-shot{height:clamp(300px,38vw,440px);overflow:hidden}
-.fam-shot img{width:100%;display:block}
+.fam-shot img{width:100%;height:auto;aspect-ratio:auto;display:block}
 .fam-meta{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-top:22px;flex-wrap:wrap}
 .fam-meta .name{font-family:var(--display);font-size:clamp(1.5rem,1.1rem + 1.4vw,2.1rem);font-weight:600}
 .fam-meta .desc{color:var(--soft);font-size:.96rem;max-width:42ch;margin-top:6px}
@@ -194,7 +194,7 @@ section{padding-block:clamp(64px,9vw,128px);position:relative}
 .exa-bar i{width:9px;height:9px;border-radius:50%;background:#352f28}
 .exa-bar i:first-child{background:#cf5b4b}.exa-bar i:nth-child(2){background:#d6a23f}.exa-bar i:nth-child(3){background:#5aa45a}
 .exa-scroll{height:calc(300px - 35px);overflow:hidden}
-.exa-scroll img{width:100%;display:block;transition:transform 5s ease-in-out}
+.exa-scroll img{width:100%;height:auto;aspect-ratio:auto;display:block;transition:transform 5s ease-in-out}
 .exa:hover .exa-scroll img{transform:translateY(calc(-100% + 265px))}
 .exa-open{position:absolute;right:12px;bottom:12px;z-index:3;background:rgba(11,13,18,.82);backdrop-filter:blur(6px);
   border:1px solid var(--line-2);border-radius:999px;padding:8px 14px;font-size:.78rem;font-weight:700;color:var(--ink);

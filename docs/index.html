@@ -168,7 +168,7 @@ section{padding-block:clamp(64px,9vw,128px);position:relative}
 .fam-bar .url{margin-left:12px;font-family:var(--mono);font-size:.72rem;color:var(--faint);
   background:rgba(255,255,255,.04);border-radius:6px;padding:4px 12px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .fam-shot{height:clamp(300px,38vw,440px);overflow:hidden}
-.fam-shot img{width:100%;display:block}
+.fam-shot img{width:100%;height:auto;aspect-ratio:auto;display:block}
 .fam-meta{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-top:22px;flex-wrap:wrap}
 .fam-meta .name{font-family:var(--display);font-size:clamp(1.5rem,1.1rem + 1.4vw,2.1rem);font-weight:600}
 .fam-meta .desc{color:var(--soft);font-size:.96rem;max-width:42ch;margin-top:6px}
@@ -194,7 +194,7 @@ section{padding-block:clamp(64px,9vw,128px);position:relative}
 .exa-bar i{width:9px;height:9px;border-radius:50%;background:#352f28}
 .exa-bar i:first-child{background:#cf5b4b}.exa-bar i:nth-child(2){background:#d6a23f}.exa-bar i:nth-child(3){background:#5aa45a}
 .exa-scroll{height:calc(300px - 35px);overflow:hidden}
-.exa-scroll img{width:100%;display:block;transition:transform 5s ease-in-out}
+.exa-scroll img{width:100%;height:auto;aspect-ratio:auto;display:block;transition:transform 5s ease-in-out}
 .exa:hover .exa-scroll img{transform:translateY(calc(-100% + 265px))}
 .exa-open{position:absolute;right:12px;bottom:12px;z-index:3;background:rgba(11,13,18,.82);backdrop-filter:blur(6px);
   border:1px solid var(--line-2);border-radius:999px;padding:8px 14px;font-size:.78rem;font-weight:700;color:var(--ink);
@@ -317,7 +317,7 @@ dialog.lb::backdrop{background:rgba(6,8,12,.82);backdrop-filter:blur(6px)}
         </div>
       </div>
       <div class="deck" aria-hidden="true">
-        <div class="shot s1"><div class="winbar"><i></i><i></i><i></i></div><div class="winshot"><img src="shots/bar.jpg" loading="eager" alt="" width="1280" height="960" /></div></div><div class="shot s2"><div class="winbar"><i></i><i></i><i></i></div><div class="winshot"><img src="shots/dental.jpg" loading="eager" alt="" width="1280" height="960" /></div></div><div class="shot s3"><div class="winbar"><i></i><i></i><i></i></div><div class="winshot"><img src="shots/gimnasio.jpg" loading="eager" alt="" width="1280" height="960" /></div></div>
+        <div class="shot s1"><div class="winbar"><i></i><i></i><i></i></div><div class="winshot"><img src="shots/bar.jpg" loading="eager" alt="" width="1280" /></div></div><div class="shot s2"><div class="winbar"><i></i><i></i><i></i></div><div class="winshot"><img src="shots/dental.jpg" loading="eager" alt="" width="1280" /></div></div><div class="shot s3"><div class="winbar"><i></i><i></i><i></i></div><div class="winshot"><img src="shots/gimnasio.jpg" loading="eager" alt="" width="1280" /></div></div>
       </div>
     </div>
   </section>
@@ -386,7 +386,7 @@ dialog.lb::backdrop{background:rgba(6,8,12,.82);backdrop-filter:blur(6px)}
         <div class="fam-mock">
           <div class="fam-bar"><i></i><i></i><i></i><span class="url">ces107.github.io/faro/ejemplos/bar</span></div>
           <div class="fam-shot"><img src="shots/bar.jpg" loading="lazy"
-            alt="Web de ejemplo de la familia Carta editorial" width="1280" height="900" /></div>
+            alt="Web de ejemplo de la familia Carta editorial" width="1280" /></div>
         </div>
         <div class="fam-meta">
           <div><div class="name">Carta editorial</div><div class="desc">Foto a sangre, carta tipográfica con precios y serif cálida.</div></div>
@@ -398,7 +398,7 @@ dialog.lb::backdrop{background:rgba(6,8,12,.82);backdrop-filter:blur(6px)}
         <div class="fam-mock">
           <div class="fam-bar"><i></i><i></i><i></i><span class="url">ces107.github.io/faro/ejemplos/dental</span></div>
           <div class="fam-shot"><img src="shots/dental.jpg" loading="lazy"
-            alt="Web de ejemplo de la familia Confianza clínica" width="1280" height="900" /></div>
+            alt="Web de ejemplo de la familia Confianza clínica" width="1280" /></div>
         </div>
         <div class="fam-meta">
           <div><div class="name">Confianza clínica</div><div class="desc">Sereno, de confianza, con cita y valoración real.</div></div>
@@ -410,7 +410,7 @@ dialog.lb::backdrop{background:rgba(6,8,12,.82);backdrop-filter:blur(6px)}
         <div class="fam-mock">
           <div class="fam-bar"><i></i><i></i><i></i><span class="url">ces107.github.io/faro/ejemplos/asesoria</span></div>
           <div class="fam-shot"><img src="shots/asesoria.jpg" loading="lazy"
-            alt="Web de ejemplo de la familia Autoridad serif" width="1280" height="900" /></div>
+            alt="Web de ejemplo de la familia Autoridad serif" width="1280" /></div>
         </div>
         <div class="fam-meta">
           <div><div class="name">Autoridad serif</div><div class="desc">Serif de autoridad, sobrio, institucional, sin adornos.</div></div>
@@ -422,7 +422,7 @@ dialog.lb::backdrop{background:rgba(6,8,12,.82);backdrop-filter:blur(6px)}
         <div class="fam-mock">
           <div class="fam-bar"><i></i><i></i><i></i><span class="url">ces107.github.io/faro/ejemplos/taller</span></div>
           <div class="fam-shot"><img src="shots/taller.jpg" loading="lazy"
-            alt="Web de ejemplo de la familia Robusto industrial" width="1280" height="900" /></div>
+            alt="Web de ejemplo de la familia Robusto industrial" width="1280" /></div>
         </div>
         <div class="fam-meta">
           <div><div class="name">Robusto industrial</div><div class="desc">Tipografía potente, alto contraste, presupuesto claro.</div></div>
@@ -434,7 +434,7 @@ dialog.lb::backdrop{background:rgba(6,8,12,.82);backdrop-filter:blur(6px)}
         <div class="fam-mock">
           <div class="fam-bar"><i></i><i></i><i></i><span class="url">ces107.github.io/faro/ejemplos/peluqueria</span></div>
           <div class="fam-shot"><img src="shots/peluqueria.jpg" loading="lazy"
-            alt="Web de ejemplo de la familia Editorial moda" width="1280" height="900" /></div>
+            alt="Web de ejemplo de la familia Editorial moda" width="1280" /></div>
         </div>
         <div class="fam-meta">
           <div><div class="name">Editorial moda</div><div class="desc">La galería manda: editorial elegante, fotográfico.</div></div>
@@ -446,7 +446,7 @@ dialog.lb::backdrop{background:rgba(6,8,12,.82);backdrop-filter:blur(6px)}
         <div class="fam-mock">
           <div class="fam-bar"><i></i><i></i><i></i><span class="url">ces107.github.io/faro/ejemplos/gimnasio</span></div>
           <div class="fam-shot"><img src="shots/gimnasio.jpg" loading="lazy"
-            alt="Web de ejemplo de la familia Energía fitness" width="1280" height="900" /></div>
+            alt="Web de ejemplo de la familia Energía fitness" width="1280" /></div>
         </div>
         <div class="fam-meta">
           <div><div class="name">Energía fitness</div><div class="desc">Modo oscuro, acento vivo, energía de cartel.</div></div>
@@ -458,7 +458,7 @@ dialog.lb::backdrop{background:rgba(6,8,12,.82);backdrop-filter:blur(6px)}
         <div class="fam-mock">
           <div class="fam-bar"><i></i><i></i><i></i><span class="url">ces107.github.io/faro/ejemplos/comercio</span></div>
           <div class="fam-shot"><img src="shots/comercio.jpg" loading="lazy"
-            alt="Web de ejemplo de la familia Universal" width="1280" height="900" /></div>
+            alt="Web de ejemplo de la familia Universal" width="1280" /></div>
         </div>
         <div class="fam-meta">
           <div><div class="name">Universal</div><div class="desc">Editorial limpio y versátil para cualquier negocio.</div></div>
@@ -486,7 +486,7 @@ dialog.lb::backdrop{background:rgba(6,8,12,.82);backdrop-filter:blur(6px)}
         <div class="exa-frame">
           <div class="exa-bar"><i></i><i></i><i></i></div>
           <div class="exa-scroll"><img src="shots/bar.jpg" loading="lazy"
-            alt="Web de Bar El Faro" width="1280" height="900" /></div>
+            alt="Web de Bar El Faro" width="1280" /></div>
           <span class="exa-open">Abrir web ↗</span>
         </div>
         <div class="exa-cap">
@@ -500,7 +500,7 @@ dialog.lb::backdrop{background:rgba(6,8,12,.82);backdrop-filter:blur(6px)}
         <div class="exa-frame">
           <div class="exa-bar"><i></i><i></i><i></i></div>
           <div class="exa-scroll"><img src="shots/dental.jpg" loading="lazy"
-            alt="Web de Clínica Dental Sonríe" width="1280" height="900" /></div>
+            alt="Web de Clínica Dental Sonríe" width="1280" /></div>
           <span class="exa-open">Abrir web ↗</span>
         </div>
         <div class="exa-cap">
@@ -514,7 +514,7 @@ dialog.lb::backdrop{background:rgba(6,8,12,.82);backdrop-filter:blur(6px)}
         <div class="exa-frame">
           <div class="exa-bar"><i></i><i></i><i></i></div>
           <div class="exa-scroll"><img src="shots/asesoria.jpg" loading="lazy"
-            alt="Web de Asesoría Morvedre" width="1280" height="900" /></div>
+            alt="Web de Asesoría Morvedre" width="1280" /></div>
           <span class="exa-open">Abrir web ↗</span>
         </div>
         <div class="exa-cap">
@@ -528,7 +528,7 @@ dialog.lb::backdrop{background:rgba(6,8,12,.82);backdrop-filter:blur(6px)}
         <div class="exa-frame">
           <div class="exa-bar"><i></i><i></i><i></i></div>
           <div class="exa-scroll"><img src="shots/taller.jpg" loading="lazy"
-            alt="Web de Talleres Morvedre" width="1280" height="900" /></div>
+            alt="Web de Talleres Morvedre" width="1280" /></div>
           <span class="exa-open">Abrir web ↗</span>
         </div>
         <div class="exa-cap">
@@ -542,7 +542,7 @@ dialog.lb::backdrop{background:rgba(6,8,12,.82);backdrop-filter:blur(6px)}
         <div class="exa-frame">
           <div class="exa-bar"><i></i><i></i><i></i></div>
           <div class="exa-scroll"><img src="shots/peluqueria.jpg" loading="lazy"
-            alt="Web de Estudio Mara Peluqueros" width="1280" height="900" /></div>
+            alt="Web de Estudio Mara Peluqueros" width="1280" /></div>
           <span class="exa-open">Abrir web ↗</span>
         </div>
         <div class="exa-cap">
@@ -556,7 +556,7 @@ dialog.lb::backdrop{background:rgba(6,8,12,.82);backdrop-filter:blur(6px)}
         <div class="exa-frame">
           <div class="exa-bar"><i></i><i></i><i></i></div>
           <div class="exa-scroll"><img src="shots/gimnasio.jpg" loading="lazy"
-            alt="Web de Gimnasio Pulse" width="1280" height="900" /></div>
+            alt="Web de Gimnasio Pulse" width="1280" /></div>
           <span class="exa-open">Abrir web ↗</span>
         </div>
         <div class="exa-cap">
@@ -570,7 +570,7 @@ dialog.lb::backdrop{background:rgba(6,8,12,.82);backdrop-filter:blur(6px)}
         <div class="exa-frame">
           <div class="exa-bar"><i></i><i></i><i></i></div>
           <div class="exa-scroll"><img src="shots/comercio.jpg" loading="lazy"
-            alt="Web de Tienda La Plaza" width="1280" height="900" /></div>
+            alt="Web de Tienda La Plaza" width="1280" /></div>
           <span class="exa-open">Abrir web ↗</span>
         </div>
         <div class="exa-cap">

@@ -177,7 +177,7 @@ def _family_panel(fam: Family) -> str:
         <div class="fam-mock">
           <div class="fam-bar"><i></i><i></i><i></i><span class="url">{url}</span></div>
           <div class="fam-shot"><img src="shots/{fam.sector.value}.jpg" loading="lazy"
-            alt="Web de ejemplo de la familia {spec.name}" width="1280" height="900" /></div>
+            alt="Web de ejemplo de la familia {spec.name}" width="1280" /></div>
         </div>
         <div class="fam-meta">
           <div><div class="name">{spec.name}</div><div class="desc">{fam.desc}</div></div>
@@ -199,7 +199,7 @@ def _card(fam: Family) -> str:
         <div class="exa-frame">
           <div class="exa-bar"><i></i><i></i><i></i></div>
           <div class="exa-scroll"><img src="shots/{fam.sector.value}.jpg" loading="lazy"
-            alt="Web de {biz.name}" width="1280" height="900" /></div>
+            alt="Web de {biz.name}" width="1280" /></div>
           <span class="exa-open">Abrir web ↗</span>
         </div>
         <div class="exa-cap">
@@ -234,7 +234,7 @@ def _hero_deck() -> str:
         out.append(
             f'<div class="shot {cls}"><div class="winbar"><i></i><i></i><i></i></div>'
             f'<div class="winshot"><img src="shots/{sector.value}.jpg" loading="eager" '
-            f'alt="" width="1280" height="960" /></div></div>'
+            f'alt="" width="1280" /></div></div>'
         )
     return "".join(out)
 
