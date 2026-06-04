@@ -336,6 +336,21 @@
     .cookie .row{display:flex;gap:10px;flex-wrap:wrap;}
     .cookie .btn{padding:10px 16px;font-size:.9rem;}
 
+    /* --- Firmas de motion (las activa el motor GSAP; sin JS no hacen nada) --- */
+    /* Galería pinneada (carta/estudio): la rejilla pasa a tira horizontal panorámica. */
+    .gal.gal-pan{display:flex;flex-wrap:nowrap;width:max-content;gap:12px;}
+    .gal.gal-pan .cell{flex:0 0 clamp(300px,40vw,540px);min-height:clamp(320px,48vh,520px);
+      grid-column:auto !important;}
+    body[data-signature="carta"] #galeria,body[data-signature="gallery"] #galeria{overflow:hidden;}
+    /* Autoridad: el hairline bajo el hero-meta se dibuja (var --auth 0→1 por GSAP). */
+    body[data-signature="authority"] .hero-meta{position:relative;}
+    body[data-signature="authority"] .hero-meta::after{content:"";position:absolute;left:0;bottom:-1px;height:2px;
+      width:calc(var(--auth,1) * 100%);background:var(--brand);}
+    .index .item .n{transition:color .3s ease;}
+    .index .item.active .n{color:var(--accent);}
+    /* Las palabras del titular cinético suben desde detrás de un borde (SplitText mask). */
+    .fx-line{overflow:hidden;}
+
     /* Micro-interacciones: rápidas (.18–.22s) y sobrias. Nada de rebotes ni lifts. */
     .sgrid .card{transition:box-shadow .2s ease,background .2s ease;}
     .sgrid .card:hover{box-shadow:inset 3px 0 0 var(--brand);background:var(--paper);}
@@ -367,10 +382,13 @@
        queda visible. Easing cubic-bezier de estudio, no el 'ease' por defecto. */
     @media (prefers-reduced-motion: no-preference){
       html.js [data-reveal]{opacity:0;}
-      html.js [data-reveal].vis{animation:faro-rise .62s cubic-bezier(.22,1,.36,1) both;
+      /* .vis = visible SIEMPRE (red de seguridad). La animación CSS solo cuando el
+         motor GSAP NO está activo; con GSAP (html.faro-gsap) lo conduce GSAP. */
+      html.js [data-reveal].vis{opacity:1;}
+      html.js:not(.faro-gsap) [data-reveal].vis{animation:faro-rise .62s cubic-bezier(.22,1,.36,1) both;
         animation-delay:calc(var(--i,0) * 65ms);}
-      html.js [data-reveal="clip"].vis{animation:faro-clip .74s cubic-bezier(.22,1,.36,1) both;}
-      html.js [data-reveal="img"].vis{animation:faro-img .82s cubic-bezier(.22,1,.36,1) both;}
+      html.js:not(.faro-gsap) [data-reveal="clip"].vis{animation:faro-clip .74s cubic-bezier(.22,1,.36,1) both;}
+      html.js:not(.faro-gsap) [data-reveal="img"].vis{animation:faro-img .82s cubic-bezier(.22,1,.36,1) both;}
     }
     @keyframes faro-rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
     @keyframes faro-clip{from{opacity:0;clip-path:inset(0 0 100% 0);transform:translateY(10px)}
@@ -403,7 +421,7 @@
     body.cookie-open .wa-float{opacity:0;pointer-events:none;transform:translateY(8px);}
   </style>
 </head>
-<body>
+<body data-signature="{{ signature }}">
   <a class="skip" href="#contenido">Saltar al contenido</a>
   <div class="progress" id="progress" aria-hidden="true"></div>
 
@@ -629,5 +647,6 @@
   </div>
 
   {% include "blocks/script.html" %}
+  {% include "blocks/motion.html" %}
 </body>
 </html>

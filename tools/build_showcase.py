@@ -122,8 +122,11 @@ def _capture_all() -> None:
     tmp_aislop.write_text(_aislop_html(Sector.DENTAL), encoding="utf-8")
     with sync_playwright() as p:
         browser = p.chromium.launch()
-        # Páginas completas de cada ejemplo (para las tarjetas con scroll al pasar el ratón).
+        # Páginas completas de cada ejemplo (para las tarjetas con scroll al pasar
+        # el ratón). En reduced-motion: el motor GSAP se apaga y rinde el layout
+        # estático limpio (sin pins ni Lenis que descoloquen la captura).
         page = browser.new_page(viewport={"width": 1280, "height": 900})
+        page.emulate_media(reduced_motion="reduce")
         for fam in _FAMILIES:
             url = (_DOCS / "ejemplos" / fam.sector.value / "index.html").as_uri()
             _shoot(page, url, _SHOTS / f"{fam.sector.value}.jpg", full=True)
@@ -131,6 +134,7 @@ def _capture_all() -> None:
         page.close()
         # Antes/después: recorte de visor a igual encuadre (1100x820), algo más nítido.
         comp = browser.new_page(viewport={"width": 1100, "height": 820}, device_scale_factor=2)
+        comp.emulate_media(reduced_motion="reduce")
         _shoot(comp, tmp_aislop.as_uri(), _SHOTS / "_aislop.jpg", full=False, quality=80)
         faro_url = (_DOCS / "ejemplos" / Sector.DENTAL.value / "index.html").as_uri()
         _shoot(comp, faro_url, _SHOTS / "_faro-compare.jpg", full=False, quality=80)

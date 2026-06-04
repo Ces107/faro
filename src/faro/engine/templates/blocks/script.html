@@ -28,6 +28,7 @@
     var io = new IntersectionObserver(function (es) {
       es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("vis"); io.unobserve(e.target); } });
     }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+    window.__faroRevealIO = io;  // el motor GSAP (motion.html) la desconecta si toma el control
     document.querySelectorAll("[data-reveal]").forEach(function (el) { io.observe(el); });
     // Red de seguridad: motores que renderizan sin hacer scroll (crawlers SEO) o
     // una pestaña inactiva no disparan el observer; a los 3 s se revela todo para

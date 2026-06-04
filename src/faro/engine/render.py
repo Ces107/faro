@@ -19,6 +19,7 @@ from faro.content import LandingCopy
 from faro.engine.design import tokens_for
 from faro.engine.fonts import font_face_css
 from faro.engine.registry import template_for
+from faro.engine.scripts import motion_js, signature_for
 from faro.hours import parse_opening_hours
 from faro.maps import maps_embed_url, maps_link
 from faro.playbook import playbook_for
@@ -90,6 +91,8 @@ def render_site(business: BusinessProfile, copy: LandingCopy) -> str:
         "playbook": playbook,
         "tokens": tokens,
         "font_css": font_face_css(tokens.fonts()),
+        "motion_js": motion_js(),
+        "signature": signature_for(tokens),
         "css_vars": css_vars,
         "offer_eyebrow": offer_eyebrow,
         "proceso_title": "Cómo trabajamos",

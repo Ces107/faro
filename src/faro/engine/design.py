@@ -51,6 +51,7 @@ class DesignTokens:
     eyebrow: str = "caps"  # caps | smallcaps
     texture: bool = False
     paper_2: str = ""  # superficie alterna (bloques); se deriva si vacío
+    signature: str = ""  # firma de motion (vacío = la de la familia); ver engine.scripts
 
     def fonts(self) -> tuple[str, ...]:
         ids = [self.font_display]
