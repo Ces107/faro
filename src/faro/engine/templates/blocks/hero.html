@@ -1,8 +1,10 @@
-{# Hero según la familia. El protagonista cambia: tipografía (editorial/poster),
-   foto a sangre (photo/split) o tira de galería (gallery). Nunca un blob. #}
+{# Hero dramático en 3 tratamientos: PÓSTER (color sólido, o foto+color en gym),
+   FOTO A SANGRE casi a pantalla completa (cualquier negocio con foto), o EDITORIAL
+   serif gigante (sin foto). El nombre del negocio es el protagonista. #}
+{% set rating_chip %}{% if business.rating %}<span class="rating"><span class="stars" aria-hidden="true">{{ business.rating_stars }}</span> <span class="n">{{ business.google_rating }}</span>{% if business.google_reviews_count %} <span style="opacity:.7;font-weight:600">({{ business.google_reviews_count }})</span>{% endif %}{% if business.google_profile_url %} <a href="{{ business.google_profile_url }}" target="_blank" rel="noopener" style="color:inherit">en Google</a>{% endif %}</span>{% endif %}{% endset %}
 {% set meta %}
   <div class="hero-meta">
-    {% if business.rating %}<span class="rating"><span class="stars">{{ business.rating_stars }}</span> <span class="n">{{ business.google_rating }}</span>{% if business.google_reviews_count %} <span style="opacity:.7;font-weight:600">({{ business.google_reviews_count }})</span>{% endif %}{% if business.google_profile_url %} <a href="{{ business.google_profile_url }}" target="_blank" rel="noopener">en Google</a>{% endif %}</span>{% endif %}
+    {{ rating_chip }}
     <span class="open-pill" id="openPill" data-hours='{{ opening_hours_json }}'><span class="open-dot"></span><span class="txt"></span></span>
     <span>{{ business.city }}</span>
     {% for label, value in business.extras if value|lower in ['sí','si','yes'] %}<span>{{ label }}</span>{% endfor %}
@@ -18,18 +20,7 @@
   {% if business.delivery_links %}<div class="delivery">{% for url in business.delivery_links %}<a href="{{ url }}" target="_blank" rel="noopener">Pídelo a domicilio →</a>{% endfor %}</div>{% endif %}
 {% endset %}
 
-{% if tokens.hero == 'photo' and business.photos %}
-<section class="hero hero-photo" id="inicio" style="--hero-img:url('{{ business.photos[0] }}')">
-  <div class="wrap" style="padding-bottom:clamp(36px,5vw,64px)">
-    <p class="kicker">{{ business.theme.label }} · {{ business.city }}</p>
-    <h1>{{ business.name }}</h1>
-    {% if copy.slogan %}<p class="slogan">{{ copy.slogan }}</p>{% endif %}
-    <p class="sub">{{ copy.hero_subtitle }}</p>
-    {{ ctas }}{{ meta }}
-  </div>
-</section>
-
-{% elif tokens.hero == 'poster' %}
+{% if tokens.hero == 'poster' %}
 <section class="hero hero-poster" id="inicio">
   <span class="wm" aria-hidden="true">{{ business.initials }}</span>
   <div class="wrap">
@@ -41,8 +32,22 @@
   </div>
 </section>
 
-{% elif tokens.hero == 'split' %}
-<section class="hero hero-split" id="inicio">
+{% elif tokens.hero != 'editorial' and business.photos %}
+<section class="hero hero-photo" id="inicio" style="--hero-img:url('{{ business.photos[0] }}')">
+  <div class="wrap top">
+    <p class="kicker">{{ business.theme.label }} · {{ business.city }}</p>
+    {{ rating_chip }}
+  </div>
+  <div class="wrap bottom">
+    <h1>{{ business.name }}</h1>
+    {% if copy.slogan %}<p class="slogan">{{ copy.slogan }}</p>{% endif %}
+    <p class="sub">{{ copy.hero_subtitle }}</p>
+    {{ ctas }}
+  </div>
+</section>
+
+{% else %}
+<section class="hero hero-editorial" id="inicio">
   <div class="wrap"><div class="grid">
     <div>
       <p class="kicker">{{ business.theme.label }} · {{ business.city }}</p>
@@ -51,31 +56,10 @@
       <p class="sub">{{ copy.hero_subtitle }}</p>
       {{ ctas }}{{ meta }}
     </div>
-    <div class="panel-wrap" data-reveal="img"><div class="panel{% if not business.photos %} panel-brand{% endif %}"{% if business.photos %} style="--hero-img:url('{{ business.photos[0] }}')"{% endif %}>{% if not business.photos %}<span class="panel-mark">{{ business.initials }}</span>{% endif %}</div></div>
+    <div class="est" aria-hidden="true">
+      {% if business.years %}<div class="y">{{ business.years }}</div><div class="l">En activo desde</div>
+      {% else %}<div class="y">{{ business.initials }}</div><div class="l">{{ business.theme.label }}</div>{% endif %}
+    </div>
   </div></div>
-</section>
-
-{% elif tokens.hero == 'gallery' and business.photos %}
-<section class="hero hero-gallery" id="inicio">
-  <div class="wrap">
-    <p class="kicker">{{ business.theme.label }} · {{ business.city }}</p>
-    <h1>{{ business.name }}</h1>
-    {% if copy.slogan %}<p class="slogan">{{ copy.slogan }}</p>{% endif %}
-    <p class="sub">{{ copy.hero_subtitle }}</p>
-    {{ ctas }}
-    <div class="strip">{% for url in business.photos[:5] %}<img src="{{ url }}" loading="eager" alt="{{ business.name }} — {{ loop.index }}" />{% endfor %}</div>
-    {{ meta }}
-  </div>
-</section>
-
-{% else %}
-<section class="hero" id="inicio">
-  <div class="wrap">
-    <p class="kicker">{{ business.theme.label }} · {{ business.city }}</p>
-    <h1>{{ business.name }}</h1>
-    {% if copy.slogan %}<p class="slogan">{{ copy.slogan }}</p>{% endif %}
-    <p class="sub">{{ copy.hero_subtitle }}</p>
-    {{ ctas }}{{ meta }}
-  </div>
 </section>
 {% endif %}

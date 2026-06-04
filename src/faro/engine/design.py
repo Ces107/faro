@@ -115,7 +115,7 @@ AURORA = DesignTokens(
     name="aurora",
     font_display="bricolage", display_is_serif=False,
     ink="#181410", paper="#f6f3ee", brand="#1f6f5c", accent="#c2410c",
-    body_font="archivo", radius=4, border_px=2, hero="editorial",
+    body_font="archivo", radius=4, border_px=2, hero="photo",
     service_style="index", eyebrow="caps",
 )
 
@@ -132,7 +132,7 @@ CLINICA = DesignTokens(
     name="clinica",
     font_display="fraunces", display_is_serif=True,
     ink="#10211c", paper="#f1f4f0", brand="#15564a", accent="#2f7d6b",
-    body_font="archivo", radius=4, border_px=1, hero="split",
+    body_font="archivo", radius=4, border_px=1, hero="photo",
     service_style="grid", eyebrow="caps", paper_2="#ffffff",
 )
 
@@ -156,7 +156,7 @@ ESTUDIO = DesignTokens(
     name="estudio",
     font_display="fraunces", display_is_serif=True,
     ink="#0f0f10", paper="#f4f1ec", brand="#171717", accent="#a16207",
-    body_font="archivo", radius=0, border_px=1, hero="gallery",
+    body_font="archivo", radius=0, border_px=1, hero="photo",
     service_style="grid", eyebrow="smallcaps", paper_2="#ffffff",
 )
 

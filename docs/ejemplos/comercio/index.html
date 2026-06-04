@@ -76,7 +76,7 @@
     *{box-sizing:border-box;margin:0;padding:0;}
     html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
     body{font-family:var(--font-body);color:var(--ink);background:var(--paper);
-      font-size:clamp(1rem,.97rem+.18vw,1.09rem);line-height:1.55;-webkit-font-smoothing:antialiased;
+      font-size:clamp(1rem,.97rem + .18vw,1.09rem);line-height:1.55;-webkit-font-smoothing:antialiased;
       font-feature-settings:"kern" 1,"liga" 1;}
     a{color:inherit;text-decoration:none;}
     img{max-width:100%;display:block;}
@@ -92,8 +92,8 @@
     .eyebrow::before{content:"";display:inline-block;width:26px;height:2px;background:var(--brand);
       vertical-align:middle;margin-right:10px;transform:translateY(-3px);}
     .display{font-family:var(--font-display);font-weight:600;letter-spacing:-.03em;line-height:.96;
-      font-size:clamp(2.1rem,1.4rem+3.4vw,3.6rem);}
-    .lead{font-size:clamp(1.12rem,1.04rem+.4vw,1.35rem);color:var(--text-soft);max-width:54ch;line-height:1.5;}
+      font-size:clamp(2.1rem,1.4rem + 3.4vw,3.6rem);}
+    .lead{font-size:clamp(1.12rem,1.04rem + .4vw,1.35rem);color:var(--text-soft);max-width:54ch;line-height:1.5;}
     .ink-rule{border:0;border-top:var(--border) solid var(--ink);}
     :focus-visible{outline:3px solid var(--brand);outline-offset:3px;}
     .skip{position:absolute;left:-999px;background:var(--ink);color:var(--paper);padding:10px 16px;z-index:200;}
@@ -151,65 +151,87 @@
       font-weight:700;font-size:.9rem;}
     .delivery a:hover{background:var(--ink);color:var(--paper);}
 
-    /* HERO — editorial por defecto: tipografía gigante a la izquierda, asimétrica. */
-    .hero{padding-block:clamp(48px,7vw,96px) clamp(56px,8vw,104px);position:relative;overflow:hidden;}
-    .hero .kicker{font-size:.8rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--brand);}
-    .hero h1{font-size:clamp(2.8rem,1.4rem+7vw,6.6rem);margin:.18em 0 .12em;max-width:14ch;}
-    .hero .slogan{font-family:var(--font-display);font-weight:500;font-style:italic;
-      font-size:clamp(1.3rem,1rem+1.4vw,2rem);color:var(--brand);max-width:24ch;}
-    .hero .sub{margin-top:18px;max-width:50ch;color:var(--text-soft);font-size:1.1rem;}
-    .hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px;}
-    .hero-meta{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:30px;padding-top:22px;
+    /* HERO — tres tratamientos dramáticos: foto a sangre casi a pantalla completa,
+       póster de color, o editorial serif gigante. El nombre manda. */
+    .hero{position:relative;overflow:hidden;}
+    .hero .kicker{font-size:.82rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--brand);}
+    .hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:clamp(26px,3vw,38px);}
+    .hero-meta{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:28px;padding-top:20px;
       border-top:1px solid var(--line);font-size:.9rem;font-weight:600;}
     .hero-meta span{display:inline-flex;align-items:center;gap:8px;}
     .hero-meta .open-dot{width:9px;height:9px;border-radius:50%;background:#16a34a;}
     .hero-meta .open-pill.closed .open-dot{background:#d97706;}
     .open-pill{display:none;}
 
-    /* HERO foto a sangre (carta): imagen domina, texto sobre overlay de 3 paradas
-       con un tinte de marca abajo (calidez, no el negro plano de siempre). */
-    .hero-photo{color:#fff;min-height:clamp(460px,78vh,740px);display:flex;align-items:flex-end;position:relative;
-      background:linear-gradient(180deg,rgba(0,0,0,.06) 0%,rgba(0,0,0,.30) 48%,rgba(0,0,0,.76) 100%),
-        linear-gradient(180deg,transparent 58%,rgba(var(--brand-rgb),.30) 100%),var(--hero-img) center/cover;}
-    .hero-photo h1{font-size:clamp(2.8rem,1.4rem+7vw,7rem);}
-    .hero-photo .kicker,.hero-photo .slogan{color:#fff;}
-    .hero-photo .sub{color:rgba(255,255,255,.9);}
-    .hero-photo .hero-meta{border-top-color:rgba(255,255,255,.28);}
+    /* (1) FOTO A SANGRE — la imagen del negocio a casi pantalla completa, el nombre
+       descomunal anclado abajo, una barra fina arriba (kicker + valoración). */
+    .hero-photo{color:#fff;min-height:clamp(560px,93vh,1000px);display:flex;flex-direction:column;
+      justify-content:space-between;padding-block:clamp(82px,11vh,128px) clamp(40px,6vw,76px);position:relative;
+      background:linear-gradient(180deg,rgba(0,0,0,.46),rgba(0,0,0,.05) 24%,rgba(0,0,0,.30) 62%,rgba(0,0,0,.86)),
+        linear-gradient(180deg,transparent 58%,rgba(var(--brand-rgb),.36)),var(--hero-img) center/cover;}
+    .hero-photo .top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;}
+    .hero-photo .kicker{color:#fff;}
+    .hero-photo .top .rating{color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.28);
+      backdrop-filter:blur(6px);border-radius:999px;padding:8px 16px;}
+    .hero-photo h1{font-family:var(--font-display);font-weight:600;font-size:clamp(3rem,1rem + 10.5vw,10rem);
+      line-height:.9;letter-spacing:-.035em;margin:0 0 .14em;max-width:15ch;text-wrap:balance;
+      text-shadow:0 4px 40px rgba(0,0,0,.35);}
+    .hero-photo .slogan{font-family:var(--font-display);font-weight:500;font-style:italic;
+      font-size:clamp(1.35rem,1rem + 1.7vw,2.4rem);color:#fff;opacity:.96;max-width:30ch;}
+    .hero-photo .sub{margin-top:14px;max-width:52ch;color:rgba(255,255,255,.9);font-size:1.1rem;}
+    .hero-photo .btn-line{color:#fff;border-color:rgba(255,255,255,.6);}
+    .hero-photo .btn-line:hover{background:#fff;color:var(--ink);}
 
-    /* HERO poster (industrial/gym): tipografía descomunal sobre color sólido.
+    /* (2) PÓSTER — tipografía descomunal sobre color sólido (o foto+color en gym).
        El texto usa --on-brand (negro sobre lima, blanco sobre rojo): WCAG real. */
-    .hero-poster{background:var(--brand);color:var(--on-brand);position:relative;overflow:hidden;}
-    .hero-poster h1{font-size:clamp(3rem,1.2rem+9vw,8.4rem);text-transform:uppercase;letter-spacing:-.02em;line-height:.9;}
+    .hero-poster{background:var(--brand);color:var(--on-brand);position:relative;overflow:hidden;
+      min-height:clamp(520px,82vh,860px);display:flex;align-items:center;padding-block:clamp(90px,12vh,150px);}
+    .hero-poster h1{font-size:clamp(3.4rem,1rem + 11vw,10rem);text-transform:uppercase;letter-spacing:-.03em;line-height:.86;margin:.1em 0;}
     .hero-poster .kicker,.hero-poster .slogan{color:var(--on-brand);}
-    .hero-poster .slogan{font-style:normal;font-weight:700;opacity:.92;}
-    .hero-poster .sub{color:var(--on-brand);opacity:.82;}
+    .hero-poster .slogan{font-style:normal;font-weight:800;opacity:.92;text-transform:uppercase;letter-spacing:.02em;}
+    .hero-poster .sub{color:var(--on-brand);opacity:.82;max-width:50ch;font-size:1.1rem;margin-top:16px;}
     .hero-poster .btn-brand{background:var(--on-brand);color:var(--brand);border-color:var(--on-brand);}
     .hero-poster .btn-line{color:var(--on-brand);border-color:var(--on-brand);}
     .hero-poster .btn-line:hover{background:var(--on-brand);color:var(--brand);}
     .hero-poster .hero-meta{border-top:1px solid color-mix(in srgb,var(--on-brand) 26%,transparent);}
+    /* Foto detrás del color (gym): duotone enérgico mezclando la foto con el lima. */
+    .hero-poster.has-photo{background:var(--hero-img) center/cover;}
+    .hero-poster.has-photo::before{content:"";position:absolute;inset:0;z-index:0;
+      background:linear-gradient(120deg,var(--brand) 14%,color-mix(in srgb,var(--brand) 62%,transparent) 60%,color-mix(in srgb,var(--brand) 30%,transparent));mix-blend-mode:multiply;}
+    .hero-poster.has-photo::after{opacity:.34;}
     /* Grano + marca de agua de las iniciales: textura que rescata el color plano. */
     .hero-poster::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.5;
       mix-blend-mode:soft-light;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.06'/%3E%3C/svg%3E");}
-    .hero-poster .wm{position:absolute;right:-1.5vw;bottom:-7vw;font-family:var(--font-display);
-      font-weight:700;font-size:44vw;line-height:.7;color:var(--on-brand);opacity:.08;pointer-events:none;
+    .hero-poster .wm{position:absolute;right:-1.5vw;bottom:-9vw;font-family:var(--font-display);
+      font-weight:700;font-size:48vw;line-height:.7;color:var(--on-brand);opacity:.08;pointer-events:none;
       z-index:0;letter-spacing:-.05em;}
-    .hero-poster .wrap{position:relative;z-index:1;}
+    .hero-poster .wrap{position:relative;z-index:1;width:100%;}
 
-    /* HERO split (clínica): texto + tarjeta foto/dato con slab editorial desplazado. */
-    .hero-split .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(24px,4vw,64px);align-items:center;}
-    .hero-split .panel-wrap{position:relative;}
-    .hero-split .panel-wrap::before{content:"";position:absolute;inset:0;transform:translate(18px,18px);
-      background:var(--brand);opacity:.14;border-radius:var(--radius);z-index:0;}
-    .hero-split .panel{position:relative;z-index:1;background:var(--paper-2);border:1px solid var(--line);
-      border-radius:var(--radius);padding:0;overflow:hidden;min-height:340px;box-shadow:var(--shadow-pop);
-      background:var(--hero-img) center/cover;}
-    .hero-split .panel-brand{background:var(--brand);border-color:var(--brand);display:grid;place-items:center;}
-    .panel-mark{font-family:var(--font-display);font-size:clamp(4rem,10vw,7rem);font-weight:600;color:var(--on-brand);opacity:.95;}
+    /* (3) EDITORIAL — serif gigante asimétrico (legal/sin foto): aire, reglas de tinta,
+       el año de fundación como cifra monumental al lado. */
+    .hero-editorial{padding-block:clamp(70px,10vh,150px) clamp(50px,7vw,96px);}
+    .hero-editorial .grid{display:grid;grid-template-columns:1.35fr .65fr;gap:clamp(28px,5vw,80px);align-items:end;}
+    .hero-editorial h1{font-family:var(--font-display);font-weight:600;font-size:clamp(3rem,1rem + 9vw,8.5rem);
+      line-height:.92;letter-spacing:-.03em;margin:.1em 0 .14em;max-width:15ch;text-wrap:balance;}
+    .hero-editorial .slogan{font-family:var(--font-display);font-weight:500;font-style:italic;
+      font-size:clamp(1.3rem,1rem + 1.4vw,2.1rem);color:var(--brand);max-width:26ch;}
+    .hero-editorial .sub{margin-top:16px;max-width:50ch;color:var(--text-soft);font-size:1.1rem;}
+    .hero-editorial .est{text-align:right;border-left:var(--border) solid var(--ink);padding-left:clamp(18px,2vw,32px);}
+    .hero-editorial .est .y{font-family:var(--font-display);font-weight:600;font-size:clamp(3rem,2rem + 4vw,6rem);
+      line-height:.9;letter-spacing:-.03em;color:var(--brand);}
+    .hero-editorial .est .l{font-size:.78rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--text-soft);margin-top:6px;}
 
-    /* HERO gallery (estudio): texto encima de una tira de fotos. */
-    .hero-gallery .strip{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(180px,1fr);
-      gap:8px;margin-top:34px;overflow-x:auto;}
-    .hero-gallery .strip img{height:260px;width:100%;object-fit:cover;border-radius:var(--radius);}
+    /* BANDA DE DECLARACIÓN — un claim del negocio a tamaño monumental sobre el color
+       de marca, para romper el texto plano con una pausa visual fuerte. */
+    .statement{background:var(--brand);color:var(--on-brand);text-align:center;position:relative;overflow:hidden;
+      padding-block:clamp(80px,12vw,176px);}
+    .statement .wm{position:absolute;left:50%;top:54%;transform:translate(-50%,-50%);font-family:var(--font-display);
+      font-weight:700;font-size:46vw;line-height:.7;color:var(--on-brand);opacity:.06;pointer-events:none;z-index:0;letter-spacing:-.05em;}
+    .statement .wrap-narrow{position:relative;z-index:1;}
+    .statement .lbl{font-size:.78rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+      color:var(--on-brand);opacity:.8;margin-bottom:24px;display:block;}
+    .statement .claim{font-family:var(--font-display);font-weight:600;font-style:italic;
+      font-size:clamp(2rem,1rem + 6vw,5.4rem);line-height:1.04;letter-spacing:-.02em;max-width:20ch;margin-inline:auto;}
 
     /* Tira de marca: el nombre/oferta como letrero tipográfico. */
     /* Tira de marca: banda de tinta fija (independiente de familia clara/oscura). */
@@ -229,7 +251,7 @@
     .stats .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:0;}
     .stat{padding:10px clamp(16px,2vw,30px) 8px 0;border-top:var(--border) solid var(--ink);}
     .stat+.stat{border-left:1px solid var(--line);padding-left:clamp(16px,2vw,30px);}
-    .stat .v{font-family:var(--font-display);font-size:clamp(2.4rem,1.4rem+3.6vw,4.2rem);
+    .stat .v{font-family:var(--font-display);font-size:clamp(2.4rem,1.4rem + 3.6vw,4.2rem);
       font-weight:600;letter-spacing:-.03em;line-height:1;position:relative;display:inline-block;}
     .stat .v::after{content:"";position:absolute;left:0;right:0;bottom:-7px;height:3px;background:var(--brand);
       transform:scaleX(0);transform-origin:0 50%;}
@@ -241,7 +263,7 @@
 
     /* SECCIÓN cabecera editorial: eyebrow + título grande a la izquierda. */
     .head{max-width:30ch;margin-bottom:clamp(30px,4vw,52px);}
-    .head h2{font-size:clamp(1.9rem,1.3rem+2.4vw,3.1rem);}
+    .head h2{font-size:clamp(1.9rem,1.3rem + 2.4vw,3.1rem);}
     .head p{margin-top:14px;color:var(--text-soft);}
 
     /* SERVICIOS — carta (lista con líder de puntos y precio tabular). */
@@ -257,7 +279,7 @@
       padding:26px 0;border-top:1px solid var(--line);}
     .index .item:first-child{border-top:var(--border) solid var(--ink);}
     .index .n{font-family:var(--font-mono);font-size:.95rem;color:var(--brand);font-weight:600;padding-top:8px;}
-    .index .item h3{font-size:clamp(1.5rem,1.1rem+1.4vw,2.2rem);font-weight:600;}
+    .index .item h3{font-size:clamp(1.5rem,1.1rem + 1.4vw,2.2rem);font-weight:600;}
     .index .item p{margin-top:8px;color:var(--text-soft);max-width:58ch;}
 
     /* SERVICIOS — grid (tarjetas con regla de tinta gruesa, sin chip pastel). */
@@ -274,7 +296,7 @@
     /* SERVICIOS — list (bold, industrial). */
     .slist .item{display:flex;justify-content:space-between;align-items:center;gap:18px;
       padding:20px 0;border-bottom:var(--border) solid var(--ink);}
-    .slist .item h3{font-size:clamp(1.4rem,1rem+1.6vw,2.4rem);font-weight:600;text-transform:uppercase;letter-spacing:-.01em;}
+    .slist .item h3{font-size:clamp(1.4rem,1rem + 1.6vw,2.4rem);font-weight:600;text-transform:uppercase;letter-spacing:-.01em;}
     .slist .item p{color:var(--text-soft);font-size:.95rem;max-width:42ch;}
 
     /* PROCESO — pasos en línea con número grande. */
@@ -292,7 +314,7 @@
 
     /* SOBRE — texto a una columna estrecha (revista) + ficha de datos. */
     .about-grid{display:grid;grid-template-columns:1.3fr .7fr;gap:clamp(28px,5vw,72px);align-items:start;}
-    .about-grid .body p{font-size:clamp(1.1rem,1rem+.5vw,1.3rem);line-height:1.6;max-width:54ch;}
+    .about-grid .body p{font-size:clamp(1.1rem,1rem + .5vw,1.3rem);line-height:1.6;max-width:54ch;}
     .factsheet{border-top:var(--border) solid var(--ink);}
     .factsheet .row{display:grid;grid-template-columns:auto 1fr;gap:16px;padding:14px 0;
       border-bottom:1px solid var(--line);font-size:.95rem;}
@@ -336,7 +358,7 @@
     .cta::before{content:"";position:absolute;inset:0;pointer-events:none;
       background:radial-gradient(120% 140% at 85% 0%,rgba(var(--brand-rgb),.30),transparent 60%);}
     .cta .wrap{position:relative;}
-    .cta h2{font-size:clamp(2rem,1.3rem+3vw,3.6rem);max-width:18ch;}
+    .cta h2{font-size:clamp(2rem,1.3rem + 3vw,3.6rem);max-width:18ch;}
     .cta p{color:rgba(255,255,255,.74);margin:14px 0 28px;max-width:46ch;}
     .cta .btn-line{color:#fff;border-color:#fff;}
     .cta .btn-line:hover{background:#fff;color:var(--ink);}
@@ -489,9 +511,13 @@
 
 
 
-<section class="hero" id="inicio">
-  <div class="wrap">
+
+<section class="hero hero-photo" id="inicio" style="--hero-img:url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1400&amp;q=72&amp;auto=format&amp;fit=crop')">
+  <div class="wrap top">
     <p class="kicker">Tienda · Puerto de Sagunto</p>
+    <span class="rating"><span class="stars" aria-hidden="true">★★★★★</span> <span class="n">4.6</span> <span style="opacity:.7;font-weight:600">(52)</span></span>
+  </div>
+  <div class="wrap bottom">
     <h1>Tienda La Plaza</h1>
     <p class="slogan">Lo que buscas, al lado de casa</p>
     <p class="sub">Tienda en Puerto de Sagunto.</p>
@@ -502,15 +528,9 @@
   </div>
   
 
-  <div class="hero-meta">
-    <span class="rating"><span class="stars">★★★★★</span> <span class="n">4.6</span> <span style="opacity:.7;font-weight:600">(52)</span></span>
-    <span class="open-pill" id="openPill" data-hours='[{&#34;@type&#34;: &#34;OpeningHoursSpecification&#34;, &#34;dayOfWeek&#34;: [&#34;Monday&#34;, &#34;Tuesday&#34;, &#34;Wednesday&#34;, &#34;Thursday&#34;, &#34;Friday&#34;, &#34;Saturday&#34;], &#34;opens&#34;: &#34;10:00&#34;, &#34;closes&#34;: &#34;14:00&#34;}, {&#34;@type&#34;: &#34;OpeningHoursSpecification&#34;, &#34;dayOfWeek&#34;: [&#34;Monday&#34;, &#34;Tuesday&#34;, &#34;Wednesday&#34;, &#34;Thursday&#34;, &#34;Friday&#34;, &#34;Saturday&#34;], &#34;opens&#34;: &#34;17:00&#34;, &#34;closes&#34;: &#34;20:30&#34;}]'><span class="open-dot"></span><span class="txt"></span></span>
-    <span>Puerto de Sagunto</span>
-    
-  </div>
-
   </div>
 </section>
+
 
 
   
@@ -624,6 +644,17 @@
       </div>
     </div>
   </section>
+
+  
+  
+  <section class="statement" aria-label="Lo que buscas, al lado de casa">
+    <span class="wm" aria-hidden="true">TL</span>
+    <div class="wrap-narrow" data-reveal="clip">
+      <span class="lbl">Tienda · Puerto de Sagunto</span>
+      <p class="claim">Lo que buscas, al lado de casa</p>
+    </div>
+  </section>
+  
 
   
   <section id="galeria" style="background:var(--paper-2)">
