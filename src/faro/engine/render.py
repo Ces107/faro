@@ -77,7 +77,12 @@ def render_site(business: BusinessProfile, copy: LandingCopy) -> str:
     # negocio aporta su color de marca, personaliza el acento sin romperla.
     css_vars = tokens.to_css_vars()
     if business.brand_color:
-        css_vars += f":root{{--brand:{business.color};--accent:{business.accent};}}"
+        _hex = business.color.lstrip("#")
+        brand_rgb = ",".join(str(int(_hex[i : i + 2], 16)) for i in (0, 2, 4))
+        css_vars += (
+            f":root{{--brand:{business.color};--accent:{business.accent};"
+            f"--on-brand:{business.on_brand};--brand-rgb:{brand_rgb};}}"
+        )
 
     context = {
         "business": business,

@@ -38,18 +38,13 @@ class LandingCopy:
     value_props: tuple[ValueProp, ...]
 
 
-_DIFF_TITLES = ("Lo que nos diferencia", "Por qué elegirnos", "Nuestro compromiso")
-
-
 def _default_value_props(business: BusinessProfile) -> tuple[ValueProp, ...]:
     theme = business.theme
-    # Si el dueño nos dice qué les diferencia, esos son los puntos fuertes reales
-    # (con títulos distintos, no el genérico repetido tres veces).
+    # Si el dueño nos dice qué les diferencia, ESO es el titular real de cada punto
+    # (la afirmación concreta), no un genérico ("Lo que nos diferencia") que además
+    # repetía el título de la sección. El diferenciador manda; sin descripción de relleno.
     if business.differentiators:
-        return tuple(
-            ValueProp(_DIFF_TITLES[i % len(_DIFF_TITLES)], d)
-            for i, d in enumerate(business.differentiators[:3])
-        )
+        return tuple(ValueProp(d, "") for d in business.differentiators[:3])
     # Si no, tres motivos honestos y genéricos (cada uno con su propio título).
     return (
         ValueProp("Cercanía", f"Estamos en {business.city}, al lado cuando lo necesites."),

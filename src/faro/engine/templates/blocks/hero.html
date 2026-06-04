@@ -31,6 +31,7 @@
 
 {% elif tokens.hero == 'poster' %}
 <section class="hero hero-poster" id="inicio">
+  <span class="wm" aria-hidden="true">{{ business.initials }}</span>
   <div class="wrap">
     <p class="kicker">{{ business.theme.label }} · {{ business.city }}</p>
     <h1>{{ business.name }}</h1>
@@ -50,7 +51,7 @@
       <p class="sub">{{ copy.hero_subtitle }}</p>
       {{ ctas }}{{ meta }}
     </div>
-    <div class="panel{% if not business.photos %} panel-brand{% endif %}"{% if business.photos %} style="--hero-img:url('{{ business.photos[0] }}')"{% endif %}>{% if not business.photos %}<span class="panel-mark">{{ business.initials }}</span>{% endif %}</div>
+    <div class="panel-wrap" data-reveal="img"><div class="panel{% if not business.photos %} panel-brand{% endif %}"{% if business.photos %} style="--hero-img:url('{{ business.photos[0] }}')"{% endif %}>{% if not business.photos %}<span class="panel-mark">{{ business.initials }}</span>{% endif %}</div></div>
   </div></div>
 </section>
 

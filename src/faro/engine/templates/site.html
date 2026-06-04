@@ -23,6 +23,11 @@
   <style>
     {{ font_css | safe }}
     {{ css_vars | safe }}
+    /* Sombras tintadas con el tono de la marca (un solo foco, nunca negro puro). */
+    :root{
+      --shadow-card:0 1px 2px rgba(var(--brand-rgb,20,18,15),.05),0 6px 16px rgba(var(--brand-rgb,20,18,15),.08),0 14px 30px rgba(var(--brand-rgb,20,18,15),.07);
+      --shadow-pop:0 2px 6px rgba(var(--brand-rgb,20,18,15),.10),0 20px 44px rgba(var(--brand-rgb,20,18,15),.18);
+    }
     *{box-sizing:border-box;margin:0;padding:0;}
     html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
     body{font-family:var(--font-body);color:var(--ink);background:var(--paper);
@@ -34,7 +39,7 @@
       letter-spacing:-.025em;text-wrap:balance;}
     .wrap{width:min(1180px,100% - 10vw);margin-inline:auto;}
     .wrap-narrow{width:min(720px,100% - 10vw);margin-inline:auto;}
-    section{padding-block:clamp(56px,8vw,118px);position:relative;scroll-margin-top:84px;}
+    section{padding-block:clamp(50px,6.5vw,104px) clamp(40px,5vw,76px);position:relative;scroll-margin-top:84px;}
     .num{font-variant-numeric:tabular-nums lining-nums;}
     .eyebrow{font-size:.74rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
       color:var(--brand);display:inline-block;margin-bottom:18px;}
@@ -56,11 +61,11 @@
     .btn svg{width:1.15em;height:1.15em;}
     .btn-solid{background:var(--ink);color:var(--paper);}
     .btn-solid:hover{transform:translateY(-2px);}
-    .btn-brand{background:var(--brand);color:#fff;border-color:var(--brand);}
-    .btn-brand:hover{transform:translateY(-2px);}
+    .btn-brand{background:var(--brand);color:var(--on-brand);border-color:var(--brand);}
+    .btn-brand:hover{transform:translateY(-2px);box-shadow:var(--shadow-pop);}
     .btn-line{background:transparent;color:var(--ink);}
     .btn-line:hover{background:var(--ink);color:var(--paper);}
-    .btn-wa{background:#1f8f4e;color:#fff;border-color:#1f8f4e;}
+    .btn-wa{background:#1a7a42;color:#fff;border-color:#1a7a42;}
     .btn-wa:hover{transform:translateY(-2px);}
     .btn-ghost-light{background:transparent;color:#fff;border-color:rgba(255,255,255,.5);}
 
@@ -81,7 +86,7 @@
       transform:scaleX(0);transform-origin:0 50%;z-index:101;}
 
     /* Oferta con caducidad (se auto-oculta por JS tras la fecha). */
-    .offer-bar{background:var(--brand);color:#fff;font-weight:600;}
+    .offer-bar{background:var(--brand);color:var(--on-brand);font-weight:600;}
     .offer-bar .wrap{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;
       padding:10px 0;font-size:.95rem;text-align:center;}
     .offer-bar b{font-family:var(--font-display);font-weight:600;}
@@ -116,27 +121,45 @@
     .hero-meta .open-pill.closed .open-dot{background:#d97706;}
     .open-pill{display:none;}
 
-    /* HERO foto a sangre (carta): imagen domina, texto sobre overlay. */
-    .hero-photo{color:#fff;min-height:clamp(440px,76vh,720px);display:flex;align-items:flex-end;
-      background:linear-gradient(180deg,rgba(0,0,0,.12),rgba(0,0,0,.66)),var(--hero-img) center/cover;}
+    /* HERO foto a sangre (carta): imagen domina, texto sobre overlay de 3 paradas
+       con un tinte de marca abajo (calidez, no el negro plano de siempre). */
+    .hero-photo{color:#fff;min-height:clamp(460px,78vh,740px);display:flex;align-items:flex-end;position:relative;
+      background:linear-gradient(180deg,rgba(0,0,0,.06) 0%,rgba(0,0,0,.30) 48%,rgba(0,0,0,.76) 100%),
+        linear-gradient(180deg,transparent 58%,rgba(var(--brand-rgb),.30) 100%),var(--hero-img) center/cover;}
+    .hero-photo h1{font-size:clamp(2.8rem,1.4rem+7vw,7rem);}
     .hero-photo .kicker,.hero-photo .slogan{color:#fff;}
     .hero-photo .sub{color:rgba(255,255,255,.9);}
     .hero-photo .hero-meta{border-top-color:rgba(255,255,255,.28);}
 
-    /* HERO poster (industrial/gym): tipografía descomunal sobre color sólido. */
-    .hero-poster{background:var(--brand);color:#fff;}
-    .hero-poster h1{font-size:clamp(3rem,1.2rem+9vw,8rem);text-transform:uppercase;letter-spacing:-.02em;line-height:.92;}
-    .hero-poster .kicker,.hero-poster .slogan{color:#fff;}
-    .hero-poster .slogan{font-style:normal;font-weight:700;}
-    .hero-poster .sub{color:rgba(255,255,255,.9);}
-    .hero-poster .btn-brand{background:#fff;color:var(--brand);border-color:#fff;}
+    /* HERO poster (industrial/gym): tipografía descomunal sobre color sólido.
+       El texto usa --on-brand (negro sobre lima, blanco sobre rojo): WCAG real. */
+    .hero-poster{background:var(--brand);color:var(--on-brand);position:relative;overflow:hidden;}
+    .hero-poster h1{font-size:clamp(3rem,1.2rem+9vw,8.4rem);text-transform:uppercase;letter-spacing:-.02em;line-height:.9;}
+    .hero-poster .kicker,.hero-poster .slogan{color:var(--on-brand);}
+    .hero-poster .slogan{font-style:normal;font-weight:700;opacity:.92;}
+    .hero-poster .sub{color:var(--on-brand);opacity:.82;}
+    .hero-poster .btn-brand{background:var(--on-brand);color:var(--brand);border-color:var(--on-brand);}
+    .hero-poster .btn-line{color:var(--on-brand);border-color:var(--on-brand);}
+    .hero-poster .btn-line:hover{background:var(--on-brand);color:var(--brand);}
+    .hero-poster .hero-meta{border-top:1px solid color-mix(in srgb,var(--on-brand) 26%,transparent);}
+    /* Grano + marca de agua de las iniciales: textura que rescata el color plano. */
+    .hero-poster::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.5;
+      mix-blend-mode:soft-light;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.06'/%3E%3C/svg%3E");}
+    .hero-poster .wm{position:absolute;right:-1.5vw;bottom:-7vw;font-family:var(--font-display);
+      font-weight:700;font-size:44vw;line-height:.7;color:var(--on-brand);opacity:.08;pointer-events:none;
+      z-index:0;letter-spacing:-.05em;}
+    .hero-poster .wrap{position:relative;z-index:1;}
 
-    /* HERO split (clínica): texto + tarjeta foto/dato. */
-    .hero-split .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(24px,4vw,60px);align-items:center;}
-    .hero-split .panel{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--radius);
-      padding:0;overflow:hidden;min-height:320px;{% if business.photos %}background:var(--hero-img) center/cover;{% endif %}}
+    /* HERO split (clínica): texto + tarjeta foto/dato con slab editorial desplazado. */
+    .hero-split .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(24px,4vw,64px);align-items:center;}
+    .hero-split .panel-wrap{position:relative;}
+    .hero-split .panel-wrap::before{content:"";position:absolute;inset:0;transform:translate(18px,18px);
+      background:var(--brand);opacity:.14;border-radius:var(--radius);z-index:0;}
+    .hero-split .panel{position:relative;z-index:1;background:var(--paper-2);border:1px solid var(--line);
+      border-radius:var(--radius);padding:0;overflow:hidden;min-height:340px;box-shadow:var(--shadow-pop);
+      {% if business.photos %}background:var(--hero-img) center/cover;{% endif %}}
     .hero-split .panel-brand{background:var(--brand);border-color:var(--brand);display:grid;place-items:center;}
-    .panel-mark{font-family:var(--font-display);font-size:clamp(4rem,10vw,7rem);font-weight:600;color:#fff;opacity:.92;}
+    .panel-mark{font-family:var(--font-display);font-size:clamp(4rem,10vw,7rem);font-weight:600;color:var(--on-brand);opacity:.95;}
 
     /* HERO gallery (estudio): texto encima de una tira de fotos. */
     .hero-gallery .strip{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(180px,1fr);
@@ -144,17 +167,32 @@
     .hero-gallery .strip img{height:260px;width:100%;object-fit:cover;border-radius:var(--radius);}
 
     /* Tira de marca: el nombre/oferta como letrero tipográfico. */
-    .marquee{background:var(--ink);color:var(--paper);padding-block:14px;overflow:hidden;}
-    .marquee .row{display:flex;gap:48px;white-space:nowrap;font-family:var(--font-display);
-      font-size:1.1rem;font-weight:600;letter-spacing:.02em;}
-    .marquee span::after{content:"—";margin-left:48px;color:var(--brand);}
+    /* Tira de marca: banda de tinta fija (independiente de familia clara/oscura). */
+    .marquee{background:#15130f;color:#f5efe3;padding-block:15px;overflow:hidden;
+      border-block:1px solid rgba(255,255,255,.08);-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
+      mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);}
+    .marquee .track{display:flex;width:max-content;animation:faro-marquee 36s linear infinite;will-change:transform;}
+    .marquee:hover .track{animation-play-state:paused;}
+    .marquee .row{display:flex;gap:46px;white-space:nowrap;font-family:var(--font-display);
+      font-size:1.12rem;font-weight:600;letter-spacing:.02em;padding-right:46px;}
+    .marquee span::after{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;
+      background:var(--brand);margin-left:46px;vertical-align:middle;}
+    @keyframes faro-marquee{to{transform:translateX(-50%)}}
+    @media (prefers-reduced-motion:reduce){.marquee .track{animation:none;}.marquee{overflow-x:auto;}}
 
     /* STATS — números enormes, editoriales, no tarjetitas. */
-    .stats .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));}
-    .stat{padding:8px 0;border-top:var(--border) solid var(--ink);}
+    .stats .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:0;}
+    .stat{padding:10px clamp(16px,2vw,30px) 8px 0;border-top:var(--border) solid var(--ink);}
+    .stat+.stat{border-left:1px solid var(--line);padding-left:clamp(16px,2vw,30px);}
     .stat .v{font-family:var(--font-display);font-size:clamp(2.4rem,1.4rem+3.6vw,4.2rem);
-      font-weight:600;letter-spacing:-.03em;line-height:1;}
-    .stat .l{margin-top:8px;color:var(--text-soft);font-size:.92rem;font-weight:600;}
+      font-weight:600;letter-spacing:-.03em;line-height:1;position:relative;display:inline-block;}
+    .stat .v::after{content:"";position:absolute;left:0;right:0;bottom:-7px;height:3px;background:var(--brand);
+      transform:scaleX(0);transform-origin:0 50%;}
+    .stat .l{margin-top:14px;color:var(--text-soft);font-size:.92rem;font-weight:600;}
+    @media (prefers-reduced-motion:no-preference){
+      html.js .stat[data-reveal] .v::after{transition:transform .7s cubic-bezier(.22,1,.36,1) .25s;}
+      html.js .stat[data-reveal].vis .v::after{transform:scaleX(1);}}
+    html:not(.js) .stat .v::after,.stat:not([data-reveal]) .v::after{transform:scaleX(1);}
 
     /* SECCIÓN cabecera editorial: eyebrow + título grande a la izquierda. */
     .head{max-width:30ch;margin-bottom:clamp(30px,4vw,52px);}
@@ -216,13 +254,20 @@
     .factsheet .row .k{font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:.76rem;
       color:var(--text-soft);padding-top:2px;}
 
-    /* GALERÍA — mosaico irregular. */
-    .gal{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;}
-    .gal img{width:100%;height:100%;object-fit:cover;border-radius:var(--radius);min-height:180px;}
-    .gal img:nth-child(3n+1){grid-column:span 3;}
-    .gal img:nth-child(3n+2){grid-column:span 3;}
-    .gal img:nth-child(3n){grid-column:span 2;}
-    .gal img:nth-child(7n){grid-column:span 4;}
+    /* GALERÍA — mosaico irregular (6+ fotos) o rejilla fluida (2-5). */
+    .gal{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;}
+    .gal .cell{overflow:hidden;border-radius:var(--radius);min-height:180px;}
+    .gal .cell img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.22,1,.36,1);}
+    .gal .cell:hover img{transform:scale(1.05);}
+    .gal.mosaic .cell:nth-child(3n+1){grid-column:span 3;}
+    .gal.mosaic .cell:nth-child(3n+2){grid-column:span 3;}
+    .gal.mosaic .cell:nth-child(3n){grid-column:span 2;}
+    .gal.mosaic .cell:nth-child(7n){grid-column:span 4;}
+    .gal.even{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));}
+    .gal.even .cell{min-height:clamp(220px,26vw,300px);}
+    /* Foto única: figura editorial enmarcada, no una sección de galería pobre. */
+    .solo-figure{position:relative;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-pop);}
+    .solo-figure img{width:100%;height:clamp(280px,42vw,520px);object-fit:cover;display:block;}
 
     /* OPINIONES — citas grandes. */
     .quotes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(20px,3vw,40px);}
@@ -241,8 +286,11 @@
     details.faq[open] summary .pm{transform:rotate(45deg);}
     details.faq .a{padding:0 0 20px;color:var(--text-soft);max-width:64ch;}
 
-    /* CTA final — bloque de color a sangre. */
-    .cta{background:var(--ink);color:var(--paper);text-align:left;}
+    /* CTA final — banda de tinta fija con resplandor de marca (no se invierte en dark). */
+    .cta{background:#161310;color:#f4ece0;text-align:left;position:relative;overflow:hidden;}
+    .cta::before{content:"";position:absolute;inset:0;pointer-events:none;
+      background:radial-gradient(120% 140% at 85% 0%,rgba(var(--brand-rgb),.30),transparent 60%);}
+    .cta .wrap{position:relative;}
     .cta h2{font-size:clamp(2rem,1.3rem+3vw,3.6rem);max-width:18ch;}
     .cta p{color:rgba(255,255,255,.74);margin:14px 0 28px;max-width:46ch;}
     .cta .btn-line{color:#fff;border-color:#fff;}
@@ -258,8 +306,8 @@
     .reviews .qr img{width:150px;height:150px;}
     .reviews .stars{letter-spacing:4px;color:var(--brand);font-size:1.4rem;}
 
-    /* FOOTER */
-    footer{background:var(--ink);color:rgba(255,255,255,.72);padding:56px 0 28px;}
+    /* FOOTER — banda de tinta fija (no se invierte en familias oscuras). */
+    footer{background:#161310;color:rgba(244,236,224,.72);padding:56px 0 28px;}
     footer a:hover{color:#fff;}
     .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:30px;}
     .foot-grid h4{color:#fff;font-size:.76rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:14px;}
@@ -273,7 +321,7 @@
 
     /* Flotantes + cookie */
     .wa-float{position:fixed;right:20px;bottom:20px;width:58px;height:58px;border-radius:50%;
-      background:#1f8f4e;color:#fff;display:grid;place-items:center;border:var(--border) solid var(--ink);
+      background:#1a7a42;color:#fff;display:grid;place-items:center;border:var(--border) solid var(--ink);
       box-shadow:4px 4px 0 var(--ink);z-index:90;}
     .wa-float svg{width:30px;height:30px;}
     .to-top{position:fixed;right:22px;bottom:88px;width:44px;height:44px;border-radius:var(--radius);
@@ -288,14 +336,50 @@
     .cookie .row{display:flex;gap:10px;flex-wrap:wrap;}
     .cookie .btn{padding:10px 16px;font-size:.9rem;}
 
+    /* Micro-interacciones: rápidas (.18–.22s) y sobrias. Nada de rebotes ni lifts. */
+    .sgrid .card{transition:box-shadow .2s ease,background .2s ease;}
+    .sgrid .card:hover{box-shadow:inset 3px 0 0 var(--brand);background:var(--paper);}
+    .carta .item,.index .item,.slist .item{transition:background .2s ease;border-radius:2px;}
+    .carta .item:hover,.index .item:hover,.slist .item:hover{background:color-mix(in srgb,var(--brand) 5%,transparent);}
+    .proc .step{transition:transform .2s ease;}
+    .proc .step:hover .n{color:var(--accent);}
+    details.faq summary{transition:color .18s ease;}
+    details.faq summary:hover{color:var(--brand);}
+    .quote{transition:transform .25s cubic-bezier(.22,1,.36,1);}
+    .quote:hover{transform:translateX(4px);}
+    .factsheet .row{transition:background .18s ease;}
+    .factsheet .row:hover{background:color-mix(in srgb,var(--brand) 4%,transparent);}
+    .creds span{transition:border-color .18s ease,color .18s ease;}
+    .creds span:hover{border-color:var(--brand);color:var(--ink);}
+    .wa-float{transition:transform .2s ease,box-shadow .2s ease;}
+    .wa-float:hover{transform:translateY(-3px) scale(1.04);box-shadow:6px 6px 0 var(--ink);}
+    .to-top{box-shadow:3px 3px 0 var(--ink);}
+    .nav-cta{transition:transform .15s ease;}
+    .nav-cta:hover{transform:translateY(-1px);}
+    .delivery a,.creds span,.foot-social a{will-change:auto;}
+
     {% if tokens.texture %}body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:1;
       opacity:.5;mix-blend-mode:multiply;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.045'/%3E%3C/svg%3E");}
     body>*{position:relative;z-index:2;}{% endif %}
 
+    /* Reveals: rise por defecto, clip (barrido) para titulares, img (escala) para
+       fotos. El IntersectionObserver añade .vis; con reduced-motion o sin JS todo
+       queda visible. Easing cubic-bezier de estudio, no el 'ease' por defecto. */
     @media (prefers-reduced-motion: no-preference){
-      html.js [data-reveal]{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease;
-        transition-delay:calc(var(--i,0) * 70ms);}
-      html.js [data-reveal].vis{opacity:1;transform:none;}
+      html.js [data-reveal]{opacity:0;}
+      html.js [data-reveal].vis{animation:faro-rise .62s cubic-bezier(.22,1,.36,1) both;
+        animation-delay:calc(var(--i,0) * 65ms);}
+      html.js [data-reveal="clip"].vis{animation:faro-clip .74s cubic-bezier(.22,1,.36,1) both;}
+      html.js [data-reveal="img"].vis{animation:faro-img .82s cubic-bezier(.22,1,.36,1) both;}
+    }
+    @keyframes faro-rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+    @keyframes faro-clip{from{opacity:0;clip-path:inset(0 0 100% 0);transform:translateY(10px)}
+      to{opacity:1;clip-path:inset(0);transform:none}}
+    @keyframes faro-img{from{opacity:0;transform:scale(1.05)}to{opacity:1;transform:none}}
+    /* La pestaña del eyebrow se dibuja al revelar (motivo que une las cabeceras). */
+    @media (prefers-reduced-motion: no-preference){
+      html.js [data-reveal] .eyebrow::before{width:0;transition:width .7s cubic-bezier(.22,1,.36,1) .2s;}
+      html.js [data-reveal].vis .eyebrow::before{width:26px;}
     }
     @media (max-width:900px){
       .hero-split .grid,.about-grid{grid-template-columns:1fr;}
@@ -305,10 +389,18 @@
       .nav-toggle{display:grid;place-items:center;}
       .nav.open .nav-links{display:flex;position:absolute;top:66px;left:0;right:0;flex-direction:column;
         background:var(--paper);border-bottom:var(--border) solid var(--ink);padding:10px 5vw;}
-      .gal img{grid-column:span 3 !important;}
+      .gal.mosaic{grid-template-columns:repeat(2,1fr);}
+      .gal.mosaic .cell{grid-column:span 1 !important;}
+      .stat+.stat{border-left:0;padding-left:0;}
     }
-    @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}*{transition-duration:.001ms !important;}}
-    @media print{.nav,.wa-float,.to-top,.cookie,.map-consent{display:none !important;}}
+    @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}
+      *{transition-duration:.001ms !important;animation-duration:.001ms !important;animation-iteration-count:1 !important;}
+      [data-reveal]{opacity:1 !important;}}
+    /* Imprimir / motores que no hacen scroll: nada puede quedar oculto por el reveal. */
+    @media print{.nav,.wa-float,.to-top,.cookie,.map-consent,.progress{display:none !important;}
+      [data-reveal]{opacity:1 !important;transform:none !important;animation:none !important;clip-path:none !important;}}
+    /* Mientras el aviso de cookies está abierto, no solapar con el botón flotante. */
+    body.cookie-open .wa-float{opacity:0;pointer-events:none;transform:translateY(8px);}
   </style>
 </head>
 <body>
@@ -340,6 +432,9 @@
   <main id="contenido">
   {% include "blocks/hero.html" %}
 
+  {% set marquee_items %}<span>{{ business.name }}</span>{% if copy.slogan %}<span>{{ copy.slogan }}</span>{% endif %}<span>{{ business.city }}</span>{% if business.rating %}<span>★ {{ business.google_rating }} en Google</span>{% endif %}{% if business.years %}<span>Desde {{ business.years }}</span>{% endif %}{% for d in business.differentiators[:2] %}<span>{{ d }}</span>{% endfor %}{% endset %}
+  <div class="marquee" aria-hidden="true"><div class="track"><div class="row">{{ marquee_items }}</div><div class="row">{{ marquee_items }}</div></div></div>
+
   {% if stats %}
   <section class="stats" aria-label="En cifras">
     <div class="wrap"><div class="grid">
@@ -355,7 +450,7 @@
 
   <section id="servicios">
     <div class="wrap">
-      <div class="head" data-reveal>
+      <div class="head" data-reveal="clip">
         <p class="eyebrow">{{ offer_eyebrow }}</p>
         <h2>{{ copy.services_intro }}</h2>
       </div>
@@ -365,7 +460,7 @@
 
   <section id="proceso" style="background:var(--paper-2)">
     <div class="wrap">
-      <div class="head" data-reveal><p class="eyebrow">El proceso</p><h2>{{ proceso_title }}</h2></div>
+      <div class="head" data-reveal="clip"><p class="eyebrow">El proceso</p><h2>{{ proceso_title }}</h2></div>
       <div class="proc">
         {% for p in process %}
         <div class="step" data-reveal style="--i:{{ loop.index0 }}">
@@ -379,10 +474,10 @@
 
   <section id="porque">
     <div class="wrap">
-      <div class="head" data-reveal><p class="eyebrow">Por qué nosotros</p><h2>Lo que nos diferencia</h2></div>
+      <div class="head" data-reveal="clip"><p class="eyebrow">Por qué nosotros</p><h2>Lo que nos diferencia</h2></div>
       <div class="props">
         {% for prop in copy.value_props %}
-        <div class="prop" data-reveal style="--i:{{ loop.index0 }}"><h3>{{ prop.title }}</h3><p>{{ prop.description }}</p></div>
+        <div class="prop" data-reveal style="--i:{{ loop.index0 }}"><h3>{{ prop.title }}</h3>{% if prop.description %}<p>{{ prop.description }}</p>{% endif %}</div>
         {% endfor %}
       </div>
     </div>
@@ -391,10 +486,14 @@
   {% if business.photos %}
   <section id="galeria" style="background:var(--paper-2)">
     <div class="wrap">
-      <div class="head" data-reveal><p class="eyebrow">Échale un ojo</p><h2>{{ playbook.gallery_title }}</h2></div>
-      <div class="gal">
-        {% for url in business.photos %}<img src="{{ url }}" loading="lazy" decoding="async" alt="{{ business.name }} — {{ loop.index }}" data-reveal style="--i:{{ loop.index0 }}" />{% endfor %}
+      <div class="head" data-reveal="clip"><p class="eyebrow">Échale un ojo</p><h2>{{ playbook.gallery_title }}</h2></div>
+      {% if business.photos|length == 1 %}
+      <figure class="solo-figure" data-reveal="img"><img src="{{ business.photos[0] }}" loading="lazy" decoding="async" alt="{{ business.name }}" /></figure>
+      {% else %}
+      <div class="gal {{ 'mosaic' if business.photos|length >= 6 else 'even' }}">
+        {% for url in business.photos %}<div class="cell" data-reveal="img" style="--i:{{ loop.index0 }}"><img src="{{ url }}" loading="lazy" decoding="async" alt="{{ business.name }} — {{ loop.index }}" /></div>{% endfor %}
       </div>
+      {% endif %}
     </div>
   </section>
   {% endif %}
@@ -402,7 +501,7 @@
   {% if business.testimonials %}
   <section id="opiniones">
     <div class="wrap">
-      <div class="head" data-reveal><p class="eyebrow">Lo que dicen</p><h2>Opiniones de clientes</h2></div>
+      <div class="head" data-reveal="clip"><p class="eyebrow">Lo que dicen</p><h2>Opiniones de clientes</h2></div>
       <div class="quotes">
         {% for t in business.testimonials %}
         <figure class="quote" data-reveal style="--i:{{ loop.index0 }}">
@@ -439,7 +538,7 @@
 
   <section id="faq">
     <div class="wrap-narrow">
-      <div class="head" data-reveal><p class="eyebrow">Dudas frecuentes</p><h2>Preguntas frecuentes</h2></div>
+      <div class="head" data-reveal="clip"><p class="eyebrow">Dudas frecuentes</p><h2>Preguntas frecuentes</h2></div>
       <div class="faq-list">
         {% for q in faq %}
         <details class="faq"{% if loop.first %} open{% endif %} data-reveal style="--i:{{ loop.index0 }}">
@@ -465,7 +564,7 @@
   {% if maps_embed_url %}
   <section id="como-llegar">
     <div class="wrap">
-      <div class="head" data-reveal><p class="eyebrow">Visítanos</p><h2>Cómo llegar</h2></div>
+      <div class="head" data-reveal="clip"><p class="eyebrow">Visítanos</p><h2>Cómo llegar</h2></div>
       <p class="lead" style="margin-bottom:22px">{{ business.address }}, {{ business.city }}. <a href="{{ maps_link }}" style="color:var(--brand);font-weight:700;text-decoration:underline">Abrir en Google Maps</a></p>
       <div class="map-consent" id="mapConsent" data-src="{{ maps_embed_url }}" data-reveal>
         <p>El mapa lo proporciona Google Maps, que instala cookies de Google. Pulsa para cargarlo.</p>

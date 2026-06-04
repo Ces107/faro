@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Faro — webs para negocios locales que no parecen hechas por IA</title>
+<meta name="description" content="Faro genera la web, la ficha de Google y el WhatsApp de un negocio local en minutos. Cada tipo de negocio, con su propio estilo. Mira los ejemplos reales." />
+<link rel="icon" href="{{FAVICON}}" />
+<meta name="theme-color" content="#161310" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Faro — webs para negocios locales que no parecen hechas por IA" />
+<meta property="og:description" content="Cada tipo de negocio, con su propio estilo. 7 familias de diseño, tipografía real, sin cookies. Mira los ejemplos en vivo." />
+<meta property="og:image" content="shots/og.jpg" />
+<meta property="og:url" content="https://ces107.github.io/faro/" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Faro — webs que no parecen hechas por IA" />
+<meta name="twitter:description" content="7 familias de diseño, tipografía real, sin cookies. Ejemplos en vivo." />
+<meta name="twitter:image" content="shots/og.jpg" />
+<style>
+{{FONTS}}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#15110d;--bg-2:#1d1812;--ink:#f6efe3;--soft:#b1a795;--faint:#8c8170;
+  --brand:#e07a4d;--brand-2:#e9a06a;--line:rgba(255,255,255,.10);--line-2:rgba(255,255,255,.16);
+  --display:'Fraunces',Georgia,'Times New Roman',serif;
+  --body:'Archivo','Helvetica Neue',Arial,sans-serif;
+  --mono:'SFMono-Regular',Consolas,monospace;
+}
+html{-webkit-text-size-adjust:100%}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+.lenis.lenis-stopped{overflow:hidden}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.6;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;font-feature-settings:"kern" 1,"liga" 1}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.wrap{width:min(1200px,92vw);margin-inline:auto}
+.wrap-narrow{width:min(820px,92vw);margin-inline:auto}
+h1,h2,h3{font-family:var(--display);font-weight:600;letter-spacing:-.025em;line-height:1;text-wrap:balance}
+.eyebrow{font-size:.76rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--brand-2);
+  display:inline-flex;align-items:center;gap:11px}
+.eyebrow::before{content:"";width:28px;height:2px;background:var(--brand);display:inline-block}
+section{padding-block:clamp(64px,9vw,128px);position:relative}
+:focus-visible{outline:3px solid var(--brand);outline-offset:3px;border-radius:2px}
+.skip{position:absolute;left:-999px;background:var(--ink);color:var(--bg);padding:10px 16px;z-index:300}
+.skip:focus{left:14px;top:14px}
+
+/* Botones */
+.btn{display:inline-flex;align-items:center;gap:9px;padding:14px 26px;border-radius:999px;font-weight:700;
+  font-size:1rem;cursor:pointer;border:1.5px solid transparent;transition:transform .2s cubic-bezier(.22,1,.36,1),box-shadow .2s,background .2s,color .2s}
+.btn svg{width:1.1em;height:1.1em}
+.btn-brand{background:var(--brand);color:#15110d}
+.btn-brand:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(224,122,77,.42)}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--line-2)}
+.btn-ghost:hover{background:rgba(255,255,255,.06);border-color:var(--brand);transform:translateY(-2px)}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:background .3s,border-color .3s,backdrop-filter .3s;
+  border-bottom:1px solid transparent}
+.nav.scrolled{background:rgba(21,17,13,.72);backdrop-filter:blur(14px) saturate(140%);border-bottom-color:var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:70px;gap:18px}
+.wordmark{font-family:var(--display);font-weight:600;font-size:1.5rem;letter-spacing:-.02em;display:inline-flex;align-items:center}
+.wordmark .beam{width:11px;height:11px;border-radius:50%;background:var(--brand);margin-left:3px;
+  box-shadow:0 0 14px 2px rgba(224,122,77,.8)}
+.nav-links{display:flex;gap:6px;align-items:center}
+.nav-links a{padding:8px 14px;font-size:.9rem;font-weight:600;color:var(--soft);transition:color .2s}
+.nav-links a:hover{color:var(--ink)}
+.nav .btn{padding:10px 20px;font-size:.9rem}
+.nav-burger{display:none}
+.progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--brand),var(--brand-2));
+  width:100%;transform:scaleX(0);transform-origin:0;z-index:101}
+
+/* HERO */
+.hero{padding-top:clamp(104px,13vh,148px);padding-bottom:clamp(56px,7vw,96px);position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;width:90vw;height:90vw;max-width:1100px;max-height:1100px;border-radius:50%;
+  top:-44vw;right:-26vw;background:radial-gradient(circle,rgba(224,122,77,.26),rgba(224,122,77,0) 62%);pointer-events:none;z-index:0}
+.hero::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.5;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E")}
+.hero .wrap{position:relative;z-index:1;display:grid;grid-template-columns:1.04fr .96fr;gap:clamp(30px,5vw,70px);align-items:center}
+.hero .badge{display:inline-flex;align-items:center;gap:9px;background:rgba(255,255,255,.05);border:1px solid var(--line);
+  border-radius:999px;padding:8px 16px;font-size:.82rem;font-weight:600;color:var(--soft);margin-bottom:26px}
+.hero .badge .dot{width:8px;height:8px;border-radius:50%;background:#41d07f;box-shadow:0 0 10px #41d07f}
+.hero h1{font-size:clamp(2.9rem,1.5rem+5.4vw,5.6rem);line-height:.98;margin-bottom:.34em}
+.hero h1 .ia{font-style:italic;color:var(--brand-2)}
+.hero .lead{font-size:clamp(1.1rem,1rem+.55vw,1.42rem);color:var(--soft);max-width:46ch;margin-bottom:34px}
+.hero-cta{display:flex;flex-wrap:wrap;gap:14px}
+.hero-trust{margin-top:30px;display:flex;flex-wrap:wrap;gap:8px 24px;font-size:.86rem;font-weight:600;color:var(--soft)}
+.hero-trust span{display:inline-flex;align-items:center;gap:8px}
+.hero-trust b{color:var(--ink)}
+.hero-trust .tk{color:var(--brand-2)}
+.hero-legend{margin-top:26px;display:flex;align-items:center;gap:15px;flex-wrap:wrap}
+.hero-legend .ll{font-size:.74rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+.hero-legend .dots{display:flex;gap:7px}
+.hero-legend .dots i{width:27px;height:27px;border-radius:7px;display:block;border:1px solid rgba(255,255,255,.16);
+  box-shadow:0 2px 7px rgba(0,0,0,.35);transition:transform .2s}
+.hero-legend .dots i:hover{transform:translateY(-3px) scale(1.08)}
+
+/* Perspective deck of real screenshots — ventanas de navegador flotantes. */
+.deck{position:relative;height:clamp(360px,40vw,540px);perspective:1700px}
+.deck .shot{position:absolute;border-radius:12px;overflow:hidden;border:1px solid var(--line-2);
+  box-shadow:0 34px 64px -22px rgba(0,0,0,.8),0 12px 26px -14px rgba(0,0,0,.7);background:#0d0b08}
+.deck .winbar{height:27px;display:flex;align-items:center;gap:6px;padding:0 12px;background:#0d0b08;border-bottom:1px solid var(--line)}
+.deck .winbar i{width:8px;height:8px;border-radius:50%;background:#352f28;display:block}
+.deck .winshot{aspect-ratio:4/3;overflow:hidden}
+.deck .winshot img{width:100%;height:100%;object-fit:cover;object-position:top}
+/* s1 = ventana focal grande y casi plana (legible); s2/s3 de apoyo detrás. */
+.deck .s1{width:64%;left:5%;top:11%;z-index:3;transform:rotateY(8deg) rotate(-2deg);
+  box-shadow:0 46px 84px -28px rgba(0,0,0,.85),0 14px 30px -14px rgba(0,0,0,.7)}
+.deck .s2{width:50%;right:0;top:0;z-index:2;transform:rotateY(-14deg) rotate(2deg);opacity:.95}
+.deck .s3{width:45%;left:1%;bottom:2%;z-index:1;transform:rotateY(8deg) rotate(1deg);opacity:.88}
+.deck .shot::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(255,255,255,0) 42%)}
+
+/* MARQUEE */
+.ribbon{border-block:1px solid var(--line);background:var(--bg-2);overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}
+.ribbon .track{display:flex;width:max-content;animation:ribbon 40s linear infinite}
+.ribbon:hover .track{animation-play-state:paused}
+.ribbon .row{display:flex;gap:0;white-space:nowrap;padding:16px 0}
+.ribbon .row span{font-family:var(--display);font-size:1.3rem;font-weight:600;color:var(--soft);padding:0 30px;
+  display:inline-flex;align-items:center;gap:30px}
+.ribbon .row span::after{content:"";width:7px;height:7px;border-radius:50%;background:var(--brand)}
+@keyframes ribbon{to{transform:translateX(-50%)}}
+
+/* SECTION HEADERS */
+.sec-head{max-width:30ch;margin-bottom:clamp(34px,5vw,58px)}
+.sec-head.center{max-width:none;text-align:center;margin-inline:auto}
+.sec-head h2{font-size:clamp(2rem,1.3rem+2.8vw,3.4rem);margin:18px 0 0}
+.sec-head p{margin-top:16px;color:var(--soft);font-size:1.08rem;max-width:52ch}
+.sec-head.center p{margin-inline:auto}
+
+/* BEFORE / AFTER */
+.ba{background:var(--bg-2);border-block:1px solid var(--line)}
+.ba .slider{--divider-width:2px;--divider-color:var(--brand);--default-handle-opacity:1;
+  border-radius:14px;overflow:hidden;border:1px solid var(--line-2);box-shadow:0 30px 70px -28px rgba(0,0,0,.8);max-width:1040px;margin:0 auto}
+.ba .slider img{width:100%;display:block}
+.ba .tag{position:absolute;top:16px;padding:7px 14px;border-radius:999px;font-size:.78rem;font-weight:700;
+  letter-spacing:.04em;z-index:5;backdrop-filter:blur(4px)}
+.ba .tag-before{left:16px;background:rgba(20,16,12,.7);color:#f1b3b3;border:1px solid rgba(241,179,179,.4)}
+.ba .tag-after{right:16px;background:rgba(20,16,12,.7);color:#9fe6bf;border:1px solid rgba(159,230,191,.4)}
+.ba .slider-wrap{position:relative}
+.ba .hint{text-align:center;margin-top:20px;color:var(--soft);font-size:.95rem}
+.ba .hint b{color:var(--ink)}
+
+/* HOW */
+.how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,2.4vw,30px);counter-reset:step}
+.how-card{background:var(--bg-2);border:1px solid var(--line);border-radius:16px;padding:34px 28px;position:relative;
+  transition:border-color .25s,transform .25s}
+.how-card:hover{border-color:var(--line-2);transform:translateY(-4px)}
+.how-card .n{font-family:var(--mono);font-size:.85rem;color:var(--brand-2);font-weight:600;margin-bottom:18px;display:block}
+.how-card h3{font-size:1.4rem;margin-bottom:10px}
+.how-card p{color:var(--soft);font-size:.98rem}
+.how-card .ic{width:46px;height:46px;color:var(--brand);margin-bottom:18px}
+
+/* FAMILIES — pinned horizontal */
+.fam-wrap{padding:0;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+/* Solo en escritorio, donde GSAP fija la sección y desplaza el track, el wrap
+   recorta (overflow:hidden). En móvil se queda con scroll horizontal nativo para
+   no desbordar el body (el pin de GSAP se salta por debajo de 821px). */
+@media(min-width:821px){html.gsap .fam-wrap{overflow:hidden;scroll-snap-type:none}}
+.fam-track{display:flex;gap:clamp(20px,3vw,46px);padding:clamp(48px,7vw,90px) max(4vw,calc((100vw - 1200px)/2 + 4vw))}
+.fam-panel{flex:0 0 clamp(320px,60vw,720px);scroll-snap-align:center}
+.fam-mock{border-radius:14px;overflow:hidden;border:1px solid var(--line-2);background:#0d0b08;
+  box-shadow:0 34px 70px -28px rgba(0,0,0,.8)}
+.fam-bar{display:flex;align-items:center;gap:7px;padding:11px 15px;background:#0d0b08;border-bottom:1px solid var(--line)}
+.fam-bar i{width:11px;height:11px;border-radius:50%;background:#3a342c;display:block}
+.fam-bar .url{margin-left:12px;font-family:var(--mono);font-size:.72rem;color:var(--faint);
+  background:rgba(255,255,255,.04);border-radius:6px;padding:4px 12px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fam-shot{height:clamp(300px,38vw,440px);overflow:hidden}
+.fam-shot img{width:100%;display:block}
+.fam-meta{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-top:22px;flex-wrap:wrap}
+.fam-meta .name{font-family:var(--display);font-size:clamp(1.5rem,1.1rem+1.4vw,2.1rem);font-weight:600}
+.fam-meta .desc{color:var(--soft);font-size:.96rem;max-width:42ch;margin-top:6px}
+.fam-meta .tags{display:flex;flex-direction:column;align-items:flex-end;gap:10px;font-size:.78rem;color:var(--faint)}
+.fam-palette{display:flex;gap:5px}
+.fam-palette i{width:22px;height:22px;border-radius:6px;display:block;border:1px solid rgba(255,255,255,.12)}
+.fam-font{font-family:var(--mono);letter-spacing:.02em}
+
+/* EXAMPLES grid */
+.filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:34px}
+.chip{border:1px solid var(--line-2);background:transparent;color:var(--soft);border-radius:999px;
+  padding:9px 18px;font-size:.86rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s}
+.chip:hover{border-color:var(--brand);color:var(--ink)}
+.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:clamp(18px,2.2vw,28px)}
+.exa{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:14px;overflow:hidden;
+  background:var(--bg-2);cursor:pointer;transition:transform .3s cubic-bezier(.22,1,.36,1),border-color .3s,box-shadow .3s;
+  --cb:var(--brand)}
+.exa:hover{transform:translateY(-6px);border-color:color-mix(in srgb,var(--cb) 60%,transparent);
+  box-shadow:0 26px 50px -24px rgba(0,0,0,.7),0 0 0 1px color-mix(in srgb,var(--cb) 40%,transparent)}
+.exa-frame{position:relative;height:300px;overflow:hidden;border-bottom:1px solid var(--line)}
+.exa-bar{display:flex;align-items:center;gap:6px;padding:9px 13px;background:#0d0b08;border-bottom:1px solid var(--line);position:relative;z-index:2}
+.exa-bar i{width:9px;height:9px;border-radius:50%;background:#352f28}
+.exa-bar i:first-child{background:#cf5b4b}.exa-bar i:nth-child(2){background:#d6a23f}.exa-bar i:nth-child(3){background:#5aa45a}
+.exa-scroll{height:calc(300px - 35px);overflow:hidden}
+.exa-scroll img{width:100%;display:block;transition:transform 5s ease-in-out}
+.exa:hover .exa-scroll img{transform:translateY(calc(-100% + 265px))}
+.exa-open{position:absolute;right:12px;bottom:12px;z-index:3;background:rgba(13,11,8,.82);backdrop-filter:blur(6px);
+  border:1px solid var(--line-2);border-radius:999px;padding:8px 14px;font-size:.78rem;font-weight:700;color:var(--ink);
+  opacity:0;transform:translateY(6px);transition:opacity .25s,transform .25s}
+.exa:hover .exa-open{opacity:1;transform:none}
+.exa-cap{padding:20px 22px;display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+.exa-cap .fam{font-family:var(--display);font-size:1.35rem;font-weight:600}
+.exa-cap .biz{font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--cb);margin-top:4px}
+.exa-cap .swatch{width:30px;height:30px;border-radius:8px;flex:none;background:var(--cb);border:1px solid rgba(255,255,255,.16)}
+
+/* STATS */
+.stats{border-top:1px solid var(--line)}
+.stats .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0}
+.stat{padding:8px clamp(18px,2vw,34px) 8px 0}
+.stat+.stat{border-left:1px solid var(--line);padding-left:clamp(18px,2vw,34px)}
+.stat .v{font-family:var(--display);font-size:clamp(2.6rem,1.4rem+4vw,4.6rem);font-weight:600;
+  letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+.stat .l{margin-top:12px;color:var(--soft);font-size:.95rem;font-weight:600}
+
+/* CTA */
+.cta-band{text-align:center;position:relative;overflow:hidden}
+.cta-band::before{content:"";position:absolute;inset:0;z-index:0;
+  background:radial-gradient(80% 120% at 50% 0%,rgba(224,122,77,.22),transparent 65%)}
+.cta-band .wrap{position:relative;z-index:1}
+.cta-band h2{font-size:clamp(2.2rem,1.4rem+3.4vw,4rem);max-width:18ch;margin:0 auto .5em}
+.cta-band p{color:var(--soft);font-size:1.1rem;margin-bottom:32px}
+.cta-band .proof{margin-top:26px;font-size:.9rem;color:var(--faint);display:flex;gap:8px 22px;justify-content:center;flex-wrap:wrap}
+.cta-band .proof span{display:inline-flex;align-items:center;gap:8px}
+.cta-band .proof span::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--brand)}
+
+/* FOOTER */
+footer{border-top:1px solid var(--line);padding:64px 0 30px;background:var(--bg-2)}
+.foot-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:30px}
+.foot-grid .lead{font-family:var(--display);font-size:1.7rem;font-weight:600}
+.foot-grid .lead .beam{color:var(--brand)}
+.foot-grid p{color:var(--soft);font-size:.95rem;margin-top:10px;max-width:32ch}
+.foot-grid h4{font-size:.74rem;text-transform:uppercase;letter-spacing:.12em;color:var(--faint);margin-bottom:14px}
+.foot-grid ul{list-style:none;display:grid;gap:9px}
+.foot-grid a{color:var(--soft);font-size:.92rem;transition:color .2s}
+.foot-grid a:hover{color:var(--ink)}
+.foot-bottom{border-top:1px solid var(--line);margin-top:40px;padding-top:20px;display:flex;
+  justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:.84rem;color:var(--faint)}
+
+/* LIGHTBOX */
+dialog.lb{width:min(1180px,94vw);height:90vh;padding:0;border:1px solid var(--line-2);border-radius:14px;
+  background:#0d0b08;overflow:hidden;color:var(--ink)}
+dialog.lb::backdrop{background:rgba(8,6,4,.82);backdrop-filter:blur(6px)}
+.lb-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.lb-bar .t{font-weight:700;font-size:.92rem}
+.lb-bar .acts{display:flex;gap:10px;align-items:center}
+.lb-bar a,.lb-bar button{font-size:.82rem;font-weight:600;color:var(--soft);background:transparent;border:1px solid var(--line-2);
+  border-radius:999px;padding:7px 14px;cursor:pointer;font-family:inherit}
+.lb-bar a:hover,.lb-bar button:hover{color:var(--ink);border-color:var(--brand)}
+.lb iframe{width:100%;height:calc(90vh - 49px);border:0;background:#fff}
+
+/* Reveal */
+@media (prefers-reduced-motion:no-preference){
+  html.js [data-r]{opacity:0;transform:translateY(20px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1);transition-delay:calc(var(--i,0)*70ms)}
+  html.js [data-r].in{opacity:1;transform:none}
+}
+
+/* Responsive */
+@media (max-width:920px){
+  .hero .wrap{grid-template-columns:1fr}
+  .deck{height:clamp(300px,70vw,440px);margin-top:10px}
+  .how-grid{grid-template-columns:1fr}
+  .foot-grid{grid-template-columns:1fr 1fr}
+  .nav-links{display:none}
+  .nav-burger{display:inline-flex}
+}
+@media (max-width:560px){
+  .foot-grid{grid-template-columns:1fr}
+  .stat+.stat{border-left:0;padding-left:0}
+  .cards{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+  .ribbon .track{animation:none}
+  [data-r]{opacity:1!important;transform:none!important}
+}
+@media print{[data-r]{opacity:1!important;transform:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#ejemplos">Saltar a los ejemplos</a>
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="wordmark" href="#top">Faro<span class="beam"></span></a>
+    <nav class="nav-links" aria-label="Secciones">
+      <a href="#como">Cómo funciona</a>
+      <a href="#familias">Familias</a>
+      <a href="#ejemplos">Ejemplos</a>
+      <a href="https://github.com/Ces107/faro" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+    <a class="btn btn-brand" href="#ejemplos">Ver ejemplos</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <span class="badge"><span class="dot"></span> Generador de presencia digital · sin código</span>
+        <h1>Webs que no parecen hechas por una <span class="ia">IA</span>.</h1>
+        <p class="lead">Faro genera la web de una página, el contenido de Google Business y el WhatsApp de un negocio local en minutos. Cada tipo de negocio entra en su propia familia de diseño: una panadería no se parece a un bufete.</p>
+        <div class="hero-cta">
+          <a class="btn btn-brand" href="#ejemplos">Ver ejemplos en vivo</a>
+          <a class="btn btn-ghost" href="#como">Cómo funciona</a>
+        </div>
+        <div class="hero-trust">
+          <span><b class="tk">7</b>&nbsp;familias con estilo propio</span>
+          <span><span class="tk">●</span> Tipografía real embebida</span>
+          <span><span class="tk">●</span> Sin cookies de seguimiento</span>
+        </div>
+        <div class="hero-legend" aria-hidden="true">
+          <span class="ll">7 paletas, 7 mundos</span>
+          <div class="dots">{{HERO_LEGEND}}</div>
+        </div>
+      </div>
+      <div class="deck" aria-hidden="true">
+        {{HERO_DECK}}
+      </div>
+    </div>
+  </section>
+
+  <div class="ribbon" aria-hidden="true"><div class="track">
+    <div class="row">{{RIBBON}}</div><div class="row">{{RIBBON}}</div>
+  </div></div>
+
+  <section class="ba" id="prueba">
+    <div class="wrap">
+      <div class="sec-head center" data-r>
+        <span class="eyebrow">La diferencia</span>
+        <h2>El mismo negocio, dos webs</h2>
+        <p>A la izquierda, lo que escupe un generador del montón: Inter, degradado violeta, tres tarjetitas con emojis. A la derecha, el mismo negocio por Faro. Arrastra el tirador.</p>
+      </div>
+      <div class="slider-wrap" data-r>
+        <span class="tag tag-before">Una IA del montón</span>
+        <span class="tag tag-after">Con Faro</span>
+        <img-comparison-slider class="slider">
+          <img slot="first" src="shots/_aislop.jpg" alt="Web genérica hecha por una IA" width="1100" height="820" />
+          <img slot="second" src="shots/_faro-compare.jpg" alt="La misma web hecha por Faro" width="1100" height="820" />
+        </img-comparison-slider>
+        <p class="hint">Misma clínica, mismos datos. Solo cambia quién la hizo.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="como">
+    <div class="wrap">
+      <div class="sec-head" data-r>
+        <span class="eyebrow">En tres pasos</span>
+        <h2>De los datos del negocio a una web lista</h2>
+      </div>
+      <div class="how-grid">
+        <div class="how-card" data-r style="--i:0">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 5h16M4 12h16M4 19h10"/></svg>
+          <span class="n">01</span><h3>Cuéntale el negocio</h3>
+          <p>Rellenas un formulario que cambia según el tipo de negocio: la carta de un bar, los tratamientos de una clínica, las marcas de un taller.</p>
+        </div>
+        <div class="how-card" data-r style="--i:1">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l2.4 5.6L20 9l-4 4 1 6-5-3-5 3 1-6-4-4 5.6-.4z"/></svg>
+          <span class="n">02</span><h3>Faro elige familia y genera</h3>
+          <p>El motor escoge la dirección de arte que encaja con el sector y compone la web, la ficha de Google y el WhatsApp. Sin plantillas calcadas.</p>
+        </div>
+        <div class="how-card" data-r style="--i:2">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
+          <span class="n">03</span><h3>Descargas y subes</h3>
+          <p>Un solo HTML autocontenido, con las fuentes dentro y sin cookies de terceros. Se sube gratis a cualquier hosting en un minuto.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="familias">
+    <div class="wrap">
+      <div class="sec-head" data-r>
+        <span class="eyebrow">Siete familias</span>
+        <h2>Cada negocio, con su propia voz</h2>
+        <p>No es el mismo diseño con otro color. Cada familia tiene su tipografía, su paleta y su estructura. Desliza para recorrerlas.</p>
+      </div>
+    </div>
+    <div class="fam-wrap" id="famWrap">
+      <div class="fam-track" id="famTrack">
+        {{FAMILY_PANELS}}
+      </div>
+    </div>
+  </section>
+
+  <section id="ejemplos">
+    <div class="wrap">
+      <div class="sec-head" data-r>
+        <span class="eyebrow">Ejemplos en vivo</span>
+        <h2>Mira lo que Faro produce</h2>
+        <p>Webs reales generadas por Faro. Pasa el ratón para recorrerlas; pulsa para abrir la web entera. Datos, fotos y reseñas son de muestra.</p>
+      </div>
+      <div class="filters" id="filters" role="group" aria-label="Filtrar por familia">{{FILTERS}}</div>
+      <div class="cards" id="cards">
+        {{CARDS}}
+      </div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="wrap"><div class="grid">
+      <div class="stat" data-r style="--i:0"><div class="v" data-count="7">7</div><div class="l">familias con dirección de arte propia</div></div>
+      <div class="stat" data-r style="--i:1"><div class="v" data-count="17">17</div><div class="l">sectores cubiertos de fábrica</div></div>
+      <div class="stat" data-r style="--i:2"><div class="v" data-count="0">0</div><div class="l">cookies de seguimiento</div></div>
+      <div class="stat" data-r style="--i:3"><div class="v">minutos</div><div class="l">no semanas de agencia</div></div>
+    </div></div>
+  </section>
+
+  <section class="cta-band">
+    <div class="wrap" data-r>
+      <span class="eyebrow" style="justify-content:center">Empieza hoy</span>
+      <h2>La web de tu negocio, sin que parezca de IA</h2>
+      <p>Código abierto. Genérala en local, sin coste, y súbela donde quieras.</p>
+      <div class="hero-cta" style="justify-content:center">
+        <a class="btn btn-brand" href="https://github.com/Ces107/faro" target="_blank" rel="noopener">Ver el código en GitHub</a>
+        <a class="btn btn-ghost" href="#ejemplos">Volver a los ejemplos</a>
+      </div>
+      <div class="proof"><span>Gratis y de código abierto</span><span>Listo en minutos</span><span>Sin cookies</span></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="lead">Faro<span class="beam">.</span></div>
+        <p>Presencia digital para negocios locales que no parece hecha por una IA.</p>
+      </div>
+      <div><h4>Mirar</h4><ul>
+        <li><a href="#como">Cómo funciona</a></li>
+        <li><a href="#familias">Familias</a></li>
+        <li><a href="#ejemplos">Ejemplos</a></li>
+      </ul></div>
+      <div><h4>Familias</h4><ul>{{FOOT_FAMS}}</ul></div>
+      <div><h4>Proyecto</h4><ul>
+        <li><a href="https://github.com/Ces107/faro" target="_blank" rel="noopener">Código en GitHub</a></li>
+        <li><a href="https://github.com/Ces107/faro/blob/main/LICENSE" target="_blank" rel="noopener">Licencia MIT</a></li>
+      </ul></div>
+    </div>
+    <div class="foot-bottom"><span>Hecho con Faro</span><span>© <span id="yr">2026</span> · Código abierto</span></div>
+  </div>
+</footer>
+
+<dialog class="lb" id="lb">
+  <div class="lb-bar">
+    <span class="t" id="lbTitle">Ejemplo</span>
+    <div class="acts">
+      <a id="lbOpen" href="#" target="_blank" rel="noopener">Abrir en pestaña ↗</a>
+      <button id="lbClose" aria-label="Cerrar">Cerrar ✕</button>
+    </div>
+  </div>
+  <iframe id="lbFrame" title="Vista de la web de ejemplo" loading="lazy"></iframe>
+</dialog>
+
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/img-comparison-slider@8/dist/index.js"></script>
+<script>
+document.documentElement.classList.add('js');
+(function(){
+  "use strict";
+  var RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var nav = document.getElementById('nav'), prog = document.getElementById('progress');
+  function onScroll(){ var y=scrollY, h=document.documentElement.scrollHeight-innerHeight;
+    nav.classList.toggle('scrolled', y>10); prog.style.transform='scaleX('+(h>0?y/h:0)+')'; }
+  addEventListener('scroll', onScroll, {passive:true}); onScroll();
+  var yr=document.getElementById('yr'); if(yr) yr.textContent=new Date().getFullYear();
+
+  // Reveal (vanilla, always reveals — never traps content)
+  function reveal(el){ el.classList.add('in'); }
+  if(!RM && 'IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){reveal(e.target);io.unobserve(e.target);}});},{threshold:.12,rootMargin:'0px 0px -8% 0px'});
+    document.querySelectorAll('[data-r]').forEach(function(el){io.observe(el);});
+    setTimeout(function(){document.querySelectorAll('[data-r]:not(.in)').forEach(reveal);},3000);
+  } else { document.querySelectorAll('[data-r]').forEach(reveal); }
+
+  // Count-up
+  function count(el){var raw=el.getAttribute('data-count'),t=+raw,t0=null;
+    function tick(ts){if(!t0)t0=ts;var p=Math.min((ts-t0)/1200,1),e=1-Math.pow(1-p,3);el.textContent=Math.round(t*e);if(p<1)requestAnimationFrame(tick);}requestAnimationFrame(tick);}
+  if(!RM && 'IntersectionObserver' in window){
+    var cio=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){count(e.target);cio.unobserve(e.target);}});},{threshold:.6});
+    document.querySelectorAll('[data-count]').forEach(function(c){cio.observe(c);});
+  }
+
+  // Filters
+  var filters=document.getElementById('filters');
+  if(filters){ filters.addEventListener('click', function(ev){
+    var b=ev.target.closest('.chip'); if(!b) return;
+    filters.querySelectorAll('.chip').forEach(function(c){c.classList.toggle('on', c===b);});
+    var f=b.getAttribute('data-f');
+    document.querySelectorAll('#cards .exa').forEach(function(card){
+      card.style.display=(f==='all'||card.getAttribute('data-fam')===f)?'':'none';
+    });
+  }); }
+
+  // Lightbox
+  var lb=document.getElementById('lb'), frame=document.getElementById('lbFrame'),
+      lbT=document.getElementById('lbTitle'), lbO=document.getElementById('lbOpen');
+  var lastTrigger=null;
+  function openLb(href,title,trigger){ if(!lb||!lb.showModal) return true; // fallback: abrir en pestaña
+    lastTrigger=trigger||null; frame.src=href; lbT.textContent=title; lbO.href=href; lb.showModal(); return false; }
+  document.querySelectorAll('.exa').forEach(function(card){
+    card.addEventListener('click', function(e){ e.preventDefault();
+      if(openLb(card.getAttribute('data-href'), card.getAttribute('data-title'), card)) window.open(card.getAttribute('data-href'),'_blank'); });
+  });
+  var lbClose=document.getElementById('lbClose'); if(lbClose) lbClose.onclick=function(){ lb.close(); };
+  if(lb){ lb.addEventListener('close', function(){ frame.src='about:blank'; if(lastTrigger){ try{ lastTrigger.focus(); }catch(e){} } });
+    lb.addEventListener('click', function(e){ if(e.target===lb) lb.close(); }); }
+
+  // Smooth-scroll anchors fallback
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click', function(ev){ var id=a.getAttribute('href').slice(1); if(!id) return;
+      var t=document.getElementById(id); if(!t) return; ev.preventDefault();
+      t.scrollIntoView({behavior:RM?'auto':'smooth'}); }); });
+
+  // Progressive enhancement: Lenis + GSAP (only if libs load & motion allowed)
+  function enhance(){
+    if(RM || !window.gsap || !window.ScrollTrigger) return;
+    var gsap=window.gsap, ST=window.ScrollTrigger; gsap.registerPlugin(ST);
+    document.documentElement.classList.add('gsap');
+    if(window.Lenis){
+      var lenis=new Lenis({lerp:.1, smoothWheel:true});
+      lenis.on('scroll', ST.update);
+      gsap.ticker.add(function(t){ lenis.raf(t*1000); }); gsap.ticker.lagSmoothing(0);
+    }
+    // Kinetic hero headline
+    try{ if(window.SplitText){ var s=new SplitText('.hero h1',{type:'lines,words',linesClass:'sl'});
+      gsap.set('.hero h1',{opacity:1});
+      gsap.from(s.words,{yPercent:115,opacity:0,stagger:.05,duration:.9,ease:'expo.out',delay:.1}); } }catch(e){}
+    // Hero deck parallax
+    gsap.utils.toArray('.deck .shot').forEach(function(el,i){
+      gsap.to(el,{yPercent:(i-1)*-7,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:1}});
+    });
+    // Families pinned horizontal scroll
+    var track=document.getElementById('famTrack'), wrap=document.getElementById('famWrap');
+    if(track && wrap && innerWidth>820){
+      var dist=function(){ return track.scrollWidth - document.documentElement.clientWidth + (innerWidth*0.08); };
+      gsap.to(track,{x:function(){return -dist();},ease:'none',
+        scrollTrigger:{trigger:wrap,pin:true,scrub:1,start:'top 64px',
+          end:function(){return '+='+dist();},invalidateOnRefresh:true}});
+    }
+  }
+  if(document.readyState==='complete') enhance();
+  else addEventListener('load', function(){ setTimeout(enhance,60); });
+})();
+</script>
+</body>
+</html>

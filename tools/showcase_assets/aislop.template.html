@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>__NAME__</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,-apple-system,sans-serif;color:#1e293b;background:#ffffff;
+    line-height:1.6;text-align:center;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  /* Hero degradado violeta→índigo, todo centrado (el cliché nº1 del look IA). */
+  .hero{background:linear-gradient(135deg,#6366f1 0%,#8b5cf6 50%,#a855f7 100%);color:#fff;
+    padding:96px 0 110px;position:relative;overflow:hidden}
+  .hero::before{content:"";position:absolute;width:520px;height:520px;border-radius:50%;
+    background:rgba(255,255,255,.12);top:-200px;left:-120px;filter:blur(10px)}
+  .hero::after{content:"";position:absolute;width:420px;height:420px;border-radius:50%;
+    background:rgba(255,255,255,.10);bottom:-180px;right:-100px}
+  .badge{display:inline-block;background:rgba(255,255,255,.2);border-radius:999px;
+    padding:8px 18px;font-size:13px;font-weight:600;margin-bottom:22px;backdrop-filter:blur(6px)}
+  .hero h1{font-size:54px;font-weight:800;letter-spacing:-.02em;line-height:1.1;margin-bottom:18px;position:relative}
+  .hero p{font-size:20px;opacity:.92;max-width:600px;margin:0 auto 30px;position:relative}
+  .btns{display:flex;gap:14px;justify-content:center;position:relative}
+  .btn{padding:14px 30px;border-radius:14px;font-weight:600;font-size:16px;text-decoration:none;
+    display:inline-flex;align-items:center;gap:8px}
+  .btn-1{background:#fff;color:#6366f1}
+  .btn-2{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4)}
+  /* Triplete de tarjetas con icon-chips pastel + emojis (el cliché nº2). */
+  .feats{padding:90px 0}
+  .feats h2{font-size:36px;font-weight:800;margin-bottom:12px;letter-spacing:-.01em}
+  .feats .sub{color:#64748b;font-size:18px;margin-bottom:54px}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+  .card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:38px 28px;
+    box-shadow:0 10px 30px rgba(99,102,241,.08)}
+  .chip{width:72px;height:72px;border-radius:16px;display:grid;place-items:center;
+    font-size:32px;margin:0 auto 22px}
+  .c1{background:#ede9fe}.c2{background:#dbeafe}.c3{background:#fce7f3}
+  .card h3{font-size:21px;font-weight:700;margin-bottom:10px}
+  .card p{color:#64748b;font-size:15px}
+  .cta{background:#f8fafc;padding:80px 0}
+  .cta h2{font-size:34px;font-weight:800;margin-bottom:14px}
+  .cta p{color:#64748b;font-size:18px;margin-bottom:28px}
+  .pill{display:inline-block;background:linear-gradient(135deg,#6366f1,#a855f7);color:#fff;
+    padding:16px 38px;border-radius:14px;font-weight:700;text-decoration:none;font-size:17px}
+</style>
+</head>
+<body>
+  <section class="hero">
+    <div class="wrap">
+      <span class="badge">✨ Bienvenidos a nuestra web</span>
+      <h1>__NAME__</h1>
+      <p>Somos tu solución de confianza en __CITY__. Calidad, profesionalidad y atención personalizada para todos nuestros clientes.</p>
+      <div class="btns">
+        <a class="btn btn-1" href="#">Contáctanos ahora →</a>
+        <a class="btn btn-2" href="#">Saber más</a>
+      </div>
+    </div>
+  </section>
+  <section class="feats">
+    <div class="wrap">
+      <h2>¿Por qué elegirnos?</h2>
+      <p class="sub">Descubre todo lo que podemos ofrecerte</p>
+      <div class="cards">
+        <div class="card"><div class="chip c1">🦷</div><h3>Profesionalidad</h3><p>Contamos con un equipo de profesionales altamente cualificados a tu servicio.</p></div>
+        <div class="card"><div class="chip c2">⭐</div><h3>Calidad garantizada</h3><p>Ofrecemos los mejores servicios con la máxima calidad y dedicación.</p></div>
+        <div class="card"><div class="chip c3">💜</div><h3>Atención cercana</h3><p>Tu satisfacción es nuestra prioridad. Te acompañamos en todo momento.</p></div>
+      </div>
+    </div>
+  </section>
+  <section class="cta">
+    <div class="wrap">
+      <h2>¿Listo para empezar?</h2>
+      <p>No esperes más y ponte en contacto con nosotros hoy mismo.</p>
+      <a class="pill" href="#">Empezar ahora</a>
+    </div>
+  </section>
+</body>
+</html>
