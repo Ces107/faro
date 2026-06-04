@@ -293,9 +293,80 @@ _DEMO: dict[Sector, dict[str, str]] = {
 }
 
 
+def _u(pid: str) -> str:
+    """URL de una foto de Unsplash (solo para los ejemplos; el operador pone las reales)."""
+    return f"https://images.unsplash.com/{pid}?w=1400&q=72&auto=format&fit=crop"
+
+
+# Fotos topicales por sector: la foto a sangre es el protagonista del hero y llena
+# la galería (es lo que más diferencia una web de estudio de una "pobre"). Son de
+# muestra; el operador las sustituye por fotos reales del negocio.
+_PHOTOS: dict[Sector, tuple[str, ...]] = {
+    Sector.BAR: ("photo-1554118811-1e0d58224f24", "photo-1414235077428-338989a2e8c0",
+                 "photo-1509440159596-0249088772ff"),
+    Sector.RESTAURANTE: ("photo-1517248135467-4c7edcad34c4", "photo-1414235077428-338989a2e8c0",
+                         "photo-1554118811-1e0d58224f24"),
+    Sector.PANADERIA: ("photo-1509440159596-0249088772ff", "photo-1414235077428-338989a2e8c0",
+                       "photo-1554118811-1e0d58224f24"),
+    Sector.DENTAL: ("photo-1629909613654-28e377c37b09", "photo-1588776814546-1ffcf47267a5"),
+    Sector.FISIO: ("photo-1519823551278-64ac92734fb1", "photo-1629909613654-28e377c37b09"),
+    Sector.VETERINARIO: ("photo-1576201836106-db1758fd1c97", "photo-1629909613654-28e377c37b09"),
+    Sector.FARMACIA: ("photo-1576602976047-174e57a47881", "photo-1576201836106-db1758fd1c97"),
+    Sector.PELUQUERIA: ("photo-1560066984-138dadb4c035", "photo-1570172619644-dfd03ed5d881",
+                        "photo-1521590832167-7bcbfaa6381f"),
+    Sector.ESTETICA: ("photo-1570172619644-dfd03ed5d881", "photo-1560066984-138dadb4c035",
+                      "photo-1519823551278-64ac92734fb1"),
+    Sector.TALLER: ("photo-1486262715619-67b85e0b08d3", "photo-1487754180451-c456f719a1fc"),
+    Sector.REFORMAS: ("photo-1503387762-592deb58ef4e", "photo-1486262715619-67b85e0b08d3"),
+    Sector.ASESORIA: ("photo-1497366216548-37526070297c", "photo-1554118811-1e0d58224f24"),
+    Sector.INMOBILIARIA: ("photo-1560518883-ce09059eeffa", "photo-1497366216548-37526070297c"),
+    Sector.GIMNASIO: ("photo-1534438327276-14e5300c3a48", "photo-1486262715619-67b85e0b08d3"),
+    Sector.COMERCIO: ("photo-1441986300917-64674bd600d8", "photo-1560066984-138dadb4c035"),
+    Sector.AUTONOMO: ("photo-1503387762-592deb58ef4e", "photo-1487754180451-c456f719a1fc"),
+}
+
+# Opiniones de muestra (el operador las sustituye por reseñas reales con permiso).
+_TESTI: dict[Sector, str] = {
+    Sector.BAR: "Se almuerza de maravilla y el trato es de los de antes | Marta G.\n"
+                "El mejor almuerzo de obra del Puerto, sin discusión | Vicente R.",
+    Sector.RESTAURANTE: "El arroz, espectacular. Repetiremos seguro | Laura M.\n"
+                        "Producto de primera y trato cercano. Una joya | Andrés P.",
+    Sector.PANADERIA: "El pan de masa madre es otro nivel | Carmen L.\n"
+                      "Las tartas por encargo siempre perfectas | Nuria S.",
+    Sector.DENTAL: "Me explicaron todo con claridad y sin prisas. Encantada | Pilar V.\n"
+                   "Pánico al dentista y aquí me lo quitaron. Profesionales | Jorge T.",
+    Sector.FISIO: "En tres sesiones volví a entrenar sin dolor | Raúl D.\n"
+                  "Saben lo que hacen y te lo explican. Recomendable | Ana C.",
+    Sector.VETERINARIO: "Cuidaron a mi perro como si fuera suyo | Elena B.\n"
+                        "Urgencia de noche resuelta. Eternamente agradecida | Marcos F.",
+    Sector.PELUQUERIA: "Salí con el color soñado y el pelo cuidadísimo | Sara N.\n"
+                       "Por fin alguien que escucha lo que quieres | Lucía H.",
+    Sector.ESTETICA: "Trato exquisito y resultados desde la primera sesión | Beatriz O.\n"
+                     "Un sitio para desconectar y cuidarte de verdad | Cristina A.",
+    Sector.TALLER: "Presupuesto cerrado y cumplido al céntimo | José M.\n"
+                   "Honrados y rápidos. Mi taller de confianza | Fernando G.",
+    Sector.REFORMAS: "Reformaron el baño en plazo y sin sorpresas | Rosa P.\n"
+                     "Limpios, serios y buen acabado. Muy contentos | Daniel V.",
+    Sector.ASESORIA: "Me quitaron el papeleo de encima. Un alivio | Óscar L.\n"
+                     "Cercanos y siempre disponibles. Un lujo para el autónomo | Eva R.",
+    Sector.INMOBILIARIA: "Vendieron mi piso en tres semanas. Increíble | Manuel S.\n"
+                         "Transparencia total desde el primer día | Patricia D.",
+    Sector.GIMNASIO: "Ambiente genial y entrenadores que se implican | Pablo A.\n"
+                     "Sin permanencia y con resultados. Enganchado | Iván M.",
+    Sector.COMERCIO: "Trato de barrio y producto que no encuentras en otro sitio | Teresa G.\n"
+                     "Siempre me asesoran bien. Da gusto comprar aquí | Rubén C.",
+}
+
+
 def demo_data(sector: Sector) -> dict[str, str]:
     """Datos de ejemplo COMPLETOS de un sector (con los comunes mezclados)."""
     base = dict(_COMMON)
     base.update(_DEMO.get(sector, _DEMO[Sector.AUTONOMO]))
     base["sector"] = sector.value
+    photos = _PHOTOS.get(sector)
+    if photos:
+        base["photos"] = "\n".join(_u(p) for p in photos)
+    testi = _TESTI.get(sector)
+    if testi:
+        base["testimonials"] = testi
     return base
