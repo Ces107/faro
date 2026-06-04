@@ -17,7 +17,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from faro.business import contrast_ratio
 from faro.engine.fonts import family_name
+
+# Texto oscuro cálido para colores de marca claros (lima, ámbar): blanco sobre
+# lima da 1.8:1 (suspende AA); este near-black sobre lima da >10:1.
+_DARK_INK = "#15130f"
 
 # Fallbacks del sistema con carácter (si la fuente embebida no cargara): una
 # serif de verdad (Georgia/Iowan) y una grotesque, nunca system-ui a secas.
@@ -70,6 +75,20 @@ class DesignTokens:
             return self.paper_2
         return "#11131a" if self.dark else "#ffffff"
 
+    def on_brand(self) -> str:
+        """Color de texto con MÁS contraste WCAG sobre el color de marca.
+
+        Las marcas claras (lima del gimnasio, ámbar) exigen texto oscuro: blanco
+        sobre ellas suspende AA. Lo resuelve por contraste real, no por suposición.
+        """
+        if contrast_ratio("#ffffff", self.brand) >= contrast_ratio(_DARK_INK, self.brand):
+            return "#ffffff"
+        return _DARK_INK
+
+    def _brand_rgb(self) -> str:
+        v = self.brand.lstrip("#")
+        return ",".join(str(int(v[i : i + 2], 16)) for i in (0, 2, 4))
+
     def to_css_vars(self) -> str:
         """Bloque ``:root`` con las variables de la familia."""
         text_soft = "#b9b3a7" if self.dark else "#5b5650"
@@ -77,7 +96,8 @@ class DesignTokens:
         return (
             ":root{"
             f"--ink:{self.ink};--paper:{self.paper};--paper-2:{self._surface_2()};"
-            f"--brand:{self.brand};--accent:{self.accent};"
+            f"--brand:{self.brand};--accent:{self.accent};--on-brand:{self.on_brand()};"
+            f"--brand-rgb:{self._brand_rgb()};"
             f"--text-soft:{text_soft};--line:{line};"
             f"--radius:{self.radius}px;--border:{self.border_px}px;"
             f"--font-display:{self.display_stack()};"
