@@ -46,10 +46,9 @@ _INIT_JS = """
     document.querySelectorAll("[data-reveal]:not(.vis)").forEach(function(e){ e.classList.add("vis"); });
   }
   if (!window.gsap || RM) { revealAll(); return; }      // GATE: sin GSAP o reduced-motion -> estatico
-  var gsap = window.gsap, ST = window.ScrollTrigger, STX = window.SplitText, Lenis = window.Lenis;
+  var gsap = window.gsap, ST = window.ScrollTrigger, STX = window.SplitText;
   try { gsap.registerPlugin(ST, STX); } catch (e) {}
   try { ST.config({ ignoreMobileResize: true }); } catch (e) {}
-  var DESKTOP = matchMedia("(min-width:900px)").matches;
   var FINE = matchMedia("(pointer:fine)").matches;
   var root = document.documentElement;
   root.classList.add("faro-gsap");                       // apaga las @keyframes CSS de reveal (las maneja GSAP)
@@ -58,28 +57,9 @@ _INIT_JS = """
   // async, así que la desconectamos AHORA (sincrónico) y GSAP toma los reveals.
   try { if (window.__faroRevealIO) window.__faroRevealIO.disconnect(); } catch (e) {}
 
-  // --- Lenis: scroll suave fundido al ticker de GSAP (un solo RAF) ---
-  var lenis = null;
-  try {
-    if (Lenis) {
-      lenis = new Lenis({ duration: 1.05, smoothWheel: true, smoothTouch: false });
-      window.lenis = lenis;
-      gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
-      gsap.ticker.lagSmoothing(0);
-      lenis.on("scroll", ST.update);
-      document.querySelectorAll('a[href^="#"]').forEach(function (a) {
-        a.addEventListener("click", function (ev) {
-          var id = a.getAttribute("href").slice(1); if (!id) return;
-          var t = document.getElementById(id); if (!t) return;
-          ev.preventDefault();
-          t.querySelectorAll("[data-reveal]:not(.vis)").forEach(function (el) { el.classList.add("vis"); });
-          lenis.scrollTo(t, { offset: -70 });
-        }, true);
-      });
-      var toTop = document.getElementById("toTop");
-      if (toTop) toTop.addEventListener("click", function () { lenis.scrollTo(0); }, true);
-    }
-  } catch (e) {}
+  // SIN scroll suave (Lenis): el scroll es NATIVO. El smooth-scroll secuestra la
+  // rueda/trackpad y se siente lento y roto en una web de negocio. Los anclas y el
+  // botón "subir" los gobierna la capa vanilla (script.html) con scroll nativo.
 
   function park(el, props) {        // tween defensivo: si algo falla, el contenido queda visible
     try { return gsap.fromTo(el, props.from, props.to); } catch (e) { if (el.classList) el.classList.add("vis"); }
@@ -134,24 +114,7 @@ _INIT_JS = """
       scrollTrigger: { trigger: trigger || ".hero", start: "top top", end: "bottom top", scrub: true } }); } catch (e) {}
   }
 
-  // --- Firmas por familia (UNA por pagina, dentro del gate) ---
-  function pinnedGallery() {
-    if (!DESKTOP) return;
-    var sec = document.getElementById("galeria"); if (!sec) return;
-    var gal = sec.querySelector(".gal"); if (!gal) return;
-    var cells = gal.children; if (cells.length < 3) return;
-    for (var i = 0; i < cells.length; i++) { cells[i].classList.add("vis"); cells[i].removeAttribute("data-reveal"); }
-    gal.classList.add("gal-pan");
-    requestAnimationFrame(function () {
-      var amount = gal.scrollWidth - sec.querySelector(".wrap").clientWidth;
-      if (amount <= 60) return;
-      try {
-        gsap.to(gal, { x: -amount, ease: "none",
-          scrollTrigger: { trigger: sec, pin: true, scrub: 1, start: "top 72px",
-            end: "+=" + amount, invalidateOnRefresh: true } });
-      } catch (e) {}
-    });
-  }
+  // --- Firmas por familia (UNA por pagina). SIN pins: nada secuestra el scroll. ---
   function posterParallax() {
     parallax(".hero-poster .wm", -13, ".hero-poster");
     parallax(".hero-poster h1", -4, ".hero-poster");
@@ -209,8 +172,8 @@ _INIT_JS = """
         } catch (e) {}
       }
     },
-    "carta": function () { pinnedGallery(); parallax(".hero h1", -8, ".hero"); },
-    "gallery": function () { pinnedGallery(); parallax(".hero .strip", -8, ".hero"); }
+    "carta": function () { parallax(".hero h1", -9, ".hero"); parallax(".hero-photo", -6, ".hero"); },
+    "gallery": function () { parallax(".hero h1", -8, ".hero"); }
   };
 
   function run() {

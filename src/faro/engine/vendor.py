@@ -18,7 +18,6 @@ _LIBS: tuple[str, ...] = (
     "gsap.min.js",
     "ScrollTrigger.min.js",
     "SplitText.min.js",
-    "lenis.min.js",
 )
 
 
