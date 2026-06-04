@@ -257,9 +257,9 @@ def _foot_fams() -> str:
 def _favicon() -> str:
     svg = (
         "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'>"
-        "<rect width='32' height='32' rx='7' fill='%2315110d'/>"
-        "<circle cx='16' cy='16' r='6' fill='none' stroke='%23e07a4d' stroke-width='2.5'/>"
-        "<circle cx='16' cy='16' r='2' fill='%23e9a06a'/></svg>"
+        "<rect width='32' height='32' rx='7' fill='%230d0f15'/>"
+        "<circle cx='16' cy='16' r='6' fill='none' stroke='%233f63e8' stroke-width='2.5'/>"
+        "<circle cx='16' cy='16' r='2' fill='%238aa9ff'/></svg>"
     )
     return "data:image/svg+xml," + svg
 
