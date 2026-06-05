@@ -12,12 +12,19 @@ from __future__ import annotations
 from faro.business import Sector
 from faro.engine.forms import (
     FormSchema,
+    autoridad_extras,
+    carta_extras,
+    clinica_extras,
     core_brand,
     core_conversion,
     core_identity,
     core_offer,
     core_story,
     core_trust,
+    estudio_extras,
+    family_schema,
+    gimnasio_extras,
+    industrial_extras,
 )
 from faro.engine.spec import TemplateSpec
 
@@ -44,34 +51,54 @@ AURORA = TemplateSpec(
 
 
 def _family(
-    id_: str, name: str, family: str, sectors: tuple[Sector, ...], summary: str
+    id_: str, name: str, family: str, sectors: tuple[Sector, ...],
+    summary: str, schema: FormSchema,
 ) -> TemplateSpec:
     return TemplateSpec(
         id=id_, name=name, family=family, sectors=sectors,
-        form_schema=_base_schema(), summary=summary,
+        form_schema=schema, summary=summary,
     )
 
 
 # Familias con dirección de arte propia (tokens en engine.design). Cada una
-# reclama sus sectores; la universal queda de red de seguridad final.
+# reclama sus sectores y pide lo que su sector necesita (esquema propio); la
+# universal queda de red de seguridad final con el formulario base.
 CARTA = _family("carta", "Carta editorial", "carta",
                 (Sector.RESTAURANTE, Sector.BAR, Sector.PANADERIA),
-                "Gastronomía: foto a sangre, carta tipográfica, serif cálida.")
+                "Gastronomía: foto a sangre, carta tipográfica, serif cálida.",
+                family_schema("Carta o productos (uno por línea)",
+                              "Croissant — 1,80 €\nMenú del día — 12,50 €",
+                              carta_extras()))
 CLINICA = _family("clinica", "Confianza clínica", "clinica",
                   (Sector.DENTAL, Sector.FISIO, Sector.VETERINARIO, Sector.FARMACIA),
-                  "Salud: sereno, sobrio, confianza; nada de pastel genérico.")
+                  "Salud: sereno, sobrio, confianza; nada de pastel genérico.",
+                  family_schema("Tratamientos y servicios (uno por línea)",
+                                "Limpieza dental\nOrtodoncia invisible",
+                                clinica_extras()))
 AUTORIDAD = _family("autoridad", "Autoridad serif", "autoridad",
                     (Sector.ASESORIA, Sector.INMOBILIARIA),
-                    "Profesional: serif de autoridad, sobrio, institucional.")
+                    "Profesional: serif de autoridad, sobrio, institucional.",
+                    family_schema("Áreas de práctica / servicios (uno por línea)",
+                                  "Derecho laboral\nHerencias y sucesiones",
+                                  autoridad_extras()))
 INDUSTRIAL = _family("industrial", "Robusto industrial", "industrial",
                      (Sector.TALLER, Sector.REFORMAS),
-                     "Oficios: tipografía pesada, alto contraste, presupuesto.")
+                     "Oficios: tipografía pesada, alto contraste, presupuesto.",
+                     family_schema("Servicios y trabajos (uno por línea)",
+                                   "Chapa y pintura\nDiagnosis electrónica",
+                                   industrial_extras()))
 ESTUDIO = _family("estudio", "Editorial moda", "estudio",
                   (Sector.PELUQUERIA, Sector.ESTETICA),
-                  "Belleza: galería protagonista, editorial blanco y negro.")
+                  "Belleza: galería protagonista, editorial blanco y negro.",
+                  family_schema("Servicios (uno por línea)",
+                                "Corte y peinado — 18 €\nColoración",
+                                estudio_extras()))
 GIMNASIO = _family("gimnasio", "Energía fitness", "gimnasio",
                    (Sector.GIMNASIO,),
-                   "Gimnasio: modo oscuro, acento vivo, tipografía potente.")
+                   "Gimnasio: modo oscuro, acento vivo, tipografía potente.",
+                   family_schema("Clases y actividades (una por línea)",
+                                 "Sala de musculación\nSpinning, Body Pump",
+                                 gimnasio_extras()))
 
 _TEMPLATES: tuple[TemplateSpec, ...] = (
     CARTA, CLINICA, AUTORIDAD, INDUSTRIAL, ESTUDIO, GIMNASIO, AURORA,

@@ -6,9 +6,16 @@ plantilla es editar su esquema, nunca el HTML del formulario.
 
 El modelo (``BusinessProfile.from_form``) ya es agnóstico del esquema: lee las
 claves estándar (``name``, ``services``, ``about``...) y mete cualquier clave
-``x_<algo>`` como dato destacado. Por eso un campo nuevo específico de una
-plantilla solo tiene que nombrarse ``x_terraza`` para aparecer en la web sin
+``x_<algo>`` como dato destacado (etiqueta = ``Algo``, capitalizada). Por eso un
+campo nuevo específico de una plantilla solo tiene que nombrarse ``x_terraza``
+para aparecer en la web (chip si es Sí/No, fila de ficha si lleva valor) sin
 tocar el parser.
+
+Cada familia visual compone su propio esquema con ``family_schema``: el núcleo
+común (identidad, historia, confianza, conversión, marca) más una etiqueta de
+oferta propia y un grupo de campos ``x_`` específicos de su sector. Así el
+formulario es DISTINTO según la plantilla (lo que pide una carta no es lo que
+pide una clínica) sin que el parser ni el render sepan de familias.
 """
 
 from __future__ import annotations
@@ -215,5 +222,112 @@ def core_brand() -> FieldGroup:
             FormField("testimonials", "Opiniones reales (una por línea: «frase | nombre»)",
                       FieldKind.LIST, full_width=True, rows=2,
                       placeholder="Trato excelente | María L. | Cliente"),
+        ),
+    )
+
+
+# --- Esquema por familia -----------------------------------------------------
+# Cada familia visual pide lo que su sector necesita. El núcleo común no cambia;
+# cambian la etiqueta de "lo que ofrecéis" y un grupo de campos x_ propios. Los
+# campos x_ los renderiza el modelo sin saber de familias (chip afirmativo si es
+# Sí/No, fila de ficha si llevan valor), así que añadir una familia es datos, no
+# fontanería.
+
+
+def family_schema(
+    offer_label: str, offer_placeholder: str, extra: FieldGroup
+) -> FormSchema:
+    """Esquema completo de una familia: núcleo común + su oferta + sus detalles."""
+    return FormSchema(
+        (
+            core_identity(),
+            core_offer(offer_label, offer_placeholder),
+            extra,
+            core_story(),
+            core_trust(),
+            core_conversion(),
+            core_brand(),
+        )
+    )
+
+
+def carta_extras() -> FieldGroup:
+    """Gastronomía: terraza, para llevar, dietas (lo que un comensal pregunta)."""
+    return FieldGroup(
+        "Detalles de la carta (opcional)",
+        (
+            FormField("x_terraza", "Terraza", FieldKind.TOGGLE),
+            FormField("x_para_llevar", "Comida para llevar", FieldKind.TOGGLE),
+            FormField("x_opciones", "Opciones dietéticas", full_width=True,
+                      placeholder="Vegano, sin gluten, sin lactosa"),
+        ),
+    )
+
+
+def clinica_extras() -> FieldGroup:
+    """Salud: seguros, primera visita, urgencias (lo que decide al paciente)."""
+    return FieldGroup(
+        "Detalles de la consulta (opcional)",
+        (
+            FormField("x_seguros", "Seguros que aceptáis", full_width=True,
+                      placeholder="Adeslas, Sanitas, DKV, Asisa"),
+            FormField("x_primera_visita", "Primera visita",
+                      placeholder="Valoración sin coste"),
+            FormField("x_urgencias", "Atendemos urgencias", FieldKind.TOGGLE),
+        ),
+    )
+
+
+def autoridad_extras() -> FieldGroup:
+    """Despacho profesional: primera consulta, experiencia, modalidad."""
+    return FieldGroup(
+        "Detalles del despacho (opcional)",
+        (
+            FormField("x_primera_consulta", "Primera consulta sin compromiso",
+                      FieldKind.TOGGLE),
+            FormField("x_experiencia", "Experiencia",
+                      placeholder="+20 años, +500 casos"),
+            FormField("x_modalidad", "Modalidad",
+                      placeholder="Presencial y online"),
+        ),
+    )
+
+
+def industrial_extras() -> FieldGroup:
+    """Oficios: presupuesto, urgencias, garantía (lo que rompe la desconfianza)."""
+    return FieldGroup(
+        "Detalles del servicio (opcional)",
+        (
+            FormField("x_presupuesto", "Presupuesto sin compromiso", FieldKind.TOGGLE),
+            FormField("x_urgencias", "Urgencias",
+                      placeholder="24h, fines de semana"),
+            FormField("x_garantia", "Garantía",
+                      placeholder="2 años en la mano de obra"),
+        ),
+    )
+
+
+def estudio_extras() -> FieldGroup:
+    """Belleza: cita previa y marcas (la galería ya va en 'Marca')."""
+    return FieldGroup(
+        "Detalles del estudio (opcional)",
+        (
+            FormField("x_cita_previa", "Solo con cita previa", FieldKind.TOGGLE),
+            FormField("x_marcas", "Marcas que trabajáis", full_width=True,
+                      placeholder="L'Oréal, Wella, Olaplex"),
+        ),
+    )
+
+
+def gimnasio_extras() -> FieldGroup:
+    """Gimnasio: clase de prueba, cuotas, horario de acceso."""
+    return FieldGroup(
+        "Detalles del centro (opcional)",
+        (
+            FormField("x_clase_prueba", "Clase de prueba gratis", FieldKind.TOGGLE),
+            FormField("x_cuotas", "Cuotas",
+                      placeholder="Desde 29 €/mes, sin permanencia"),
+            FormField("x_acceso", "Horario de acceso",
+                      placeholder="L-D 7:00-23:00"),
         ),
     )

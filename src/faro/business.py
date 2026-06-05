@@ -389,7 +389,7 @@ class BusinessProfile:
         # Hechos por sector. Dos vías: claves "x_<etiqueta>" (formulario dinámico)
         # y un campo "destacados" con líneas "Etiqueta: valor".
         extras: list[tuple[str, str]] = [
-            (k[2:].replace("_", " ").strip(), v.strip())
+            (k[2:].replace("_", " ").strip().capitalize(), v.strip())
             for k, v in data.items()
             if k.startswith("x_") and v.strip()
         ]
