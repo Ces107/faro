@@ -46,9 +46,21 @@ def contrast_ratio(a: str, b: str) -> float:
 
 def readable_on_white(color: str, ratio: float = 4.5) -> str:
     """Oscurece el color lo justo para que contraste >= ratio sobre blanco."""
+    return readable_on(color, "#ffffff", ratio)
+
+
+def readable_on(color: str, background: str, ratio: float = 4.5) -> str:
+    """Oscurece ``color`` lo justo para que contraste >= ratio sobre ``background``.
+
+    Generaliza ``readable_on_white`` a un fondo arbitrario: los papers de Faro son
+    crema/hueso (más oscuros que blanco), así que un accent legible sobre blanco no
+    lo es necesariamente sobre el paper real. Solo oscurece (asume fondo claro); para
+    fondos oscuros, aclarar es otra estrategia y no se necesita aquí (los accents
+    sobre paper oscuro ya contrastan de sobra).
+    """
     current = color
     for _ in range(24):
-        if contrast_ratio("#ffffff", current) >= ratio:
+        if contrast_ratio(background, current) >= ratio:
             return current
         current = _darken(current, 0.86)
     return current

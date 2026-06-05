@@ -17,7 +17,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from faro.business import contrast_ratio
+from faro.business import contrast_ratio, readable_on
 from faro.engine.fonts import family_name
 
 # Texto oscuro cálido para colores de marca claros (lima, ámbar): blanco sobre
@@ -86,6 +86,20 @@ class DesignTokens:
             return "#ffffff"
         return _DARK_INK
 
+    def _accent_text(self) -> str:
+        """Accent garantizado legible COMO TEXTO (>=4.5) sobre el paper real.
+
+        El accent solo se usa como color de texto (números de índice/proceso). En
+        familias de paper claro algunos accents (bronce de autoridad 3.53:1, ámbar
+        de estudio 4.37:1) suspenden AA como texto pequeño; se oscurecen lo justo
+        contra el paper concreto (crema/hueso, no blanco). En familias oscuras el
+        accent claro ya contrasta de sobra (ámbar sobre casi-negro = 9:1) y
+        oscurecerlo lo empeoraría, así que se deja igual.
+        """
+        if self.dark:
+            return self.accent
+        return readable_on(self.accent, self.paper, 4.5)
+
     def _brand_rgb(self) -> str:
         v = self.brand.lstrip("#")
         return ",".join(str(int(v[i : i + 2], 16)) for i in (0, 2, 4))
@@ -97,7 +111,7 @@ class DesignTokens:
         return (
             ":root{"
             f"--ink:{self.ink};--paper:{self.paper};--paper-2:{self._surface_2()};"
-            f"--brand:{self.brand};--accent:{self.accent};--on-brand:{self.on_brand()};"
+            f"--brand:{self.brand};--accent:{self._accent_text()};--on-brand:{self.on_brand()};"
             f"--brand-rgb:{self._brand_rgb()};"
             f"--text-soft:{text_soft};--line:{line};"
             f"--radius:{self.radius}px;--border:{self.border_px}px;"

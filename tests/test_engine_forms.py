@@ -108,6 +108,27 @@ def test_family_specific_field_flows_to_web() -> None:
     assert ("Seguros", "Adeslas, Sanitas") in biz.extras
 
 
+def test_affirmative_flag_survives_in_photo_hero() -> None:
+    """Regresión: un dato afirmativo (x_*=Sí) NO se pierde en familias con hero photo.
+
+    estudio/clinica/carta/aurora usan hero=photo cuando el negocio sube fotos; ese
+    hero no pintaba los chips afirmativos → el dato del dueño desaparecía. Ahora se
+    renderiza en `.hero-flags`.
+    """
+    from faro.landing import build_landing
+
+    biz = BusinessProfile.from_form({
+        "name": "Marea Estudio", "city": "Sagunto", "phone": "961234567",
+        "sector": "peluqueria", "services": "Corte\nColor",
+        "x_cita_previa": "Sí",
+        "photos": "https://example.com/a.jpg",  # fuerza el hero photo
+    })
+    html = build_landing(biz, use_live=False)
+    assert "hero-photo" in html  # confirmamos que es el hero en riesgo
+    assert "hero-flags" in html
+    assert "Cita previa" in html
+
+
 def test_universal_template_keeps_generic_offer() -> None:
     """La plantilla universal (aurora) no impone vocabulario de un sector concreto."""
     schema = template_for(Sector.OTRO).form_schema
