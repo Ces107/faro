@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from faro.business import BusinessProfile
+from faro.business import BusinessProfile, Sector
 from faro.engine.forms import (
     FieldKind,
     FormField,
@@ -12,6 +12,7 @@ from faro.engine.forms import (
     core_story,
     core_trust,
 )
+from faro.engine.registry import all_templates, template_for
 
 
 def _full_schema() -> FormSchema:
@@ -61,6 +62,54 @@ def test_x_prefixed_field_becomes_extra() -> None:
     """Un campo específico de plantilla (x_*) entra como dato destacado, sin tocar el parser."""
     biz = BusinessProfile.from_form({
         "name": "Bar Pepe", "city": "Sagunto", "phone": "961234567",
-        "services": "Tapas", "x_terraza": "Sí",
+        "services": "Tapas", "x_terraza": "Sí", "x_para_llevar": "Sí",
     })
-    assert ("terraza", "Sí") in biz.extras
+    # La etiqueta se capitaliza (chip legible en el hero), no se queda en minúscula.
+    assert ("Terraza", "Sí") in biz.extras
+    assert ("Para llevar", "Sí") in biz.extras
+
+
+def test_each_family_asks_for_distinct_fields() -> None:
+    """La demanda del principal: el formulario es DISTINTO según la plantilla.
+
+    Las familias visuales (no la universal) divergen en al menos un campo x_
+    propio; ninguna comparte exactamente el mismo conjunto de nombres.
+    """
+    visual = [t for t in all_templates() if t.family != "aurora"]
+    name_sets = {t.family: t.form_schema.field_names() for t in visual}
+    # Cada familia trae algún campo que otra no tiene.
+    for family, names in name_sets.items():
+        others = frozenset().union(
+            *(n for f, n in name_sets.items() if f != family)
+        )
+        assert names - others, f"{family} no aporta ningún campo propio"
+
+
+def test_family_offer_label_varies_by_template() -> None:
+    """La etiqueta de 'lo que ofrecéis' cambia por familia (carta vs tratamientos)."""
+    def offer_label(sector: Sector) -> str:
+        schema = template_for(sector).form_schema
+        return next(f.label for f in schema.fields() if f.name == "services")
+
+    assert "Carta" in offer_label(Sector.RESTAURANTE)
+    assert "Tratamientos" in offer_label(Sector.DENTAL)
+    assert "Clases" in offer_label(Sector.GIMNASIO)
+
+
+def test_family_specific_field_flows_to_web() -> None:
+    """Un campo propio de la clínica (x_seguros) llega al modelo como dato real."""
+    schema = template_for(Sector.DENTAL).form_schema
+    assert "x_seguros" in schema.field_names()
+    biz = BusinessProfile.from_form({
+        "name": "Clínica Sonrisa", "city": "Sagunto", "phone": "961234567",
+        "sector": "dental", "services": "Limpieza dental",
+        "x_seguros": "Adeslas, Sanitas",
+    })
+    assert ("Seguros", "Adeslas, Sanitas") in biz.extras
+
+
+def test_universal_template_keeps_generic_offer() -> None:
+    """La plantilla universal (aurora) no impone vocabulario de un sector concreto."""
+    schema = template_for(Sector.OTRO).form_schema
+    label = next(f.label for f in schema.fields() if f.name == "services")
+    assert "Servicios o productos" in label
