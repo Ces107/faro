@@ -1,0 +1,24 @@
+{# Carta estructurada de gastronomía: categorías, platos con precio tabular y
+   badges de alérgenos (UE 1169/2011), más una leyenda al pie. Solo se usa si el
+   dueño ha rellenado la carta; si no, services.html cae a la lista normal. #}
+<div class="menu">
+  {% for cat in business.menu %}
+  <div class="menu-cat" data-reveal style="--i:{{ loop.index0 }}">
+    <h3 class="menu-cat-title">{{ cat.title }}</h3>
+    <div class="menu-items">
+      {% for item in cat.items %}
+      <div class="menu-item">
+        <span class="mi-name">{{ item.name }}{% for a in item.allergens %}<abbr class="alg" title="{{ a.label }}">{{ a.short }}</abbr>{% endfor %}</span>
+        {% if item.price_display %}<span class="mi-dots" aria-hidden="true"></span><span class="mi-price num">{{ item.price_display }}</span>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+  {% if menu_allergens %}
+  <div class="allergen-legend" data-reveal>
+    <p class="al-title">Alérgenos · Reglamento UE 1169/2011</p>
+    <ul>{% for a in menu_allergens %}<li><abbr class="alg">{{ a.short }}</abbr> {{ a.label }}</li>{% endfor %}</ul>
+  </div>
+  {% endif %}
+</div>

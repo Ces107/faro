@@ -252,10 +252,24 @@ def family_schema(
 
 
 def carta_extras() -> FieldGroup:
-    """Gastronomía: terraza, para llevar, dietas (lo que un comensal pregunta)."""
+    """Gastronomía: carta con precios y alérgenos + terraza, para llevar, dietas."""
     return FieldGroup(
         "Detalles de la carta (opcional)",
         (
+            FormField(
+                "menu", "Carta con precios y alérgenos", FieldKind.TEXTAREA,
+                full_width=True, rows=8,
+                placeholder=("Entrantes:\n"
+                             "Croquetas caseras — 6,50 (gluten, lácteos)\n"
+                             "Ensalada de la casa — 7,00\n"
+                             "Principales:\n"
+                             "Paella valenciana — 14,00 (gluten, crustáceos, pescado)\n"
+                             "Postres:\n"
+                             "Flan de la abuela — 4,00 (huevos, lácteos)"),
+                help=("Una categoría por línea acabada en «:». Un plato por línea: "
+                      "Nombre — precio (alérgenos). El precio y los alérgenos son "
+                      "opcionales. Alérgenos según el Reglamento UE 1169/2011."),
+            ),
             FormField("x_terraza", "Terraza", FieldKind.TOGGLE),
             FormField("x_para_llevar", "Comida para llevar", FieldKind.TOGGLE),
             FormField("x_opciones", "Opciones dietéticas", full_width=True,

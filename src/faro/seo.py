@@ -43,6 +43,38 @@ def schema_type(sector: Sector) -> str:
     return _SCHEMA_TYPES[sector]
 
 
+def _menu_schema(business: BusinessProfile) -> dict[str, object] | None:
+    """schema.org ``Menu`` con secciones, platos y alérgenos suitableForDiet/...
+
+    Devuelve None si el negocio no aportó carta. Los alérgenos se exponen como
+    ``menuAddOn`` no — schema.org no tiene un campo de alérgenos canónico, así que
+    se listan en el nombre legible del plato y como ``suitableForDiet`` se omite
+    (no aplica). Se modela lo que schema.org sí soporta: Menu→MenuSection→MenuItem.
+    """
+    if not business.menu:
+        return None
+    sections: list[dict[str, object]] = []
+    for cat in business.menu:
+        items: list[dict[str, object]] = []
+        for item in cat.items:
+            entry: dict[str, object] = {"@type": "MenuItem", "name": item.name}
+            if item.allergens:
+                entry["description"] = "Alérgenos: " + ", ".join(
+                    a.label for a in item.allergens
+                )
+            if item.price:
+                entry["offers"] = {
+                    "@type": "Offer",
+                    "price": item.price.replace(",", "."),
+                    "priceCurrency": "EUR",
+                }
+            items.append(entry)
+        sections.append(
+            {"@type": "MenuSection", "name": cat.title, "hasMenuItem": items}
+        )
+    return {"@type": "Menu", "hasMenuSection": sections}
+
+
 def local_business_jsonld(business: BusinessProfile) -> str:
     """JSON-LD schema.org del negocio (string para incrustar en un <script>)."""
     address: dict[str, str] = {
@@ -80,6 +112,10 @@ def local_business_jsonld(business: BusinessProfile) -> str:
     ]
     if same_as:
         data["sameAs"] = same_as
+    # Carta estructurada → schema.org Menu (rich results de restaurantes en Google).
+    menu_jsonld = _menu_schema(business)
+    if menu_jsonld is not None:
+        data["hasMenu"] = menu_jsonld
     # El email no se incluye en el JSON-LD a propósito: lo dejaría en texto plano,
     # rastreable por bots de spam. El teléfono ya cubre el contacto estructurado.
     payload = json.dumps(data, ensure_ascii=False, indent=2)

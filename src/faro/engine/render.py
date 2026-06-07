@@ -22,6 +22,7 @@ from faro.engine.registry import template_for
 from faro.engine.scripts import motion_js, signature_for
 from faro.hours import parse_opening_hours
 from faro.maps import maps_embed_url, maps_link
+from faro.menu import all_allergens_present
 from faro.playbook import playbook_for
 from faro.qr import review_qr
 from faro.reviews import review_url
@@ -97,6 +98,7 @@ def render_site(business: BusinessProfile, copy: LandingCopy) -> str:
         "offer_eyebrow": offer_eyebrow,
         "proceso_title": "Cómo trabajamos",
         "service_cards": build_service_cards(business, playbook),
+        "menu_allergens": all_allergens_present(business.menu),
         "process": playbook.process,
         "faq": faq,
         "faq_jsonld": faq_jsonld([(q.question, q.answer) for q in faq]),

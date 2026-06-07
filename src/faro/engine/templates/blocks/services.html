@@ -1,6 +1,9 @@
-{# Servicios según la familia: carta (lista con precio), index (numerada),
-   grid (tarjetas con regla de tinta) o list (bold industrial). #}
-{% if tokens.service_style == 'carta' %}
+{# Si el negocio aportó una carta estructurada (gastronomía), manda esa: precios
+   tabulares + alérgenos UE. Si no, los servicios según la familia. #}
+{% if business.menu %}
+{% include "blocks/menu.html" %}
+
+{% elif tokens.service_style == 'carta' %}
 <div class="carta">
   {% for c in service_cards %}
   <div class="item" data-reveal style="--i:{{ loop.index0 }}">

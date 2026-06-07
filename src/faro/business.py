@@ -11,6 +11,8 @@ import re
 from dataclasses import dataclass
 from enum import Enum
 
+from faro.menu import MenuCategory, parse_menu
+
 _PHONE_RE = re.compile(r"^[6789]\d{8}$")
 _HEX_RE = re.compile(r"^#[0-9a-fA-F]{6}$")
 
@@ -234,6 +236,7 @@ class BusinessProfile:
     delivery_links: tuple[str, ...] = ()  # enlaces de pedido (Glovo, Just Eat...)
     service_area: str = ""  # zonas donde trabaja (negocios móviles)
     credentials: tuple[str, ...] = ()  # certificaciones/licencias/colegiación reales
+    menu: tuple[MenuCategory, ...] = ()  # carta estructurada: categorías + precios + alérgenos
 
     def __post_init__(self) -> None:
         if not self.name.strip():
@@ -448,4 +451,5 @@ class BusinessProfile:
             delivery_links=split_lines(data.get("delivery_links", "")),
             service_area=data.get("service_area", "").strip(),
             credentials=split_lines(data.get("credentials", "")),
+            menu=parse_menu(data.get("menu", "")),
         )
