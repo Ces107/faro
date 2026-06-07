@@ -55,6 +55,8 @@ def _anchors(business: BusinessProfile, offer_label: str) -> list[dict[str, str]
     items = [{"id": "servicios", "label": offer_label}, {"id": "proceso", "label": "Proceso"}]
     if business.photos:
         items.append({"id": "galeria", "label": "Galería"})
+    if business.before_after:
+        items.append({"id": "antes-despues", "label": "Antes y después"})
     if business.testimonials:
         items.append({"id": "opiniones", "label": "Opiniones"})
     items.append({"id": "sobre", "label": "Nosotros"})

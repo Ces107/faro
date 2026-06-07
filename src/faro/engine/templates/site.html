@@ -317,6 +317,18 @@
     .solo-figure{position:relative;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-pop);}
     .solo-figure img{width:100%;height:clamp(280px,42vw,520px);object-fit:cover;display:block;}
 
+    /* ANTES / DESPUÉS — pares lado a lado (apilan en móvil), etiqueta sobre cada foto.
+       Sin JS: ambas fotos siempre visibles, robusto y honesto. */
+    .ba-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:28px;}
+    .ba-pair{margin:0;}
+    .ba-imgs{display:grid;grid-template-columns:1fr 1fr;gap:6px;border:var(--border) solid var(--ink);}
+    .ba-shot{position:relative;overflow:hidden;background:var(--paper-2);min-height:180px;}
+    .ba-shot img{width:100%;height:clamp(180px,24vw,300px);object-fit:cover;display:block;}
+    .ba-tag{position:absolute;left:10px;top:10px;font-size:.7rem;font-weight:700;letter-spacing:.08em;
+      text-transform:uppercase;color:#fff;background:rgba(0,0,0,.62);padding:4px 9px;border-radius:3px;}
+    .ba-tag-after{background:var(--brand);color:var(--on-brand);}
+    .ba-pair figcaption{margin-top:12px;font-size:.96rem;color:var(--text-soft);}
+
     /* OPINIONES — citas grandes. */
     .quotes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(20px,3vw,40px);}
     .quote{border-top:var(--border) solid var(--ink);padding-top:20px;}
@@ -571,6 +583,25 @@
         {% for url in business.photos %}<div class="cell" data-reveal="img" style="--i:{{ loop.index0 }}"><img src="{{ url }}" loading="lazy" decoding="async" alt="{{ business.name }} — {{ loop.index }}" /></div>{% endfor %}
       </div>
       {% endif %}
+    </div>
+  </section>
+  {% endif %}
+
+  {% if business.before_after %}
+  <section id="antes-despues">
+    <div class="wrap">
+      <div class="head" data-reveal="clip"><p class="eyebrow">Resultados reales</p><h2>Antes y después</h2></div>
+      <div class="ba-grid">
+        {% for ba in business.before_after %}
+        <figure class="ba-pair" data-reveal style="--i:{{ loop.index0 }}">
+          <div class="ba-imgs">
+            <div class="ba-shot"><img src="{{ ba.before }}" loading="lazy" decoding="async" alt="Antes{% if ba.caption %} — {{ ba.caption }}{% endif %}" /><span class="ba-tag">Antes</span></div>
+            <div class="ba-shot"><img src="{{ ba.after }}" loading="lazy" decoding="async" alt="Después{% if ba.caption %} — {{ ba.caption }}{% endif %}" /><span class="ba-tag ba-tag-after">Después</span></div>
+          </div>
+          {% if ba.caption %}<figcaption>{{ ba.caption }}</figcaption>{% endif %}
+        </figure>
+        {% endfor %}
+      </div>
     </div>
   </section>
   {% endif %}

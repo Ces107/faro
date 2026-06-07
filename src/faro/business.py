@@ -194,6 +194,38 @@ def _parse_testimonials(value: str) -> tuple[Testimonial, ...]:
 
 
 @dataclass(frozen=True)
+class BeforeAfter:
+    """Un par antes/después: dos fotos del mismo trabajo y una descripción."""
+
+    before: str
+    after: str
+    caption: str = ""
+
+
+def _parse_before_after(value: str, consent: bool) -> tuple[BeforeAfter, ...]:
+    """Parsea líneas 'url_antes | url_después | descripción' en pares antes/después.
+
+    RGPD: las fotos de antes/después suelen mostrar personas (dental, estética).
+    Sin la declaración de consentimiento del dueño NO se renderiza la galería —
+    proteger al cliente y al negocio prima sobre enseñar resultados.
+    """
+    if not consent:
+        return ()
+    out: list[BeforeAfter] = []
+    for line in value.replace(";", "\n").splitlines():
+        parts = [p.strip() for p in line.split("|")]
+        if len(parts) < 2:
+            continue
+        before, after = parts[0], parts[1]
+        if not (before.startswith(("http://", "https://"))
+                and after.startswith(("http://", "https://"))):
+            continue
+        caption = parts[2][:120] if len(parts) > 2 else ""
+        out.append(BeforeAfter(before[:300], after[:300], caption))
+    return tuple(out[:6])
+
+
+@dataclass(frozen=True)
 class BusinessProfile:
     """Datos de un negocio local. Inmutable y validado."""
 
@@ -237,6 +269,7 @@ class BusinessProfile:
     service_area: str = ""  # zonas donde trabaja (negocios móviles)
     credentials: tuple[str, ...] = ()  # certificaciones/licencias/colegiación reales
     menu: tuple[MenuCategory, ...] = ()  # carta estructurada: categorías + precios + alérgenos
+    before_after: tuple[BeforeAfter, ...] = ()  # galería antes/después (con consentimiento RGPD)
 
     def __post_init__(self) -> None:
         if not self.name.strip():
@@ -452,4 +485,9 @@ class BusinessProfile:
             service_area=data.get("service_area", "").strip(),
             credentials=split_lines(data.get("credentials", "")),
             menu=parse_menu(data.get("menu", "")),
+            before_after=_parse_before_after(
+                data.get("before_after", ""),
+                data.get("before_after_consent", "").strip().lower()
+                in ("sí", "si", "yes", "true", "on"),
+            ),
         )

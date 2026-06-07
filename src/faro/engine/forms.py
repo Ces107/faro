@@ -278,8 +278,32 @@ def carta_extras() -> FieldGroup:
     )
 
 
+def before_after_fields() -> tuple[FormField, ...]:
+    """Galería antes/después + la casilla de consentimiento RGPD obligatoria.
+
+    Sin marcar el consentimiento, la galería no se renderiza (el modelo la
+    descarta). Reutilizada por las familias cuyo sector enseña resultados:
+    estética, reformas, dental.
+    """
+    return (
+        FormField(
+            "before_after", "Galería antes / después", FieldKind.LIST,
+            full_width=True, rows=4,
+            placeholder=("https://...antes.jpg | https://...despues.jpg | Blanqueamiento dental\n"
+                         "https://...antes2.jpg | https://...despues2.jpg | Reforma de cocina"),
+            help="Una línea por trabajo: URL antes | URL después | descripción (opcional).",
+        ),
+        FormField(
+            "before_after_consent",
+            "Confirmo que tengo el consentimiento de las personas que aparecen (RGPD)",
+            FieldKind.TOGGLE, full_width=True,
+            help="Obligatorio para mostrar la galería. Sin esta confirmación no se publica.",
+        ),
+    )
+
+
 def clinica_extras() -> FieldGroup:
-    """Salud: seguros, primera visita, urgencias (lo que decide al paciente)."""
+    """Salud: seguros, primera visita, urgencias + galería antes/después (dental)."""
     return FieldGroup(
         "Detalles de la consulta (opcional)",
         (
@@ -288,6 +312,7 @@ def clinica_extras() -> FieldGroup:
             FormField("x_primera_visita", "Primera visita",
                       placeholder="Valoración sin coste"),
             FormField("x_urgencias", "Atendemos urgencias", FieldKind.TOGGLE),
+            *before_after_fields(),
         ),
     )
 
@@ -308,7 +333,7 @@ def autoridad_extras() -> FieldGroup:
 
 
 def industrial_extras() -> FieldGroup:
-    """Oficios: presupuesto, urgencias, garantía (lo que rompe la desconfianza)."""
+    """Oficios: presupuesto, urgencias, garantía + galería antes/después (reformas)."""
     return FieldGroup(
         "Detalles del servicio (opcional)",
         (
@@ -317,18 +342,20 @@ def industrial_extras() -> FieldGroup:
                       placeholder="24h, fines de semana"),
             FormField("x_garantia", "Garantía",
                       placeholder="2 años en la mano de obra"),
+            *before_after_fields(),
         ),
     )
 
 
 def estudio_extras() -> FieldGroup:
-    """Belleza: cita previa y marcas (la galería ya va en 'Marca')."""
+    """Belleza: cita previa, marcas + galería antes/después (estética)."""
     return FieldGroup(
         "Detalles del estudio (opcional)",
         (
             FormField("x_cita_previa", "Solo con cita previa", FieldKind.TOGGLE),
             FormField("x_marcas", "Marcas que trabajáis", full_width=True,
                       placeholder="L'Oréal, Wella, Olaplex"),
+            *before_after_fields(),
         ),
     )
 
