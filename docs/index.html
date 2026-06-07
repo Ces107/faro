@@ -33,7 +33,7 @@ html.lenis,html.lenis body{height:auto}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.6;
   -webkit-font-smoothing:antialiased;overflow-x:hidden;font-feature-settings:"kern" 1,"liga" 1}
 a{color:inherit;text-decoration:none}
-img{max-width:100%;display:block}
+img{max-width:100%;height:auto;display:block}
 .wrap{width:min(1200px,92vw);margin-inline:auto}
 .wrap-narrow{width:min(820px,92vw);margin-inline:auto}
 h1,h2,h3{font-family:var(--display);font-weight:600;letter-spacing:-.025em;line-height:1;text-wrap:balance}
@@ -134,7 +134,7 @@ section{padding-block:clamp(64px,9vw,128px);position:relative}
 .ba{background:var(--bg-2);border-block:1px solid var(--line)}
 .ba .slider{--divider-width:2px;--divider-color:var(--brand);--default-handle-opacity:1;
   border-radius:14px;overflow:hidden;border:1px solid var(--line-2);box-shadow:0 30px 70px -28px rgba(0,0,0,.8);max-width:1040px;margin:0 auto}
-.ba .slider img{width:100%;display:block}
+.ba .slider img{width:100%;height:auto;display:block}
 .ba .tag{position:absolute;top:16px;padding:7px 14px;border-radius:999px;font-size:.78rem;font-weight:700;
   letter-spacing:.04em;z-index:5;backdrop-filter:blur(4px)}
 .ba .tag-before{left:16px;background:rgba(20,16,12,.7);color:#f1b3b3;border:1px solid rgba(241,179,179,.4)}
@@ -259,7 +259,14 @@ dialog.lb::backdrop{background:rgba(6,8,12,.82);backdrop-filter:blur(6px)}
 /* Responsive */
 @media (max-width:920px){
   .hero .wrap{grid-template-columns:1fr}
-  .deck{height:clamp(300px,70vw,440px);margin-top:10px}
+  /* El deck 3D de ventanas flotantes está pensado para una columna ancha; en
+     móvil el escorzo de la perspectiva deforma visualmente las capturas. Lo
+     aplanamos a una sola ventana limpia a ancho completo, con su proporción
+     intacta (winshot 4/3 + object-fit:cover). s2/s3 se ocultan (deck decorativo,
+     aria-hidden). */
+  .deck{height:auto;perspective:none;max-width:560px;margin:18px auto 0}
+  .deck .shot{position:relative;width:100%;inset:auto;transform:none!important;opacity:1!important;z-index:auto}
+  .deck .s2,.deck .s3{display:none}
   .how-grid{grid-template-columns:1fr}
   .foot-grid{grid-template-columns:1fr 1fr}
   .nav-links{display:none}
