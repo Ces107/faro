@@ -108,7 +108,8 @@ def _summary(census: CensusResult) -> str:
     top_families: dict[str, int] = {}
     for prospect in census.prospects:
         top_families[prospect.family] = top_families.get(prospect.family, 0) + 1
-    families = ", ".join(f"{fam}: {n}" for fam, n in sorted(top_families.items(), key=lambda kv: -kv[1]))
+    by_count = sorted(top_families.items(), key=lambda kv: -kv[1])
+    families = ", ".join(f"{fam}: {n}" for fam, n in by_count)
     excluded = ", ".join(f"{reason.value}: {n}" for reason, n in census.excluded)
     return (
         f"Censo de {census.municipality}: {len(census.prospects)} candidatos "
@@ -128,7 +129,9 @@ def main(argv: list[str] | None = None, *, fetch: HttpFetcher | None = None) -> 
     parser.add_argument("municipality", help="Nombre del municipio (p. ej. 'Sagunto')")
     parser.add_argument("--rel-id", type=int, default=0, help="ID de relación OSM (si es ambiguo)")
     parser.add_argument("--bbox", default="", help="Recorte 'sur,oeste,norte,este' (núcleo urbano)")
-    parser.add_argument("--city", default="", help="Nombre de ciudad para la web (p. ej. 'Puerto de Sagunto')")
+    parser.add_argument(
+        "--city", default="", help="Nombre de ciudad para la web (p. ej. 'Puerto de Sagunto')"
+    )
     parser.add_argument("--out", default="prospect", help="Directorio de salida (def: prospect/)")
     parser.add_argument(
         "--base-url", default="http://127.0.0.1:8000/", help="URL base de la consola Faro local"
@@ -149,7 +152,9 @@ def main(argv: list[str] | None = None, *, fetch: HttpFetcher | None = None) -> 
     city = args.city or _default_city(municipality.name)
     generated_on = _dt.date.today().isoformat()
     out_dir = Path(args.out) / _dir_slug(args.city or municipality.name)
-    paths = _write_outputs(out_dir, census, city=city, base_url=args.base_url, generated_on=generated_on)
+    paths = _write_outputs(
+        out_dir, census, city=city, base_url=args.base_url, generated_on=generated_on
+    )
     print(_summary(census))
     print("  Ficheros:")
     for path in paths:

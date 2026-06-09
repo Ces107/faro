@@ -88,7 +88,10 @@ def _grouped(census: CensusResult) -> list[tuple[str, list[Prospect]]]:
         groups.items(),
         key=lambda kv: (kv[0] == _NO_STREET, -max(p.score for p in kv[1])),
     )
-    return [(street, sorted(ps, key=lambda p: (p.housenumber or "~", p.name))) for street, ps in ordered]
+    return [
+        (street, sorted(ps, key=lambda p: (p.housenumber or "~", p.name)))
+        for street, ps in ordered
+    ]
 
 
 def route_sheet_html(
