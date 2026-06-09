@@ -31,6 +31,7 @@ dev = [
 
 [project.scripts]
 faro = "faro.server:main"
+faro-prospect = "faro.prospect.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/Ces107/faro"

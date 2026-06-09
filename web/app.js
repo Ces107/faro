@@ -254,6 +254,27 @@ async function autoGenerate() {
   if (new URLSearchParams(location.search).get("demo") === "1") el("bizForm").requestSubmit();
 }
 
+// ?prefill=<slug>: carga los datos públicos del negocio desde el censo local
+// (faro-prospect) en lugar del ejemplo del sector. Solo datos reales: el resto
+// de campos quedan vacíos y se completan con el dueño delante.
+async function applyPrefill() {
+  const slug = new URLSearchParams(location.search).get("prefill");
+  if (!slug) return;
+  try {
+    const res = await fetch("/api/prospect/prefill/" + encodeURIComponent(slug));
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.sector && [...el("sector").options].some((o) => o.value === data.sector)) {
+      el("sector").value = data.sector;
+    }
+    currentValues = data.values || {};
+    await renderForm();
+    el("templateTag").textContent += " · datos del censo: confírmalos con el dueño";
+  } catch (e) {
+    /* sin censo local: el formulario queda con el ejemplo del sector */
+  }
+}
+
 el("sector").addEventListener("change", applySector);
 el("bizForm").addEventListener("submit", generate);
-loadSectors().then(autoGenerate);
+loadSectors().then(applyPrefill).then(autoGenerate);

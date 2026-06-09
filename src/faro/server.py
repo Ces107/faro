@@ -6,6 +6,7 @@ delante del cliente, ve la web al momento y descarga el .zip listo para entregar
 
 from __future__ import annotations
 
+import json
 import os
 import secrets
 import unicodedata
@@ -23,7 +24,29 @@ _WEB_DIR = Path(__file__).resolve().parents[2] / "web"
 
 
 _OUTPUT_DIR = Path(__file__).resolve().parents[2] / "output"
+_PROSPECT_DIR = Path(__file__).resolve().parents[2] / "prospect"
 _MAX_PACKS_IN_MEMORY = 50
+
+
+def _load_prospects() -> dict[str, dict[str, object]]:
+    """Une los prospects.json de todos los municipios censados (faro-prospect).
+
+    Lectura perezosa en cada petición: los ficheros son pequeños y locales, y
+    así un censo recién generado aparece sin reiniciar la consola.
+    """
+    merged: dict[str, dict[str, object]] = {}
+    if not _PROSPECT_DIR.exists():
+        return merged
+    for path in sorted(_PROSPECT_DIR.glob("*/prospects.json")):
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if isinstance(data, dict):
+            for slug, entry in data.items():
+                if isinstance(entry, dict):
+                    merged[slug] = entry
+    return merged
 
 
 def _ascii_slug(text: str) -> str:
@@ -140,6 +163,32 @@ def create_app(*, use_live: bool = False) -> FastAPI:
                 "schema": spec.form_schema.as_dict(),
             }
         )
+
+    @app.get("/api/prospect")
+    def prospect_index() -> JSONResponse:
+        """Censo local de prospección (si se generó con ``faro-prospect``)."""
+        prospects = _load_prospects()
+        return JSONResponse(
+            {
+                "count": len(prospects),
+                "prospects": [
+                    {
+                        "slug": slug,
+                        "sector": entry.get("sector", ""),
+                        "values": entry.get("values", {}),
+                    }
+                    for slug, entry in sorted(prospects.items())
+                ],
+            }
+        )
+
+    @app.get("/api/prospect/prefill/{slug}")
+    def prospect_prefill(slug: str) -> JSONResponse:
+        """Datos de precarga de un negocio del censo (enlazado desde ruta.html)."""
+        entry = _load_prospects().get(slug)
+        if entry is None:
+            raise HTTPException(status_code=404, detail="Negocio no encontrado en el censo")
+        return JSONResponse({"slug": slug, **entry})
 
     @app.post("/api/generate")
     def generate(req: GenerateRequest) -> JSONResponse:

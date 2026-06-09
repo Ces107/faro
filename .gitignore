@@ -17,6 +17,9 @@ venv/
 output/
 *.zip
 
+# Prospecting census (real business names from OSM; local-only, never published)
+/prospect/
+
 # Secrets
 .env
 *.key

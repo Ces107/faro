@@ -1,4 +1,4 @@
-# Faro
+﻿# Faro
 
 **Genera en minutos el pack de presencia digital de un negocio local: una página web premium lista para publicar, el contenido para su ficha de Google, el WhatsApp y la tarjeta de reseñas con QR. Rellenas un formulario, ves la web al momento y descargas todo en un .zip. Funciona sin cuentas de pago.**
 
@@ -32,8 +32,17 @@ Rellenas el formulario, pulsas "Generar pack" y ves la web del negocio al moment
 
 ![Ejemplo de web generada](docs/ejemplo-landing.png)
 
-## Modo plantillas y modo IA
+## Prospección (faro-prospect)
 
+`faro-prospect <municipio>` construye un censo de negocios de la zona sin
+presencia web mapeada (datos © OpenStreetMap contributors, ODbL) y genera una
+hoja de ruta imprimible por calles, folletos por sector con QR a los ejemplos
+y la precarga del formulario por negocio (`/?prefill=<negocio>`): la demo en
+puerta pasa de ~10 minutos a ~1. El censo es local y no se commitea (datos
+reales de negocios). Detalles, límites honestos y reglas de uso (LSSI, RGPD,
+ODbL) en [docs/prospect.md](docs/prospect.md).
+
+## Modo plantillas y modo IA
 | | Plantillas (por defecto) | IA (opcional) |
 |---|---|---|
 | Copy de la web | Plantillas de calidad por sector | API de Anthropic (Claude) |
