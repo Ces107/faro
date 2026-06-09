@@ -203,11 +203,19 @@ def create_app(*, use_live: bool = False) -> FastAPI:
         # Cap FIFO del store en memoria: no crece sin límite en sesiones largas.
         while len(packs) > _MAX_PACKS_IN_MEMORY:
             packs.pop(next(iter(packs)))
+        warnings: list[str] = []
+        if not business.whatsapp_looks_mobile:
+            warnings.append(
+                f"El botón de WhatsApp apunta a {business.whatsapp}, que parece un fijo. "
+                "Confirma con el dueño que ese número tiene WhatsApp; si no, pon un móvil "
+                "en el campo «WhatsApp (si es otro)» y vuelve a generar."
+            )
         return JSONResponse(
             {
                 "pack_id": pack_id,
                 "preview_url": f"/preview/{pack_id}",
                 "download_url": f"/download/{pack_id}",
+                "warnings": warnings,
                 "gmb": {
                     "description": pack.gmb.description,
                     "categories": list(pack.gmb.categories),

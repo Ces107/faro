@@ -424,6 +424,17 @@ class BusinessProfile:
         digits = self.whatsapp
         return digits if digits.startswith("34") else f"34{digits}"
 
+    @property
+    def whatsapp_looks_mobile(self) -> bool:
+        """¿El número del botón de WhatsApp parece un móvil español (6xx/7xx)?
+
+        Un fijo (8xx/9xx) PUEDE tener WhatsApp Business, pero lo normal es que
+        no: el botón quedaría muerto en silencio. La consola y el LEEME avisan
+        al operador para que lo confirme con el dueño antes de entregar.
+        """
+        national = self.whatsapp_e164.removeprefix("34")
+        return national.startswith(("6", "7"))
+
     @classmethod
     def from_form(cls, data: dict[str, str]) -> BusinessProfile:
         """Construye un perfil desde el formulario web (campos de texto plano)."""

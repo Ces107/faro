@@ -68,6 +68,8 @@ hecho con la misma herramienta: web propia, ficha de Google y WhatsApp, montado 
 en tu zona aún no tienen web).</span></div>
 <p class="url">{html.escape(url)}</p>
 <p class="price">Pago único desde 290 €. La web es tuya: sin cuotas obligatorias.</p>
+<p class="price">La ficha de Google es gratis y queda en tu cuenta: Google no llama
+para cobrar. Esto es un trabajo de montaje, una vez.</p>
 <p class="contact">{html.escape(contact)}</p>
 </article>"""
 

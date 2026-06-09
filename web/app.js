@@ -210,6 +210,9 @@ async function generate(e) {
 
 function showResult(data) {
   el("empty").classList.add("hidden");
+  // Avisos no bloqueantes (p. ej. botón de WhatsApp apuntando a un fijo):
+  // se enseñan donde el operador puede corregirlos con el dueño delante.
+  el("error").textContent = (data.warnings || []).map((w) => "Aviso: " + w).join(" ");
   const frame = el("preview");
   frame.src = data.preview_url + "?t=" + Date.now();
   frame.classList.remove("hidden");

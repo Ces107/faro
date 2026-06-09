@@ -142,9 +142,20 @@ Esto es todo lo que necesitas para que te encuentren en internet. Qué es cada c
 
 Tu WhatsApp de contacto: {whatsapp_link(business)}
 Tu enlace de reseñas: {review_url(business)}
-
+{_whatsapp_warning(business)}
 {_operator_line()}
 """
+
+
+def _whatsapp_warning(business: BusinessProfile) -> str:
+    """Aviso si el botón de WhatsApp apunta a un número que parece un fijo."""
+    if business.whatsapp_looks_mobile:
+        return ""
+    return (
+        f"\nAVISO: el número del botón de WhatsApp ({business.whatsapp}) parece un fijo."
+        "\nSi ese número no tiene WhatsApp, el botón no contestará nunca: pide que se"
+        "\nregenere el pack con un móvil en el campo de WhatsApp.\n"
+    )
 
 
 def _operator_line() -> str:
