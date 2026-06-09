@@ -272,5 +272,7 @@ def prefill_values(prospect: Prospect, *, city: str) -> dict[str, str]:
             address += f", {prospect.postcode}"
         values["address"] = address
     if prospect.phone:
-        values["phone"] = prospect.phone
+        # OSM admite varios teléfonos separados por ";": el formulario espera UNO
+        # (alimenta el wa.me); el dueño confirma o corrige en la puerta.
+        values["phone"] = prospect.phone.split(";")[0].strip()
     return values

@@ -140,6 +140,23 @@ def test_slug_collisions_get_suffix() -> None:
     assert slugs == ["cerveceria-turia", "cerveceria-turia-2"]
 
 
+def test_prefill_takes_first_phone_of_multivalue() -> None:
+    multi = {
+        "type": "node",
+        "id": 10,
+        "lat": 39.66,
+        "lon": -0.23,
+        "tags": {
+            "amenity": "veterinary",
+            "name": "Multi Tel",
+            "phone": "+34 96 268 11 76;+34 96 378 44 40",
+        },
+    }
+    census = build_census([multi], municipality="Sagunt")
+    values = prefill_values(census.prospects[0], city="Puerto de Sagunto")
+    assert values["phone"] == "+34 96 268 11 76"
+
+
 def test_prefill_only_real_public_data() -> None:
     census = _census()
     veterinaria = next(p for p in census.prospects if "Veterinaria" in p.name)
