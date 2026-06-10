@@ -172,6 +172,10 @@ def core_trust() -> FieldGroup:
             FormField("languages", "Idiomas", placeholder="Castellano, Valenciano"),
             FormField("instagram", "Instagram", placeholder="@tunegocio"),
             FormField("facebook", "Facebook", placeholder="enlace o página"),
+            FormField("registration_number", "Nº de registro sanitario (si aplica)",
+                      placeholder="Ej. R.S. 12.345/V",
+                      help="Para clínicas, farmacias y centros sanitarios: la publicidad "
+                      "debe llevarlo. Va en el aviso legal y en el pie de la web."),
             FormField("google_review_url", "Enlace para reseñas de Google", FieldKind.URL,
                       full_width=True,
                       placeholder="pega el enlace de tu ficha; si no, el QR lleva a una búsqueda"),
@@ -206,6 +210,10 @@ def core_conversion() -> FieldGroup:
             FormField("credentials", "Certificaciones / licencias / colegiación (una por línea)",
                       FieldKind.LIST, full_width=True, rows=2,
                       placeholder="Colegiado nº 1234\nSeguro de responsabilidad civil"),
+            FormField("analytics_goatcounter", "Código de GoatCounter (contador de visitas)",
+                      full_width=True, placeholder="el código de tu cuenta de GoatCounter",
+                      help="Contador de visitas sin cookies, gratis y conforme al RGPD. "
+                      "Permite saber cuántas visitas recibe la web. Déjalo vacío si no usas."),
         ),
     )
 

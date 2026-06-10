@@ -22,6 +22,17 @@ def legal_notice_html(business: BusinessProfile) -> str:
     address = html.escape(raw_address)
     email = f"<li>Email: {html.escape(business.email)}</li>" if business.email else ""
     nif = html.escape(business.cif) if business.cif else _NIF_PLACEHOLDER
+    registration = (
+        f"<li>Nº de registro sanitario: {html.escape(business.registration_number)}</li>"
+        if business.registration_number
+        else ""
+    )
+    analytics_note = (
+        "<p>Esta web cuenta las visitas de forma anónima con GoatCounter, sin "
+        "cookies y sin recoger datos personales identificables.</p>"
+        if business.analytics_goatcounter
+        else ""
+    )
     return f"""<!DOCTYPE html>
 <html lang="es"><head><meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -39,6 +50,7 @@ def legal_notice_html(business: BusinessProfile) -> str:
   <ul>
     <li>Titular: {name}</li>
     <li>NIF/CIF: {nif}</li>
+    {registration}
     <li>Domicilio: {address}</li>
     <li>Teléfono: {business.phone}</li>
     {email}
@@ -57,6 +69,7 @@ def legal_notice_html(business: BusinessProfile) -> str:
   que facilites se usan únicamente para atender tu solicitud y no se ceden a
   terceros. Puedes ejercer tus derechos de acceso, rectificación y supresión
   escribiendo al titular en los datos de contacto indicados arriba.</p>
+  {analytics_note}
 
   <h2>Cookies</h2>
   <p>Esta web no usa cookies propias de seguimiento. Si pulsas para cargar el mapa

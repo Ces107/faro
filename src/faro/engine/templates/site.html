@@ -19,6 +19,7 @@
 {{ jsonld | safe }}
   </script>
   {% if faq_jsonld %}<script type="application/ld+json">{{ faq_jsonld | safe }}</script>{% endif %}
+  {% if analytics %}{{ analytics | safe }}{% endif %}
   <script>document.documentElement.className += ' js';</script>
   <style>
     {{ font_css | safe }}
@@ -721,6 +722,7 @@
             <a href="aviso-legal.html">Aviso legal</a>
             <button class="linkbtn" onclick="faroOpenCookies()">Cookies</button>
             {% if business.cif %}<span>NIF/CIF: {{ business.cif }}</span>{% endif %}
+            {% if business.registration_number %}<span>Nº de registro sanitario: {{ business.registration_number }}</span>{% endif %}
           </div>
         </div>
       </div>

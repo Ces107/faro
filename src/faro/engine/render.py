@@ -27,7 +27,7 @@ from faro.playbook import playbook_for
 from faro.qr import review_qr
 from faro.reviews import review_url
 from faro.sections import build_faq, build_service_cards, build_stats
-from faro.seo import faq_jsonld, favicon_data_uri, local_business_jsonld
+from faro.seo import analytics_snippet, faq_jsonld, favicon_data_uri, local_business_jsonld
 from faro.whatsapp import phone_link, whatsapp_link
 
 _TEMPLATES_DIR = Path(__file__).resolve().parent / "templates"
@@ -110,6 +110,7 @@ def render_site(business: BusinessProfile, copy: LandingCopy) -> str:
         "review_url": review_url(business),
         "review_qr": review_qr(business),
         "favicon": favicon_data_uri(business),
+        "analytics": analytics_snippet(business),
         "jsonld": local_business_jsonld(business),
         "maps_embed_url": maps_embed_url(business) if business.address else "",
         "maps_link": maps_link(business),

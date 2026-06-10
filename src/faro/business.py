@@ -15,6 +15,7 @@ from faro.menu import MenuCategory, parse_menu
 
 _PHONE_RE = re.compile(r"^[6789]\d{8}$")
 _HEX_RE = re.compile(r"^#[0-9a-fA-F]{6}$")
+_GOATCOUNTER_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,40}$")
 
 
 def _rgb(hex_color: str) -> tuple[int, int, int]:
@@ -168,6 +169,25 @@ def _clean_phone(raw: str) -> str:
     return digits
 
 
+def _clean_goatcounter(raw: str) -> str:
+    """Normaliza el código de GoatCounter a un subdominio seguro.
+
+    Acepta el código pelado ('mibar') o la URL completa de la cuenta
+    ('https://mibar.goatcounter.com/count') y devuelve solo el código si es
+    válido. Si no lo es, cadena vacía: como el resto de campos opcionales,
+    degrada en silencio en vez de romper la generación del pack. El charset se
+    restringe a [a-z0-9-] para que sea seguro incrustarlo en el <script> sin
+    escapar (lo consume ``seo.analytics_snippet``).
+    """
+    value = raw.strip().lower()
+    if not value:
+        return ""
+    match = re.match(r"^https?://([a-z0-9-]+)\.goatcounter\.com", value)
+    if match:
+        value = match.group(1)
+    return value if _GOATCOUNTER_RE.match(value) else ""
+
+
 @dataclass(frozen=True)
 class Testimonial:
     """Una reseña real dictada por el dueño. Nunca se inventa."""
@@ -270,6 +290,8 @@ class BusinessProfile:
     credentials: tuple[str, ...] = ()  # certificaciones/licencias/colegiación reales
     menu: tuple[MenuCategory, ...] = ()  # carta estructurada: categorías + precios + alérgenos
     before_after: tuple[BeforeAfter, ...] = ()  # galería antes/después (con consentimiento RGPD)
+    registration_number: str = ""  # nº de registro sanitario u oficial (publicidad sanitaria)
+    analytics_goatcounter: str = ""  # código GoatCounter: contador de visitas sin cookies (RGPD)
 
     def __post_init__(self) -> None:
         if not self.name.strip():
@@ -350,6 +372,12 @@ class BusinessProfile:
         )
         object.__setattr__(self, "service_area", self.service_area.strip()[:160])
         object.__setattr__(self, "credentials", tuple(c[:90] for c in self.credentials[:6]))
+        object.__setattr__(
+            self, "registration_number", self.registration_number.strip()[:80]
+        )
+        object.__setattr__(
+            self, "analytics_goatcounter", _clean_goatcounter(self.analytics_goatcounter)
+        )
 
     @property
     def theme(self) -> SectorTheme:
@@ -495,6 +523,8 @@ class BusinessProfile:
             delivery_links=split_lines(data.get("delivery_links", "")),
             service_area=data.get("service_area", "").strip(),
             credentials=split_lines(data.get("credentials", "")),
+            registration_number=data.get("registration_number", "").strip(),
+            analytics_goatcounter=data.get("analytics_goatcounter", "").strip(),
             menu=parse_menu(data.get("menu", "")),
             before_after=_parse_before_after(
                 data.get("before_after", ""),

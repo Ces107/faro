@@ -142,6 +142,26 @@ def faq_jsonld(faq: list[tuple[str, str]]) -> str:
     return json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
 
 
+def analytics_snippet(business: BusinessProfile) -> str:
+    """Contador de visitas (GoatCounter) para el ``<head>``, o '' si no hay código.
+
+    GoatCounter cuenta páginas vistas sin cookies y sin recoger datos personales,
+    así que NO rompe la promesa de "sin cookies de seguimiento" del aviso legal ni
+    obliga a banner de consentimiento. Es la pieza que permite al operador
+    demostrar que la web recibe visitas (el gap que mataba la pregunta "¿cuántos
+    clientes me trae?"). El código ya viene validado a ``[a-z0-9-]`` por
+    ``BusinessProfile``, así que es seguro incrustarlo sin escapar.
+    """
+    code = business.analytics_goatcounter
+    if not code:
+        return ""
+    endpoint = f"https://{code}.goatcounter.com/count"
+    return (
+        f'<script data-goatcounter="{endpoint}" '
+        'async src="//gc.zgo.at/count.js"></script>'
+    )
+
+
 def favicon_data_uri(business: BusinessProfile) -> str:
     """Favicon SVG (inicial del negocio sobre el color de marca)."""
     svg = (
