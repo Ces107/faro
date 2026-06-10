@@ -17,6 +17,9 @@ venv/
 output/
 *.zip
 
+# Binario de cloudflared para faro-demo (se descarga solo la primera vez; ~52 MB)
+tools/bin/
+
 # Prospecting census (real business names from OSM; local-only, never published)
 /prospect/
 

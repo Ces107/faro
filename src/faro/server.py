@@ -71,6 +71,36 @@ def _save_pack_to_disk(
         pass
 
 
+def _demo_form_for(slug: str) -> dict[str, str] | None:
+    """Datos de formulario para la demo pública de un negocio.
+
+    Si el slug está en el censo (``faro-prospect``), superpone sus datos reales
+    (nombre, dirección…) sobre los datos de ejemplo del sector: así la web sale
+    completa y presentable aunque el censo traiga pocos campos, y el operador
+    sustituye el resto con el dueño delante. Si el slug no está en el censo pero
+    es un sector válido, usa solo el ejemplo. Devuelve ``None`` si no hay ninguno.
+    """
+    from faro.engine.demo import demo_data
+
+    prospect = _load_prospects().get(slug)
+    if prospect is not None:
+        raw = prospect.get("values", {})
+        items = raw.items() if isinstance(raw, dict) else []
+        real = {str(k): str(v) for k, v in items if str(v).strip()}
+        sector = str(prospect.get("sector", "otro"))
+        try:
+            base = demo_data(Sector(sector))
+        except ValueError:
+            base = {}
+        return {**base, **real, "sector": sector}
+
+    try:
+        sector_enum = Sector(slug)
+    except ValueError:
+        return None
+    return {**demo_data(sector_enum), "sector": sector_enum.value}
+
+
 class GenerateRequest(BaseModel):
     name: str = ""
     sector: str = "otro"
@@ -190,6 +220,28 @@ def create_app(*, use_live: bool = False) -> FastAPI:
             raise HTTPException(status_code=404, detail="Negocio no encontrado en el censo")
         return JSONResponse({"slug": slug, **entry})
 
+    @app.get("/d/{slug}", response_class=HTMLResponse)
+    def public_demo(slug: str) -> HTMLResponse:
+        """Web del negocio a pantalla completa para la demo en el móvil del cliente.
+
+        Toma los datos públicos del censo (``faro-prospect``); si el slug no está
+        en el censo pero es un sector válido (p. ej. ``/d/bar``), usa los datos de
+        ejemplo de ese sector. El cliente ve SOLO su web, sin el panel del operador.
+        Es lo que sirve ``faro-demo`` detrás del túnel público.
+        """
+        form = _demo_form_for(slug)
+        if form is None:
+            raise HTTPException(
+                status_code=404,
+                detail="No está en el censo ni es un sector válido.",
+            )
+        try:
+            business = BusinessProfile.from_form(form)
+        except ValueError as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
+        pack = build_pack(business, use_live=use_live)
+        return HTMLResponse(pack.landing_html)
+
     @app.post("/api/generate")
     def generate(req: GenerateRequest) -> JSONResponse:
         try:
@@ -264,8 +316,10 @@ app = create_app(use_live=os.environ.get("FARO_LIVE") == "1")
 def main() -> None:
     import uvicorn
 
-    print("Faro — demo en http://localhost:8000")
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    host = os.environ.get("FARO_HOST", "127.0.0.1")
+    port = int(os.environ.get("FARO_PORT", "8000"))
+    print(f"Faro — demo en http://localhost:{port}")
+    uvicorn.run(app, host=host, port=port)
 
 
 if __name__ == "__main__":

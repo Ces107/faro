@@ -42,6 +42,14 @@ puerta pasa de ~10 minutos a ~1. El censo es local y no se commitea (datos
 reales de negocios). Detalles, límites honestos y reglas de uso (LSSI, RGPD,
 ODbL) en [docs/prospect.md](docs/prospect.md).
 
+## Demo en vivo y publicación (faro-demo / faro-publish)
+
+`faro-demo casa-paco` arranca el servidor, abre un túnel público efímero (sin
+cuenta) y muestra un **QR**: el cliente lo escanea y ve **su** web en **su**
+móvil, en la puerta. `faro-publish casa-paco` deja la web online de verdad en una
+URL persistente `*.pages.dev` (Cloudflare Pages, free tier) para entregar tras
+cerrar. Detalles, requisitos y notas de red en [docs/demo.md](docs/demo.md).
+
 ## Modo plantillas y modo IA
 | | Plantillas (por defecto) | IA (opcional) |
 |---|---|---|
