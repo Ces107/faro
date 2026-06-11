@@ -100,7 +100,11 @@
 
   var consent = null;
   try { consent = localStorage.getItem("faro_cookies"); } catch (e) {}
-  if (consent === null) { var cb = document.getElementById("cookie"); if (cb) { cb.classList.add("show"); document.body.classList.add("cookie-open"); } }
+  if (consent === null) {
+    var cb = document.getElementById("cookie");
+    // Retardo: que la web entre primero; el aviso asoma en la esquina al cabo de 1 s.
+    if (cb) setTimeout(function () { cb.classList.add("show"); document.body.classList.add("cookie-open"); }, 1000);
+  }
   window.faroCookies = function (accept) {
     try { localStorage.setItem("faro_cookies", accept ? "1" : "0"); } catch (e) {}
     document.getElementById("cookie").classList.remove("show");

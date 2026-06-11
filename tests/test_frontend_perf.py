@@ -60,3 +60,24 @@ def test_nav_gains_shadow_on_scroll() -> None:
     # El JS togglea .scrolled pasados 8px; el CSS debe darle estilo (antes no).
     html = build_landing(_biz(Sector.DENTAL), use_live=False)
     assert ".nav.scrolled{" in html
+
+
+def test_photo_hero_is_cinematic() -> None:
+    # Hero con foto: capa ::before con ken-burns + indicador de scroll.
+    html = build_landing(_biz(Sector.DENTAL, photos=(_PHOTO,)), use_live=False)
+    assert ".hero-photo::before{" in html
+    assert "@keyframes faro-ken{" in html
+    assert '<div class="scroll-cue" aria-hidden="true"></div>' in html
+
+
+def test_no_scroll_cue_without_photo_hero() -> None:
+    # El indicador de scroll es un elemento del hero con foto, no del editorial.
+    editorial = build_landing(_biz(Sector.ASESORIA, photos=(_PHOTO,)), use_live=False)
+    assert "hero-editorial" in editorial
+    assert '<div class="scroll-cue"' not in editorial
+
+
+def test_cookie_notice_is_compact_toast() -> None:
+    # El aviso es un toast fino en una esquina, no el cajón ancho de antes.
+    html = build_landing(_biz(Sector.DENTAL), use_live=False)
+    assert "width:min(340px,calc(100% - 32px))" in html

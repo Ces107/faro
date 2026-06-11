@@ -169,9 +169,21 @@
     /* (1) FOTO A SANGRE — la imagen del negocio a casi pantalla completa, el nombre
        descomunal anclado abajo, una barra fina arriba (kicker + valoración). */
     .hero-photo{color:#fff;min-height:clamp(560px,93vh,1000px);min-height:clamp(560px,93dvh,1000px);display:flex;flex-direction:column;
-      justify-content:space-between;padding-block:clamp(82px,11vh,128px) clamp(40px,6vw,76px);position:relative;
-      background:linear-gradient(180deg,rgba(0,0,0,.46),rgba(0,0,0,.05) 24%,rgba(0,0,0,.30) 62%,rgba(0,0,0,.86)),
-        linear-gradient(180deg,transparent 58%,rgba(var(--brand-rgb),.36)),var(--hero-img) center/cover;}
+      justify-content:space-between;padding-block:clamp(82px,11vh,128px) clamp(40px,6vw,76px);position:relative;overflow:hidden;
+      background:#0b0b0c;}
+    /* La foto va en una capa propia (::before) para poder darle un ken-burns lento
+       al cargar: la web "respira" en vez de quedarse congelada. El gradiente oscuro
+       + el tinte de marca abajo hacen que el nombre gigante destaque siempre. */
+    .hero-photo::before{content:"";position:absolute;inset:0;z-index:0;
+      background:radial-gradient(125% 105% at 50% 38%,transparent 52%,rgba(0,0,0,.40)),
+        linear-gradient(180deg,rgba(0,0,0,.50),rgba(0,0,0,.04) 26%,rgba(0,0,0,.32) 60%,rgba(0,0,0,.90)),
+        linear-gradient(180deg,transparent 54%,rgba(var(--brand-rgb),.42)),var(--hero-img) center/cover;
+      transform-origin:50% 55%;will-change:transform;}
+    .hero-photo>.wrap{position:relative;z-index:1;}
+    /* Ken-burns lento e infinito: la foto siempre respira, nunca se queda congelada. */
+    @media (prefers-reduced-motion:no-preference){
+      .hero-photo::before{animation:faro-ken 26s ease-in-out infinite alternate;}}
+    @keyframes faro-ken{from{transform:scale(1.02)}to{transform:scale(1.09)}}
     .hero-photo .top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;}
     .hero-photo .kicker{color:#fff;}
     .hero-photo .top .rating{color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.28);
@@ -184,6 +196,16 @@
     .hero-photo .sub{margin-top:14px;max-width:52ch;color:rgba(255,255,255,.9);font-size:1.1rem;}
     .hero-photo .btn-line{color:#fff;border-color:rgba(255,255,255,.6);}
     .hero-photo .btn-line:hover{background:#fff;color:var(--ink);}
+    /* Indicador de scroll: un ratón estilizado con la rueda que baja. Señal premium
+       sobria al pie del hero con foto; se va al hacer scroll (queda fuera de pantalla). */
+    .scroll-cue{position:absolute;left:50%;bottom:20px;transform:translateX(-50%);z-index:1;
+      width:25px;height:40px;border:2px solid rgba(255,255,255,.5);border-radius:13px;}
+    .scroll-cue::after{content:"";position:absolute;left:50%;top:8px;width:3px;height:8px;border-radius:2px;
+      background:#fff;transform:translateX(-50%);}
+    @media (prefers-reduced-motion:no-preference){
+      .scroll-cue::after{animation:faro-cue 1.7s ease-in-out infinite;}}
+    @keyframes faro-cue{0%{opacity:0;transform:translate(-50%,0)}25%{opacity:1}
+      70%{opacity:0;transform:translate(-50%,13px)}100%{opacity:0}}
     /* Datos afirmativos del dueño sobre la foto: chips translúcidos legibles. */
     .hero-flags{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;}
     .hero-flags span{display:inline-flex;align-items:center;font-size:.82rem;font-weight:600;
@@ -436,13 +458,15 @@
       background:var(--paper);color:var(--ink);border:var(--border) solid var(--ink);display:grid;place-items:center;
       cursor:pointer;opacity:0;pointer-events:none;transition:opacity .3s;z-index:90;}
     .to-top.show{opacity:1;pointer-events:auto;}
-    .cookie{position:fixed;left:16px;right:16px;bottom:16px;max-width:540px;margin:0 auto;background:var(--paper);
-      border:var(--border) solid var(--ink);border-radius:var(--radius);box-shadow:6px 6px 0 var(--ink);
-      padding:18px;z-index:120;display:none;}
-    .cookie.show{display:block;}
-    .cookie p{font-size:.9rem;color:var(--text-soft);margin-bottom:12px;}
-    .cookie .row{display:flex;gap:10px;flex-wrap:wrap;}
-    .cookie .btn{padding:10px 16px;font-size:.9rem;}
+    /* Aviso de cookies: toast fino en una esquina, NO un cajón que tape el hero.
+       Aparece con retardo (JS) para que la web entre primero. */
+    .cookie{position:fixed;left:16px;bottom:16px;width:min(340px,calc(100% - 32px));background:var(--paper);
+      border:1px solid var(--ink);border-radius:var(--radius);box-shadow:var(--shadow-pop);
+      padding:14px 16px;z-index:120;display:none;}
+    .cookie.show{display:block;animation:faro-rise .4s cubic-bezier(.22,1,.36,1) both;}
+    .cookie p{font-size:.82rem;color:var(--text-soft);margin-bottom:10px;line-height:1.45;}
+    .cookie .row{display:flex;gap:8px;flex-wrap:wrap;}
+    .cookie .btn{padding:8px 14px;font-size:.82rem;}
 
     /* --- Firmas de motion (las activa el motor GSAP; sin JS no hacen nada) --- */
     /* Galería pinneada (carta/estudio): la rejilla pasa a tira horizontal panorámica. */
@@ -521,10 +545,10 @@
       *{transition-duration:.001ms !important;animation-duration:.001ms !important;animation-iteration-count:1 !important;}
       [data-reveal]{opacity:1 !important;}}
     /* Imprimir / motores que no hacen scroll: nada puede quedar oculto por el reveal. */
-    @media print{.nav,.wa-float,.to-top,.cookie,.map-consent,.progress{display:none !important;}
+    @media print{.nav,.wa-float,.to-top,.cookie,.map-consent,.progress,.scroll-cue{display:none !important;}
       [data-reveal]{opacity:1 !important;transform:none !important;animation:none !important;clip-path:none !important;}}
-    /* Mientras el aviso de cookies está abierto, no solapar con el botón flotante. */
-    body.cookie-open .wa-float{opacity:0;pointer-events:none;transform:translateY(8px);}
+    /* El toast de cookies vive en la esquina opuesta al botón de WhatsApp, así que
+       el botón sigue visible (no se sacrifica conversión por el aviso). */
   </style>
 </head>
 <body data-signature="authority">
@@ -1002,7 +1026,11 @@
 
   var consent = null;
   try { consent = localStorage.getItem("faro_cookies"); } catch (e) {}
-  if (consent === null) { var cb = document.getElementById("cookie"); if (cb) { cb.classList.add("show"); document.body.classList.add("cookie-open"); } }
+  if (consent === null) {
+    var cb = document.getElementById("cookie");
+    // Retardo: que la web entre primero; el aviso asoma en la esquina al cabo de 1 s.
+    if (cb) setTimeout(function () { cb.classList.add("show"); document.body.classList.add("cookie-open"); }, 1000);
+  }
   window.faroCookies = function (accept) {
     try { localStorage.setItem("faro_cookies", accept ? "1" : "0"); } catch (e) {}
     document.getElementById("cookie").classList.remove("show");
