@@ -77,6 +77,13 @@ def render_site(business: BusinessProfile, copy: LandingCopy) -> str:
     offer_eyebrow = "La carta" if is_carta else "Lo que ofrecemos"
     faq = build_faq(business, playbook)
 
+    # LCP: el hero a sangre usa la 1ª foto como fondo CSS (prioridad mínima por
+    # defecto). Cuando ese hero se renderiza, precargamos esa imagen con prioridad
+    # alta para que pinte cuanto antes (clave en la demo en el móvil a 4G). Los
+    # heroes 'poster' (color sólido) y 'editorial' (sin foto) no precargan nada.
+    hero_uses_photo = tokens.hero not in ("poster", "editorial") and bool(business.photos)
+    hero_preload = business.photos[0] if hero_uses_photo else ""
+
     # La familia fija la dirección de arte (tipografía, layout, neutros); si el
     # negocio aporta su color de marca, personaliza el acento sin romperla.
     css_vars = tokens.to_css_vars()
@@ -97,6 +104,7 @@ def render_site(business: BusinessProfile, copy: LandingCopy) -> str:
         "motion_js": motion_js(),
         "signature": signature_for(tokens),
         "css_vars": css_vars,
+        "hero_preload": hero_preload,
         "offer_eyebrow": offer_eyebrow,
         "proceso_title": "Cómo trabajamos",
         "service_cards": build_service_cards(business, playbook),
