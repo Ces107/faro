@@ -173,7 +173,10 @@
        El texto usa --on-brand (negro sobre lima, blanco sobre rojo): WCAG real. */
     .hero-poster{background:var(--brand);color:var(--on-brand);position:relative;overflow:hidden;
       min-height:clamp(520px,82vh,860px);min-height:clamp(520px,82dvh,860px);display:flex;align-items:center;padding-block:clamp(90px,12vh,150px);}
-    .hero-poster h1{font-size:clamp(3.4rem,1rem + 11vw,10rem);text-transform:uppercase;letter-spacing:-.03em;line-height:.86;margin:.1em 0;}
+    /* Título descomunal, pero que NUNCA parta una palabra a la mitad en móvil
+       (un nombre como "GIMNASIO" no debe salir "GIMNASI" + "O"): tamaño fluido
+       más prudente en el extremo bajo + sin corte intra-palabra. */
+    .hero-poster h1{font-size:clamp(2.4rem,.4rem + 9vw,10rem);text-transform:uppercase;letter-spacing:-.03em;line-height:.86;margin:.1em 0;overflow-wrap:normal;word-break:keep-all;}
     .hero-poster .kicker,.hero-poster .slogan{color:var(--on-brand);}
     .hero-poster .slogan{font-style:normal;font-weight:800;opacity:.92;text-transform:uppercase;letter-spacing:.02em;}
     .hero-poster .sub{color:var(--on-brand);opacity:.82;max-width:50ch;font-size:1.1rem;margin-top:16px;}
