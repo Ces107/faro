@@ -3,10 +3,11 @@
 from __future__ import annotations
 
 import json
+from urllib.parse import parse_qs, urlsplit
 
 from faro.business import BusinessProfile, Sector
 from faro.landing import build_landing
-from faro.seo import favicon_data_uri, local_business_jsonld, schema_type
+from faro.seo import favicon_data_uri, local_business_jsonld, schema_type, tracked_url
 
 
 def _biz(**ov: object) -> BusinessProfile:
@@ -20,6 +21,37 @@ def _biz(**ov: object) -> BusinessProfile:
     }
     data.update(ov)
     return BusinessProfile(**data)  # type: ignore[arg-type]
+
+
+def test_tracked_url_empty_without_canonical() -> None:
+    # Sin URL publicada no hay a dónde atribuir: cadena vacía, no una URL rota.
+    assert tracked_url(_biz(), source="qr-mostrador") == ""
+
+
+def test_tracked_url_appends_utm_params() -> None:
+    biz = _biz(canonical_url="https://casapaco.netlify.app/")
+    url = tracked_url(biz, source="qr-mostrador", medium="qr", campaign="local")
+    q = parse_qs(urlsplit(url).query)
+    assert q["utm_source"] == ["qr-mostrador"]
+    assert q["utm_medium"] == ["qr"]
+    assert q["utm_campaign"] == ["local"]
+    assert url.startswith("https://casapaco.netlify.app/")
+
+
+def test_tracked_url_preserves_existing_query_and_no_duplicate_utm() -> None:
+    biz = _biz(canonical_url="https://casapaco.com/?ref=x&utm_source=ya")
+    url = tracked_url(biz, source="google-business", medium="organic")
+    q = parse_qs(urlsplit(url).query)
+    # respeta query existente y no pisa un utm_source ya presente
+    assert q["ref"] == ["x"]
+    assert q["utm_source"] == ["ya"]
+    assert q["utm_medium"] == ["organic"]
+
+
+def test_tracked_url_never_touches_canonical_in_jsonld() -> None:
+    # El canonical de la propia página debe quedar SIN etiquetas UTM.
+    biz = _biz(canonical_url="https://casapaco.com/")
+    assert "utm_" not in local_business_jsonld(biz)
 
 
 def test_schema_type_per_sector() -> None:

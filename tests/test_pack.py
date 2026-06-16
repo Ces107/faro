@@ -89,6 +89,31 @@ def test_readme_includes_operator_contact_when_set(monkeypatch: pytest.MonkeyPat
     assert "600111222" in leeme
 
 
+def test_pack_adds_web_qr_and_website_section_when_published() -> None:
+    # Con URL publicada, el pack incluye el QR a la web (atribución mostrador) y
+    # la ficha de Google trae la URL etiquetada para el campo "Sitio web".
+    biz = _biz(canonical_url="https://sonrie.netlify.app/")
+    data = to_zip(build_pack(biz, use_live=False), biz)
+    with zipfile.ZipFile(io.BytesIO(data)) as zf:
+        names = set(zf.namelist())
+        assert "web-qr.svg" in names
+        assert "<svg" in zf.read("web-qr.svg").decode("utf-8")
+        gmb = zf.read("google-business.md").decode("utf-8")
+        assert "Sitio web" in gmb
+        assert "utm_source=google-business" in gmb
+        leeme = zf.read("LEEME.txt").decode("utf-8")
+        assert "web-qr.svg" in leeme
+
+
+def test_pack_omits_web_qr_before_publish() -> None:
+    # Sin canonical_url no hay a dónde apuntar: nada de web-qr ni sección web.
+    biz = _biz()
+    data = to_zip(build_pack(biz, use_live=False), biz)
+    with zipfile.ZipFile(io.BytesIO(data)) as zf:
+        assert "web-qr.svg" not in set(zf.namelist())
+        assert "## Sitio web" not in zf.read("google-business.md").decode("utf-8")
+
+
 def test_pack_without_optional_fields() -> None:
     biz = BusinessProfile(
         name="Peluquería Ana",

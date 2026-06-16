@@ -13,7 +13,7 @@ Lo que de verdad ayuda a "que te encuentren en Google":
 from __future__ import annotations
 
 import json
-from urllib.parse import quote
+from urllib.parse import parse_qsl, quote, urlencode, urlsplit, urlunsplit
 
 from faro.business import BusinessProfile, Sector
 from faro.hours import parse_opening_hours
@@ -160,6 +160,42 @@ def analytics_snippet(business: BusinessProfile) -> str:
         f'<script data-goatcounter="{endpoint}" '
         'async src="//gc.zgo.at/count.js"></script>'
     )
+
+
+def tracked_url(
+    business: BusinessProfile,
+    *,
+    source: str,
+    medium: str = "qr",
+    campaign: str = "",
+) -> str:
+    """URL del sitio del negocio con etiquetas UTM, para atribución por canal.
+
+    El contador (GoatCounter, ``analytics_snippet``) cuenta visitas pero no sabe
+    de DÓNDE vienen. Si el QR del mostrador y el campo "Sitio web" de la ficha de
+    Google llevan la misma URL pero con una etiqueta distinta, en el panel se ve
+    cuántas visitas trae cada canal: eso es lo que permite responder con datos a
+    "¿cuántos clientes me trae la web?" (el gap del buyer-review).
+
+    SOLO para colocaciones EXTERNAS (ficha de Google, QR impreso, folleto). El
+    canonical / Open Graph / JSON-LD de la propia página usan ``canonical_url``
+    SIN tocar y deben quedar limpios; por eso esto es una función aparte y no se
+    aplica nunca a esas piezas.
+
+    Devuelve '' si el negocio aún no tiene URL publicada (``canonical_url``): la
+    atribución solo existe cuando hay un sitio al que apuntar.
+    """
+    base = business.canonical_url
+    if not base:
+        return ""
+    new_params = [("utm_source", source), ("utm_medium", medium)]
+    if campaign:
+        new_params.append(("utm_campaign", campaign))
+    split = urlsplit(base)
+    query = parse_qsl(split.query, keep_blank_values=True)
+    existing = {key for key, _ in query}
+    query.extend((key, value) for key, value in new_params if key not in existing)
+    return urlunsplit(split._replace(query=urlencode(query)))
 
 
 def favicon_data_uri(business: BusinessProfile) -> str:

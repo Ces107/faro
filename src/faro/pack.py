@@ -25,6 +25,7 @@ from faro.reviews import (
     review_replies,
     review_url,
 )
+from faro.seo import tracked_url
 from faro.whatsapp import whatsapp_link
 
 
@@ -82,6 +83,20 @@ def _gmb_markdown(business: BusinessProfile, gmb: GmbContent, replies: ReviewRep
     posts = "\n\n".join(f"**Publicación {i}:**\n{p}" for i, p in enumerate(gmb.posts, 1))
     services = "\n".join(f"- {s}" for s in gmb.services)
     offer = playbook_for(business.sector).offer_word.capitalize()
+    web_url = tracked_url(business, source="google-business", medium="organic", campaign="ficha")
+    web_section = (
+        f"""## Sitio web (pégalo en el campo "Sitio web" de tu ficha)
+
+{web_url}
+
+Esta dirección lleva una etiqueta invisible para que en tu contador de visitas
+puedas ver cuánta gente llega a la web desde tu ficha de Google. Funciona igual
+que la web normal; la etiqueta no se ve.
+
+"""
+        if web_url
+        else ""
+    )
     return f"""# Google Business Profile — {business.name}
 
 Pega esto en tu ficha de Google Business (business.google.com).
@@ -94,7 +109,7 @@ Pega esto en tu ficha de Google Business (business.google.com).
 
 {", ".join(gmb.categories)}
 
-## {offer}
+{web_section}## {offer}
 
 {services}
 
@@ -113,6 +128,17 @@ Pega esto en tu ficha de Google Business (business.google.com).
 **Reseña mala (1-2 estrellas):**
 {replies.negative}
 """
+
+
+def _web_qr_line(business: BusinessProfile) -> str:
+    """Línea del LEEME para el QR que lleva a la web (solo si hay URL publicada)."""
+    if not tracked_url(business, source="qr-mostrador", medium="qr", campaign="local"):
+        return ""
+    return (
+        "\n6. web-qr.svg — Un QR que lleva a TU web (no a las reseñas)."
+        "\n   Ponlo en el escaparate, la carta o el mostrador. Lleva una etiqueta"
+        "\n   para que en el contador de visitas veas cuánta gente entra por aquí.\n"
+    )
 
 
 def _readme(business: BusinessProfile) -> str:
@@ -139,7 +165,7 @@ Esto es todo lo que necesitas para que te encuentren en internet. Qué es cada c
 5. aviso-legal.html — El aviso legal de tu web (lo exige la ley).
    Súbelo junto a la web (ya va enlazado en el pie). Completa tu NIF antes de
    publicarlo y, si tienes dudas, revísalo con tu asesor.
-
+{_web_qr_line(business)}
 Tu WhatsApp de contacto: {whatsapp_link(business)}
 Tu enlace de reseñas: {review_url(business)}
 {_whatsapp_warning(business)}
@@ -197,6 +223,9 @@ def to_zip(pack: DigitalPresencePack, business: BusinessProfile) -> bytes:
         zf.writestr("tarjeta-resenas.html", pack.review_card_html)
         zf.writestr("resenas-qr.svg", qr_svg(pack.review_url))
         zf.writestr("whatsapp-qr.svg", qr_svg(pack.whatsapp_url, dark=business.theme.accent))
+        web_qr_url = tracked_url(business, source="qr-mostrador", medium="qr", campaign="local")
+        if web_qr_url:
+            zf.writestr("web-qr.svg", qr_svg(web_qr_url, dark=business.theme.color))
         zf.writestr("aviso-legal.html", pack.legal_html)
         zf.writestr("LEEME.txt", _readme(business))
     return buffer.getvalue()
