@@ -150,8 +150,11 @@
       var wa = cf.getAttribute("data-wa"), endpoint = cf.getAttribute("data-endpoint");
       var toWhatsApp = function () {
         if (!wa) { setStat("No se pudo enviar. Inténtalo por teléfono.", "err"); return; }
+        // wa.me ya trae un ?text= por defecto: reemplázalo (no lo dupliques) por el
+        // mensaje compuesto con los datos del lead, o wa.me ignoraría estos.
+        var base = wa.split("?")[0];
         var text = "Hola, soy " + name + " (" + email + (phone ? ", " + phone : "") + "). " + message;
-        window.open(wa + (wa.indexOf("?") >= 0 ? "&" : "?") + "text=" + encodeURIComponent(text), "_blank");
+        window.open(base + "?text=" + encodeURIComponent(text), "_blank");
         setStat("Te llevamos a WhatsApp para enviarlo…", "ok");
       };
       if (!endpoint) { toWhatsApp(); return; }
