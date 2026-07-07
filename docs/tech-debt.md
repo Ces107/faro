@@ -41,6 +41,15 @@ la demo ni la entrega de un pack; se listan para no esconderlos.
   legible; el color vivo se mantiene en los acentos sobre fondo blanco. Verificado
   con un color amarillo. Cubierto por `test_hero_gradient_light_color_is_darkened`.
 
+- **TD-009 LOW — el formulario de contacto solo prueba su render, no la JS.**
+  La sección `#contacto` (feature 2026-07-07) se cubre con tests de render
+  (campos, `data-wa`, `data-endpoint`, obligatorios). La lógica de envío (WhatsApp
+  base-URL sin duplicar `text=`; POST `{name,email,phone,message}` a faro-backend;
+  fallback a WhatsApp si el backend cae; bloqueo de envío vacío) se verificó
+  conduciendo el form en Chromium, pero NO hay test automatizado de esa JS en la
+  suite pytest. Fix futuro: un test Playwright opcional (marker de red/browser) que
+  ejercite el submit estático y el dinámico. La verificación manual queda en LEDGER.
+
 - **TD-008 LOW — el horario no entra en los datos estructurados.**
   El JSON-LD no incluye `openingHours` porque el horario es texto libre y
   convertirlo al formato schema.org (`Mo-Fr 09:00-20:00`) requiere parsearlo.
