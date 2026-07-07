@@ -65,15 +65,27 @@ _INIT_JS = """
     try { return gsap.fromTo(el, props.from, props.to); } catch (e) { if (el.classList) el.classList.add("vis"); }
   }
 
+  // Difiere hasta que carguen las fuentes. SplitText mide la geometría de los glifos;
+  // partir con la fuente fallback y re-maquetar al entrar la web font provoca un flash
+  // visible en los titulares (GSAP avisa "SplitText called before fonts loaded"). Si el
+  // API de fuentes no existe, ejecuta ya (degradación segura: el titular queda visible).
+  function whenFontsReady(fn) {
+    try { if (document.fonts && document.fonts.ready) { document.fonts.ready.then(fn); } else { fn(); } }
+    catch (e) { fn(); }
+  }
+
   // --- Titular cinético del hero (SplitText, líneas enmascaradas) ---
-  try {
-    var h1 = document.querySelector(".hero h1");
-    var sig0 = document.body.getAttribute("data-signature") || "";
-    if (h1 && STX && sig0 !== "poster-gym") {
-      var split = new STX(h1, { type: "lines,words", mask: "lines" });
-      gsap.from(split.words, { yPercent: 118, duration: 0.9, ease: "expo.out", stagger: { each: 0.045 } });
-    }
-  } catch (e) {}
+  // Diferido a whenFontsReady: el titular es el WOW del hero, no puede parpadear.
+  whenFontsReady(function () {
+    try {
+      var h1 = document.querySelector(".hero h1");
+      var sig0 = document.body.getAttribute("data-signature") || "";
+      if (h1 && STX && sig0 !== "poster-gym") {
+        var split = new STX(h1, { type: "lines,words", mask: "lines" });
+        gsap.from(split.words, { yPercent: 118, duration: 0.9, ease: "expo.out", stagger: { each: 0.045 } });
+      }
+    } catch (e) {}
+  });
 
   // --- Sistema de reveal con ScrollTrigger (reusa .vis + el stagger --i) ---
   // Solo oculta EN onEnter (nunca pre-oculta inline lo de bajo del fold), así la
@@ -156,11 +168,13 @@ _INIT_JS = """
       });
     },
     "poster-gym": function () {                             // gimnasio: titular slam + marquee reactivo a velocidad
-      try {
-        var h = document.querySelector(".hero-poster h1");
-        if (h && STX) { var s = new STX(h, { type: "chars" });
-          gsap.from(s.chars, { yPercent: 135, autoAlpha: 0, duration: 0.5, stagger: 0.02, ease: "back.out(2)" }); }
-      } catch (e) {}
+      whenFontsReady(function () {                           // el slam mide chars: espera la web font (evita reflow)
+        try {
+          var h = document.querySelector(".hero-poster h1");
+          if (h && STX) { var s = new STX(h, { type: "chars" });
+            gsap.from(s.chars, { yPercent: 135, autoAlpha: 0, duration: 0.5, stagger: 0.02, ease: "back.out(2)" }); }
+        } catch (e) {}
+      });
       posterParallax();
       var track = document.querySelector(".marquee .track");
       if (track) {
