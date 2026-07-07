@@ -133,5 +133,37 @@
       t.setAttribute("tabindex", "-1"); t.focus({ preventScroll: true });
     });
   });
+
+  // --- Formulario de contacto: capta el lead sin perderlo nunca ---
+  // Tier dinámico (data-endpoint): POST JSON a faro-backend. Tier estático o fallo de
+  // red: compone un WhatsApp prellenado con los datos. Un lead nunca se pierde.
+  var cf = document.getElementById("contactForm");
+  if (cf) {
+    var cstat = document.getElementById("contactStatus");
+    var setStat = function (msg, cls) { if (cstat) { cstat.textContent = msg; cstat.className = "cf-status" + (cls ? " " + cls : ""); } };
+    cf.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      var el = cf.elements;
+      var name = (el["name"].value || "").trim(), email = (el["email"].value || "").trim();
+      var phone = (el["phone"].value || "").trim(), message = (el["message"].value || "").trim();
+      if (!name || !email || !message) { setStat("Completa nombre, email y mensaje.", "err"); return; }
+      var wa = cf.getAttribute("data-wa"), endpoint = cf.getAttribute("data-endpoint");
+      var toWhatsApp = function () {
+        if (!wa) { setStat("No se pudo enviar. Inténtalo por teléfono.", "err"); return; }
+        var text = "Hola, soy " + name + " (" + email + (phone ? ", " + phone : "") + "). " + message;
+        window.open(wa + (wa.indexOf("?") >= 0 ? "&" : "?") + "text=" + encodeURIComponent(text), "_blank");
+        setStat("Te llevamos a WhatsApp para enviarlo…", "ok");
+      };
+      if (!endpoint) { toWhatsApp(); return; }
+      var btn = cf.querySelector("button[type=submit]"); if (btn) btn.disabled = true;
+      setStat("Enviando…", "");
+      fetch(endpoint, { method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: name, email: email, phone: phone, message: message }) })
+        .then(function (r) { if (!r.ok) throw new Error("bad status");
+          cf.reset(); setStat("¡Gracias! Hemos recibido tu mensaje.", "ok"); })
+        .catch(function () { toWhatsApp(); })  // backend caído -> no perder el lead
+        .finally(function () { if (btn) btn.disabled = false; });
+    });
+  }
 })();
 </script>

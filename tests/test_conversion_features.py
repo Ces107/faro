@@ -80,3 +80,31 @@ def test_nothing_invented_when_empty() -> None:
     )
     for marker in markers:
         assert marker not in html, marker
+
+
+def test_contact_form_always_renders_with_whatsapp_fallback() -> None:
+    """El formulario de contacto sale siempre y trae el WhatsApp de respaldo."""
+    html = build_landing(_biz(whatsapp="620000000"), use_live=False)
+    assert 'id="contactForm"' in html
+    for field in ('name="name"', 'name="email"', 'name="phone"', 'name="message"'):
+        assert field in html, field
+    # Respaldo estático: el WhatsApp va en data-wa; sin endpoint dinámico por defecto.
+    assert "data-wa=" in html
+    assert 'data-endpoint="' not in html  # el atributo no se emite (la JS sí menciona la cadena)
+    # Contacto está en la navegación.
+    assert 'href="#contacto"' in html
+
+
+def test_contact_form_wires_dynamic_endpoint_when_set() -> None:
+    """Con contact_endpoint (tier dinámico), el formulario apunta a faro-backend."""
+    url = "https://saguntweb.com/api/v1/negocio/contact"
+    html = build_landing(_biz(contact_endpoint=url), use_live=False)
+    assert f'data-endpoint="{url}"' in html
+    # El respaldo de WhatsApp sigue presente para no perder el lead si el backend cae.
+    assert "data-wa=" in html
+
+
+def test_contact_form_required_fields_marked() -> None:
+    html = build_landing(_biz(), use_live=False)
+    # nombre, email y mensaje son obligatorios; teléfono no.
+    assert html.count("required") >= 3

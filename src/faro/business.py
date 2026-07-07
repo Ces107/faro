@@ -292,6 +292,8 @@ class BusinessProfile:
     before_after: tuple[BeforeAfter, ...] = ()  # galería antes/después (con consentimiento RGPD)
     registration_number: str = ""  # nº de registro sanitario u oficial (publicidad sanitaria)
     analytics_goatcounter: str = ""  # código GoatCounter: contador de visitas sin cookies (RGPD)
+    contact_endpoint: str = ""  # URL POST del formulario (tier dinámico, faro-backend); vacío =
+    #                             tier estático (el formulario compone un WhatsApp prellenado)
 
     def __post_init__(self) -> None:
         if not self.name.strip():

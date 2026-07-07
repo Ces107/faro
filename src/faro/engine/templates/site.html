@@ -511,6 +511,25 @@
       [data-reveal]{opacity:1 !important;transform:none !important;animation:none !important;clip-path:none !important;}}
     /* El toast de cookies vive en la esquina opuesta al botón de WhatsApp, así que
        el botón sigue visible (no se sacrifica conversión por el aviso). */
+    /* Formulario de contacto: capta el lead en la página. En tier estático compone
+       un WhatsApp prellenado; en tier dinámico hace POST al backend (faro-backend). */
+    .contact-form{max-width:640px;}
+    .cf-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    @media (max-width:560px){.cf-row{grid-template-columns:1fr;}}
+    .cf-field{display:block;margin-bottom:16px;}
+    .cf-field>span{display:block;font-weight:700;font-size:.82rem;text-transform:uppercase;
+      letter-spacing:.05em;color:var(--text-soft);margin-bottom:7px;}
+    .cf-field input,.cf-field textarea{width:100%;padding:13px 15px;font:inherit;font-size:1rem;
+      color:var(--ink);background:var(--paper);border:2px solid color-mix(in srgb,var(--ink) 18%,transparent);
+      border-radius:var(--radius);transition:border-color .16s ease;}
+    .cf-field input:focus,.cf-field textarea:focus{outline:none;border-color:var(--brand);}
+    .cf-field textarea{resize:vertical;min-height:120px;}
+    .cf-actions{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:4px;}
+    .cf-status{margin:0;font-weight:600;font-size:.95rem;}
+    .cf-status.ok{color:var(--brand);}
+    .cf-status.err{color:#c0392b;}
+    .cf-legal{margin:16px 0 0;font-size:.8rem;color:var(--text-soft);max-width:56ch;}
+    button[disabled]{opacity:.6;cursor:progress;}
   </style>
 </head>
 <body data-signature="{{ signature }}">
@@ -687,6 +706,26 @@
         </details>
         {% endfor %}
       </div>
+    </div>
+  </section>
+
+  <section id="contacto" style="background:var(--paper-2)">
+    <div class="wrap">
+      <div class="head" data-reveal="clip"><p class="eyebrow">Contacto</p><h2>Escríbenos</h2></div>
+      <p class="lead" style="margin-bottom:24px">Déjanos tu mensaje y te respondemos lo antes posible{% if business.phone %}, o llámanos al <a href="{{ phone_url }}" style="color:var(--brand);font-weight:700">{{ business.phone }}</a>{% endif %}.</p>
+      <form class="contact-form" id="contactForm" data-reveal data-wa="{{ whatsapp_url }}"{% if contact_endpoint %} data-endpoint="{{ contact_endpoint }}"{% endif %} novalidate>
+        <div class="cf-row">
+          <label class="cf-field"><span>Nombre</span><input name="name" type="text" required maxlength="200" autocomplete="name" /></label>
+          <label class="cf-field"><span>Email</span><input name="email" type="email" required maxlength="254" autocomplete="email" /></label>
+        </div>
+        <label class="cf-field"><span>Teléfono <em style="font-weight:400;text-transform:none;letter-spacing:0">(opcional)</em></span><input name="phone" type="tel" maxlength="40" autocomplete="tel" /></label>
+        <label class="cf-field"><span>Mensaje</span><textarea name="message" required maxlength="2000" rows="4"></textarea></label>
+        <div class="cf-actions">
+          <button type="submit" class="btn btn-solid">Enviar mensaje</button>
+          <p class="cf-status" id="contactStatus" role="status" aria-live="polite"></p>
+        </div>
+        <p class="cf-legal">Al enviar aceptas que tratemos tus datos con el único fin de responderte. No los cedemos a terceros.</p>
+      </form>
     </div>
   </section>
 

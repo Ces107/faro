@@ -61,6 +61,7 @@ def _anchors(business: BusinessProfile, offer_label: str) -> list[dict[str, str]
         items.append({"id": "opiniones", "label": "Opiniones"})
     items.append({"id": "sobre", "label": "Nosotros"})
     items.append({"id": "faq", "label": "Preguntas"})
+    items.append({"id": "contacto", "label": "Contacto"})
     if business.address:
         items.append({"id": "como-llegar", "label": "Cómo llegar"})
     return items
@@ -127,6 +128,7 @@ def render_site(business: BusinessProfile, copy: LandingCopy) -> str:
         "facebook_url": _social_url(business.facebook, "facebook.com"),
         "anchors": _anchors(business, offer_label),
         "opening_hours_json": json.dumps(parse_opening_hours(business.hours)),
+        "contact_endpoint": business.contact_endpoint,
         "current_year": datetime.datetime.now().year,
     }
     return _env.get_template("site.html").render(**context)
